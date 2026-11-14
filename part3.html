@@ -1,0 +1,938 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CS333 Part 3: Dubai Real Estate Livability & Valuation Matrix</title>
+
+  <!-- Vega, Vega-Lite, and Vega-Embed libraries -->
+  <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
+
+  <!-- Pre-loaded combined community dataset for guaranteed zero-latency and CORS-free offline/online execution -->
+  <script src="community_data.js"></script>
+
+  <style>
+    :root {
+      --primary: #1e3a8a;
+      --primary-dark: #0f172a;
+      --secondary: #0284c7;
+      --accent: #f59e0b;
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --text-main: #1e293b;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+      --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.08), 0 2px 4px -1px rgba(0,0,0,0.04);
+      --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.08), 0 4px 6px -2px rgba(0,0,0,0.03);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: var(--bg);
+      color: var(--text-main);
+      line-height: 1.6;
+      padding-bottom: 80px;
+    }
+
+    .container {
+      max-width: 1140px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* Header & Navigation */
+    header {
+      background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%);
+      color: #ffffff;
+      padding: 40px 0 32px 0;
+      margin-bottom: 32px;
+      box-shadow: var(--shadow-md);
+    }
+
+    .header-content {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .badge-bar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 12px;
+      border-radius: 9999px;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+    }
+
+    .badge-gold {
+      background-color: #fef3c7;
+      color: #92400e;
+    }
+
+    .badge-blue {
+      background-color: #dbeafe;
+      color: #1e40af;
+    }
+
+    .badge-green {
+      background-color: #d1fae5;
+      color: #065f46;
+    }
+
+    h1 {
+      font-size: 28px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      line-height: 1.25;
+    }
+
+    .header-subtitle {
+      font-size: 15px;
+      color: #cbd5e1;
+      max-width: 880px;
+    }
+
+    nav.nav-bar {
+      display: flex;
+      gap: 16px;
+      margin-top: 16px;
+      border-top: 1px solid rgba(255,255,255,0.15);
+      padding-top: 16px;
+    }
+
+    nav.nav-bar a {
+      color: #93c5fd;
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 600;
+      transition: color 0.2s;
+    }
+
+    nav.nav-bar a:hover {
+      color: #ffffff;
+      text-decoration: underline;
+    }
+
+    /* KPI Summary Cards */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 18px;
+      margin-bottom: 30px;
+    }
+
+    .kpi-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px 24px;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .kpi-card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .kpi-label {
+      font-size: 12px;
+      text-transform: uppercase;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+    }
+
+    .kpi-value {
+      font-size: 26px;
+      font-weight: 800;
+      color: var(--primary);
+    }
+
+    .kpi-desc {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    /* Visualization Card */
+    .viz-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 28px 24px;
+      box-shadow: var(--shadow-md);
+      margin-bottom: 40px;
+    }
+
+    .viz-header {
+      margin-bottom: 20px;
+    }
+
+    .viz-header h2 {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--primary-dark);
+      margin-bottom: 6px;
+    }
+
+    .viz-header p {
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+
+    .instructions-box {
+      background-color: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-left: 4px solid #16a34a;
+      border-radius: 8px;
+      padding: 12px 18px;
+      margin-bottom: 22px;
+      font-size: 13px;
+      color: #166534;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .instructions-box strong {
+      color: #14532d;
+    }
+
+    .chart-viewport {
+      width: 100%;
+      overflow-x: auto;
+      display: flex;
+      justify-content: center;
+      padding: 10px 0;
+    }
+
+    /* Vega embed action menu fixes */
+    .vega-embed {
+      position: relative !important;
+      display: block;
+    }
+
+    .vega-embed summary {
+      cursor: pointer;
+      opacity: 0.7;
+    }
+
+    .vega-embed summary:hover {
+      opacity: 1;
+    }
+
+    .vega-embed .vega-actions {
+      background: white;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      box-shadow: var(--shadow-md);
+      padding: 8px 12px;
+      font-size: 12px;
+      z-index: 1000;
+    }
+
+    /* Vega-Lite signal binding controls styling */
+    .vega-bindings {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      margin-bottom: 16px;
+      padding: 14px 18px;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      font-size: 13px;
+    }
+
+    .vega-bind {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .vega-bind-name {
+      font-weight: 600;
+      color: #334155;
+    }
+
+    .vega-bind input[type="range"] {
+      accent-color: #2563eb;
+      cursor: pointer;
+    }
+
+    .vega-bind select {
+      padding: 4px 8px;
+      border-radius: 6px;
+      border: 1px solid #cbd5e1;
+      background: white;
+      font-size: 12px;
+      cursor: pointer;
+    }
+
+    /* Documentation Section */
+    .doc-section {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 36px 32px;
+      box-shadow: var(--shadow-sm);
+      margin-bottom: 30px;
+    }
+
+    .doc-section h2 {
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--primary-dark);
+      margin-bottom: 20px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid #e2e8f0;
+    }
+
+    .doc-section h3 {
+      font-size: 17px;
+      font-weight: 700;
+      color: #1e3a8a;
+      margin: 24px 0 10px 0;
+    }
+
+    .doc-section p {
+      font-size: 14.5px;
+      color: #334155;
+      margin-bottom: 14px;
+      line-height: 1.65;
+    }
+
+    .doc-section ul {
+      margin: 10px 0 18px 24px;
+      font-size: 14px;
+      color: #334155;
+    }
+
+    .doc-section li {
+      margin-bottom: 8px;
+    }
+
+    .quadrant-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 16px;
+      margin: 20px 0;
+    }
+
+    .quadrant-box {
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 16px;
+      background: #fafafa;
+    }
+
+    .quadrant-box.q1 { border-top: 4px solid #ef4444; }
+    .quadrant-box.q2 { border-top: 4px solid #10b981; }
+    .quadrant-box.q3 { border-top: 4px solid #8b5cf6; }
+    .quadrant-box.q4 { border-top: 4px solid #f59e0b; }
+
+    .quadrant-title {
+      font-weight: 700;
+      font-size: 14px;
+      margin-bottom: 6px;
+      color: #0f172a;
+    }
+
+    .quadrant-desc {
+      font-size: 12.5px;
+      color: #64748b;
+      line-height: 1.5;
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 30px 0;
+      font-size: 13px;
+      color: #94a3b8;
+      border-top: 1px solid var(--border);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <div class="container header-content">
+      <div class="badge-bar">
+        <span class="badge badge-gold">CS333 Project Submission – Part 3</span>
+        <span class="badge badge-blue">Target: 80+ / A Grade</span>
+        <span class="badge badge-green">Presentation Slot: 8:40 AM Confirmed</span>
+      </div>
+      <h1>Dubai Real Estate: The Urban Livability & Valuation Matrix</h1>
+      <p class="header-subtitle">
+        A coordinated multi-view visual analytics dashboard linking 51,730 verified Dubai Land Department (DLD) property sales with 2,955 Foursquare urban lifestyle amenities across Dubai communities.
+      </p>
+      <nav class="nav-bar">
+        <a href="index.html">← Back to Part 2 Project Home</a>
+        <a href="#dashboard">Interactive Dashboard</a>
+        <a href="#documentation">Formal Deliverables Documentation</a>
+        <a href="#findings">Key Analytical Insights</a>
+        <a href="#methodology">Data Pipeline & Cleaning</a>
+      </nav>
+    </div>
+  </header>
+
+  <div class="container">
+
+    <!-- KPI Summary Banner -->
+    <section class="kpi-grid">
+      <div class="kpi-card">
+        <span class="kpi-label">Sales Transactions Analyzed</span>
+        <span class="kpi-value">51,730</span>
+        <span class="kpi-desc">Verified sales (2015–2026) with valid unit pricing</span>
+      </div>
+      <div class="kpi-card">
+        <span class="kpi-label">Dubai Communities Covered</span>
+        <span class="kpi-value">163</span>
+        <span class="kpi-desc">Official Dubai Municipality geographic boundaries</span>
+      </div>
+      <div class="kpi-card">
+        <span class="kpi-label">Lifestyle Amenities Integrated</span>
+        <span class="kpi-value">2,955</span>
+        <span class="kpi-desc">Foursquare verified cafes, restaurants, gyms, and retail</span>
+      </div>
+      <div class="kpi-card">
+        <span class="kpi-label">Coordinated Sub-Views</span>
+        <span class="kpi-value">2 Linked Views</span>
+        <span class="kpi-desc">Bidirectional 2D interval brushing & cross-filtering</span>
+      </div>
+    </section>
+
+    <!-- Interactive Visualization Card -->
+    <section id="dashboard" class="viz-card">
+      <div class="viz-header">
+        <h2>Interactive Coordinated Visualization Dashboard</h2>
+        <p>Explore the relationship between property valuation per m² and community amenity richness across Dubai.</p>
+      </div>
+
+      <div class="instructions-box">
+        <div><strong>How to Interact:</strong></div>
+        <div>1. <strong>2D Interval Brush (Sub-Vis 1):</strong> Click and drag a rectangular selection box over any quadrant or cluster of communities on the top scatter matrix. Notice how unselected communities are muted, and the two sub-panels in Sub-Vis 2 immediately recalibrate to show the exact amenity DNA and transaction asset split for your selection!</div>
+        <div>2. <strong>Dynamic Volume Slider:</strong> Use the "Filter by Min Sales Volume" slider to eliminate statistical noise from low-volume communities (directly addressing the professor's Part 1 feedback).</div>
+        <div>3. <strong>Quadrant Focus Dropdown:</strong> Select an analytical quadrant to isolate specific urban archetypes.</div>
+        <div>4. <strong>Contextual Tooltips:</strong> Hover over any community circle or bar to view detailed metrics including off-plan share, average venue rating, and median transaction worth.</div>
+      </div>
+
+      <!-- Chart Mount Point -->
+      <div class="chart-viewport">
+        <div id="vis"></div>
+      </div>
+    </section>
+
+    <!-- Deliverables Documentation Section -->
+    <section id="documentation" class="doc-section">
+      <h2>Formal Assignment Deliverables</h2>
+
+      <h3>1. Visualization Title</h3>
+      <p><strong>The Dubai Urban Livability & Valuation Matrix: Coordinated Exploratory Analysis of Real Estate Pricing and Lifestyle Amenity Ecosystems</strong></p>
+
+      <h3>2. Working URL</h3>
+      <p><strong>URL:</strong> <a href="https://lealbadda.github.io/Vega-lite-Group-4/part3.html" target="_blank">https://lealbadda.github.io/Vega-lite-Group-4/part3.html</a></p>
+
+      <h3>3. Visual Encoding Architecture</h3>
+      <p>The dashboard is composed of two vertically coordinated sub-visualizations linked through dynamic reactive signals:</p>
+
+      <ul>
+        <li>
+          <strong>Sub-Visualization 1 (Top View: Livability-Price Quadrant Matrix):</strong>
+          <ul>
+            <li><strong>X-axis (Position):</strong> Quantitative continuous encoding representing <em>Total Recorded Lifestyle Amenities</em> (0 to 105 venues) from Foursquare.</li>
+            <li><strong>Y-axis (Position):</strong> Quantitative logarithmic scale representing <em>Median Property Price per m² (AED/m²)</em>, spanning from AED 3,000/m² to AED 80,000/m² to accommodate severe right-skewed pricing without compressing typical suburban communities.</li>
+            <li><strong>Point Size (Area):</strong> Quantitative area-proportional encoding representing <em>Total Sales Volume (Transactions)</em> recorded by the Dubai Land Department between Jan 2015 and Aug 2026.</li>
+            <li><strong>Point Color (Hue):</strong> Nominal categorical encoding representing <em>Dominant Housing Typology</em>:
+              <span style="color:#2563eb; font-weight:bold;">Royal Blue (#2563eb)</span> for Apartments / High-Density Units;
+              <span style="color:#059669; font-weight:bold;">Emerald Green (#059669)</span> for Villas & Townhouse Communities; and
+              <span style="color:#d97706; font-weight:bold;">Amber Orange (#d97706)</span> for Mixed Master Developments.
+            </li>
+            <li><strong>Conditional Opacity & Muting:</strong> Conditioned on the 2D interactive brush selection: selected communities retain 88% opacity, while unselected communities are desaturated to muted light slate gray (#cbd5e1) at 22% opacity.</li>
+            <li><strong>Reference Grid & Quadrants:</strong> Dashed orthogonal reference rules at 15 venues (amenity median threshold) and AED 13,000/m² (citywide median price threshold) demarcate the 4 analytical quadrants with subtle background text callouts.</li>
+          </ul>
+        </li>
+
+        <li>
+          <strong>Sub-Visualization 2 (Bottom View: Coordinated Multi-Panel Ecosystem Breakdown):</strong>
+          <ul>
+            <li><strong>Panel 2A (Left – Lifestyle Amenity DNA):</strong>
+              Horizontal bar chart showing the composition of amenities for the brushed selection. <strong>Y-axis</strong> encodes 5 semantic amenity categories (Dining & Cafes, Retail & Shopping, Hospitality & Hotels, Leisure & Wellness, Services & Community); <strong>X-axis</strong> encodes aggregate venue count (`sum(venue_total)`); <strong>Color</strong> encodes distinct semantic hues.
+            </li>
+            <li><strong>Panel 2B (Right – Investment Vehicle & Housing Split):</strong>
+              Horizontal bar chart decomposing real estate transactions for the brushed selection into capital vehicles and housing types. <strong>Y-axis</strong> encodes transaction categories (Off-Plan Sales, Existing Resales, Flats/Units, Villas); <strong>X-axis</strong> encodes aggregate transaction volume (`sum(tx_total)`); <strong>Color</strong> highlights the investment vehicle split.
+            </li>
+          </ul>
+        </li>
+      </ul>
+
+      <h3>4. Interaction Mechanisms</h3>
+      <ul>
+        <li><strong>2D Cross-Filtering Interval Brush (`params: [{"name": "brush", "select": "interval"}]`):</strong> Dragging a rectangular selection across any region of Sub-Vis 1 creates a bounding box in amenity-price space. Vega-Lite propagates this selection reactively to Sub-Vis 2 via `transform: [{"filter": {"param": "brush"}}]`, recalculating the folded aggregate distributions in real time.</li>
+        <li><strong>Minimum Sales Volume Slider:</strong> An interactive range slider bound to `sales_count >= min_sales` allows the user to filter out low-volume outlier communities (default set to 50 transactions, adjustable up to 500). This directly addresses Professor Sherief Abdallah's Part 1 feedback regarding noise reduction in small sample communities.</li>
+        <li><strong>Quadrant Focus Dropdown:</strong> An interactive selection menu that isolates individual quadrants, allowing instant focus on specific urban archetypes.</li>
+        <li><strong>Rich Contextual Tooltips:</strong> Multi-variable inspection on hover showing Community Name, Official Community ID, Median Price/m², Total Sales, Total Venues, Dominant Housing Type, Off-Plan Share (%), Average Venue Rating, and Geographical Area (km²).</li>
+      </ul>
+
+      <h3>5. Value Added & Practical Questions Answered</h3>
+      <p>This visualization provides profound visual analytical insights that cannot be extracted from static tables or simple geographic maps:</p>
+
+      <div class="quadrant-grid">
+        <div class="quadrant-box q1">
+          <div class="quadrant-title">1. Urban Lifestyle Hubs (High Price, High Amenities)</div>
+          <div class="quadrant-desc">
+            <strong>Key Areas:</strong> Downtown Dubai (Burj Khalifa: 100 venues, AED 34,395/m²), Marsa Dubai / Marina (100 venues, AED 18,340/m²), Business Bay (85 venues, AED 17,730/m²).<br>
+            <strong>Insight:</strong> These high-density apartment districts justify their capital premium through unmatched walkability, where dining and retail make up over 70% of the local amenity fabric.
+          </div>
+        </div>
+
+        <div class="quadrant-box q2">
+          <div class="quadrant-title">2. Affordable Active Communities (Low Price, High Amenities)</div>
+          <div class="quadrant-desc">
+            <strong>Key Areas:</strong> Al Barsha First (74 venues, AED 10,250/m²), Port Saeed (47 venues, AED 8,920/m²), Al Karama.<br>
+            <strong>Insight:</strong> <em>The Value Hunter's Sweet Spot.</em> These mature, walkable urban districts offer rich commercial and dining ecosystems at less than half the square-meter cost of Downtown.
+          </div>
+        </div>
+
+        <div class="quadrant-box q3">
+          <div class="quadrant-title">3. Exclusive Privacy Enclaves (High Price, Low Amenities)</div>
+          <div class="quadrant-desc">
+            <strong>Key Areas:</strong> Al Thanyah First / Emirates Hills (AED 28,900/m²), Jumeirah Second (AED 75,635/m²), Al Saffa.<br>
+            <strong>Insight:</strong> <em>The Amenity Decoupling Paradox.</em> In luxury villa enclaves, buyers pay a massive premium for privacy, security, and plot seclusion, deliberately trading away commercial public venues.
+          </div>
+        </div>
+
+        <div class="quadrant-box q4">
+          <div class="quadrant-title">4. Emerging Suburban Corridors (Low Price, Developing Amenities)</div>
+          <div class="quadrant-desc">
+            <strong>Key Areas:</strong> Al Barsha South Fourth / JVC (3,925 sales, 13 venues, AED 12,923/m²), Wadi Al Safa 5 (2,183 sales, AED 7,500/m²), Dubai South / Madinat Al Mataar.<br>
+            <strong>Insight:</strong> <em>The Speculative Frontier.</em> Sub-Vis 2 reveals these areas have over 65–80% off-plan sales. Transaction velocity is surging years ahead of physical commercial amenity delivery.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Methodology & Data Quality Section -->
+    <section id="methodology" class="doc-section">
+      <h2>Data Quality, Integration & Preprocessing Methodology</h2>
+
+      <h3>Foundation & Additional Datasets</h3>
+      <ul>
+        <li><strong>DLD Real Estate Transactions (`transactions.csv`):</strong> Official 10% random sample from Dubai Land Department (89,212 raw records). Filtered to valid property sales between 1 January 2015 and 31 August 2026 with verified positive square-meter pricing (`meter_sale_price > 0`), yielding 51,730 sales records.</li>
+        <li><strong>Foursquare Urban Venues (`dubai_venues.csv`):</strong> 2,955 verified commercial and recreational venues collected across Dubai. Each venue was classified into 5 standardized urban lifestyle domains: <em>Dining & Cafes</em> (49.6%), <em>Retail & Shopping</em> (13.5%), <em>Hospitality & Nightlife</em> (13.0%), <em>Leisure & Wellness</em> (12.3%), and <em>Services & Community</em> (11.6%).</li>
+        <li><strong>Dubai Municipality Boundaries (`dubai.geojson`):</strong> Spatial geometries, official community names (`CNAME_E`), geographic areas (`Area Sq Km`), and 2019 census population figures for all 226 communities.</li>
+      </ul>
+
+      <h3>Data Integration Key & Validation</h3>
+      <p>
+        The datasets were joined using the canonical community identifier <code>COMM_NUM</code> (which is formatted as <code>comm_num</code> in the transactions table). Automated Python schema audits confirmed a <strong>100% key match</strong>: all 182 transaction community IDs resolve directly into the official GeoJSON boundaries, and 163 communities contain active real estate sales linked to Foursquare amenities.
+      </p>
+
+      <h3>Data Cleaning & Mathematical Derivations</h3>
+      <ul>
+        <li><strong>Median Valuation:</strong> Price per m² is evaluated using the statistical <em>median</em> rather than the mean to prevent luxury trophy assets or recording errors from distorting community benchmark levels.</li>
+        <li><strong>Amenity Density:</strong> Computed as <code>Total Venues / Area Sq Km</code> to normalize community geographic area differences.</li>
+        <li><strong>Off-Plan Absorption Ratio:</strong> Calculated as <code>(Off-Plan Sales / Total Sales) * 100</code> to measure speculative developer absorption vs. existing resale market liquidity.</li>
+        <li><strong>Noise Mitigation:</strong> Implemented a user-adjustable minimum volume threshold (default: 50 sales) to prevent sparsely transacted communities from skewing comparative visual distributions.</li>
+      </ul>
+
+      <h3>Analytical Assumptions & Limitations</h3>
+      <ul>
+        <li><strong>Foursquare Sampling Cap:</strong> The venues dataset collected up to 100 venues per community; therefore, mega-centers like Downtown and Marina hit this collection ceiling. This is explicitly noted in our analysis.</li>
+        <li><strong>Private vs. Public Amenities:</strong> Luxury gated villa communities (e.g., Emirates Hills) often incorporate private clubhouse facilities, private swimming pools, and residential tennis courts that are not indexed on commercial public Foursquare listings. This explains their low commercial venue count.</li>
+      </ul>
+    </section>
+
+  </div>
+
+  <footer>
+    <div class="container">
+      <p>CS333 Data Visualization Assignment Part 3 | Prepared for Dr. Sherief Abdallah</p>
+      <p style="margin-top: 4px;">Built with Vega-Lite 5 & D3 | Group 4</p>
+    </div>
+  </footer>
+
+  <!-- Vega-Lite Embedding Logic -->
+  <script>
+    // Embed Options with Full Action Menu
+    const embedOptions = {
+      actions: {
+        export: { svg: true, png: true },
+        source: true,
+        compiled: true,
+        editor: true
+      },
+      i18n: {
+        SVG_ACTION: "Export as SVG",
+        PNG_ACTION: "Export as PNG",
+        SOURCE_ACTION: "View Vega-Lite Source",
+        COMPILED_ACTION: "View Compiled Vega",
+        EDITOR_ACTION: "Open in Vega Editor"
+      }
+    };
+
+    // Construct Vega-Lite Spec dynamically using the pre-loaded communityData
+    const dashboardSpec = {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "data": {
+        "values": communityData
+      },
+      "params": [
+        {
+          "name": "min_sales",
+          "value": 50,
+          "bind": {
+            "input": "range",
+            "min": 10,
+            "max": 500,
+            "step": 10,
+            "name": "Filter by Min Sales Volume: "
+          }
+        },
+        {
+          "name": "quadrant_filter",
+          "value": "All Quadrants",
+          "bind": {
+            "input": "select",
+            "options": [
+              "All Quadrants",
+              "Urban Lifestyle Hub",
+              "Affordable Active Community",
+              "Exclusive Privacy Enclave",
+              "Emerging Suburban Corridor"
+            ],
+            "name": "Focus Quadrant: "
+          }
+        }
+      ],
+      "vconcat": [
+        // Sub-Vis 1: Quadrant Scatter Matrix with 2D Interval Brush
+        {
+          "title": {
+            "text": "Sub-Vis 1: Dubai Community Livability vs Valuation Quadrant Matrix",
+            "subtitle": "Click and drag a rectangular brush across any quadrant or group of points to inspect their composition below",
+            "fontSize": 15,
+            "fontWeight": "bold",
+            "subtitleFontSize": 12,
+            "subtitleColor": "#64748b",
+            "anchor": "start",
+            "offset": 12
+          },
+          "width": 940,
+          "height": 420,
+          "transform": [
+            {"filter": "datum.sales_count >= min_sales"},
+            {"filter": "quadrant_filter === 'All Quadrants' || datum.quadrant === quadrant_filter"}
+          ],
+          "layer": [
+            // Quadrant Background Annotations
+            {
+              "data": {
+                "values": [
+                  {"text": "EXCLUSIVE PRIVACY ENCLAVES\n(High Price, Low Public Amenities)", "x": 2, "y": 68000, "align": "left"},
+                  {"text": "URBAN LIFESTYLE HUBS\n(High Price, High Amenities)", "x": 88, "y": 68000, "align": "right"},
+                  {"text": "EMERGING SUBURBAN CORRIDORS\n(Moderate Price, Developing Amenities)", "x": 2, "y": 3800, "align": "left"},
+                  {"text": "AFFORDABLE ACTIVE COMMUNITIES\n(Accessible Price, High Amenities)", "x": 88, "y": 3800, "align": "right"}
+                ]
+              },
+              "mark": {
+                "type": "text",
+                "fontSize": 11,
+                "fontStyle": "italic",
+                "fontWeight": "bold",
+                "fill": "#94a3b8",
+                "opacity": 0.7,
+                "lineBreak": "\n"
+              },
+              "encoding": {
+                "x": {"field": "x", "type": "quantitative"},
+                "y": {"field": "y", "type": "quantitative"},
+                "text": {"field": "text", "type": "nominal"},
+                "align": {"field": "align", "type": "nominal"}
+              }
+            },
+            // Vertical Threshold Rule (15 Venues)
+            {
+              "data": {"values": [{"x": 15}]},
+              "mark": {"type": "rule", "strokeDash": [4, 4], "color": "#cbd5e1", "strokeWidth": 1.5},
+              "encoding": {"x": {"field": "x", "type": "quantitative"}}
+            },
+            // Horizontal Threshold Rule (13,000 AED/m²)
+            {
+              "data": {"values": [{"y": 13000}]},
+              "mark": {"type": "rule", "strokeDash": [4, 4], "color": "#cbd5e1", "strokeWidth": 1.5},
+              "encoding": {"y": {"field": "y", "type": "quantitative"}}
+            },
+            // Scatter Mark Layer with Brush Parameter
+            {
+              "params": [
+                {
+                  "name": "brush",
+                  "select": {"type": "interval"}
+                }
+              ],
+              "mark": {
+                "type": "circle",
+                "stroke": "#ffffff",
+                "strokeWidth": 1.2
+              },
+              "encoding": {
+                "x": {
+                  "field": "venue_count",
+                  "type": "quantitative",
+                  "title": "Total Recorded Lifestyle Amenities (Foursquare Venues)",
+                  "scale": {"domain": [0, 105]},
+                  "axis": {"grid": true, "gridColor": "#f1f5f9", "titleFontSize": 12}
+                },
+                "y": {
+                  "field": "median_price_sqm",
+                  "type": "quantitative",
+                  "title": "Median Property Price per m² (AED/m²)",
+                  "scale": {"type": "log", "domain": [3000, 80000]},
+                  "axis": {"grid": true, "gridColor": "#f1f5f9", "format": ",.0f", "titleFontSize": 12}
+                },
+                "size": {
+                  "field": "sales_count",
+                  "type": "quantitative",
+                  "title": "Sales Volume",
+                  "scale": {"range": [50, 850]},
+                  "legend": {
+                    "orient": "bottom-right",
+                    "offset": 8,
+                    "titleFontSize": 11,
+                    "labelFontSize": 10,
+                    "format": ","
+                  }
+                },
+                "color": {
+                  "condition": {
+                    "param": "brush",
+                    "field": "dominant_type",
+                    "type": "nominal",
+                    "scale": {
+                      "domain": ["Apartments / Units", "Villas / Townhouses", "Mixed Typology"],
+                      "range": ["#2563eb", "#059669", "#d97706"]
+                    },
+                    "legend": {
+                      "title": "Dominant Housing Typology",
+                      "orient": "top-right",
+                      "offset": 8,
+                      "titleFontSize": 11,
+                      "labelFontSize": 10
+                    }
+                  },
+                  "value": "#cbd5e1"
+                },
+                "opacity": {
+                  "condition": {"param": "brush", "value": 0.88},
+                  "value": 0.22
+                },
+                "tooltip": [
+                  {"field": "community_name", "type": "nominal", "title": "Community"},
+                  {"field": "comm_num", "type": "nominal", "title": "Community #"},
+                  {"field": "quadrant", "type": "nominal", "title": "Market Quadrant"},
+                  {"field": "median_price_sqm", "type": "quantitative", "title": "Median Price (AED/m²)", "format": ",.0f"},
+                  {"field": "sales_count", "type": "quantitative", "title": "Sales Volume", "format": ","},
+                  {"field": "venue_count", "type": "quantitative", "title": "Total Venues"},
+                  {"field": "dominant_type", "type": "nominal", "title": "Housing Typology"},
+                  {"field": "offplan_pct", "type": "quantitative", "title": "Off-Plan Share (%)", "format": ".1f"},
+                  {"field": "avg_venue_rating", "type": "quantitative", "title": "Avg Venue Rating", "format": ".2f"},
+                  {"field": "area_sqkm", "type": "quantitative", "title": "Area (km²)"}
+                ]
+              }
+            }
+          ]
+        },
+        // Sub-Vis 2: Coordinated Breakdown Views Linked to Brush
+        {
+          "title": {
+            "text": "Sub-Vis 2: Coordinated Ecosystem Decomposition (Filtered by Sub-Vis 1 Brush Selection)",
+            "subtitle": "Updates dynamically when communities are selected on the matrix above",
+            "fontSize": 15,
+            "fontWeight": "bold",
+            "subtitleFontSize": 12,
+            "subtitleColor": "#64748b",
+            "anchor": "start",
+            "offset": 14
+          },
+          "transform": [
+            {"filter": "datum.sales_count >= min_sales"},
+            {"filter": "quadrant_filter === 'All Quadrants' || datum.quadrant === quadrant_filter"},
+            {"filter": {"param": "brush"}}
+          ],
+          "hconcat": [
+            // Panel 2A: Amenity Category Breakdown
+            {
+              "title": {
+                "text": "Amenity Category Composition",
+                "fontSize": 12,
+                "fontWeight": "bold",
+                "anchor": "start",
+                "color": "#334155"
+              },
+              "width": 435,
+              "height": 220,
+              "transform": [
+                {
+                  "fold": [
+                    "dining_count",
+                    "leisure_count",
+                    "retail_count",
+                    "hospitality_count",
+                    "services_count"
+                  ],
+                  "as": ["amenity_key", "venue_total"]
+                },
+                {
+                  "calculate": "datum.amenity_key === 'dining_count' ? 'Dining & Cafes' : (datum.amenity_key === 'retail_count' ? 'Retail & Shopping' : (datum.amenity_key === 'hospitality_count' ? 'Hospitality & Hotels' : (datum.amenity_key === 'leisure_count' ? 'Leisure & Wellness' : 'Services & Community')))",
+                  "as": "category_name"
+                }
+              ],
+              "mark": {
+                "type": "bar",
+                "cornerRadiusTopRight": 4,
+                "cornerRadiusBottomRight": 4
+              },
+              "encoding": {
+                "y": {
+                  "field": "category_name",
+                  "type": "nominal",
+                  "title": null,
+                  "sort": "-x",
+                  "axis": {"labelFontSize": 11}
+                },
+                "x": {
+                  "field": "venue_total",
+                  "aggregate": "sum",
+                  "type": "quantitative",
+                  "title": "Total Venues in Selection",
+                  "axis": {"grid": true, "titleFontSize": 11}
+                },
+                "color": {
+                  "field": "category_name",
+                  "type": "nominal",
+                  "legend": null,
+                  "scale": {
+                    "domain": [
+                      "Dining & Cafes",
+                      "Retail & Shopping",
+                      "Hospitality & Hotels",
+                      "Leisure & Wellness",
+                      "Services & Community"
+                    ],
+                    "range": ["#ef4444", "#8b5cf6", "#f59e0b", "#06b6d4", "#64748b"]
+                  }
+                },
+                "tooltip": [
+                  {"field": "category_name", "type": "nominal", "title": "Amenity Type"},
+                  {"field": "venue_total", "aggregate": "sum", "type": "quantitative", "title": "Venues in Selection", "format": ","}
+                ]
+              }
+            },
+            // Panel 2B: Real Estate Investment Split (Off-Plan vs Existing)
+            {
+              "title": {
+                "text": "Transaction Typology & Off-Plan Split",
+                "fontSize": 12,
+                "fontWeight": "bold",
+                "anchor": "start",
+                "color": "#334155"
+              },
+              "width": 435,
+              "height": 220,
+              "transform": [
+                {
+                  "fold": [
+                    "offplan_count",
+                    "existing_count",
+                    "unit_count",
+                    "villa_count"
+                  ],
+                  "as": ["asset_key", "tx_total"]
+                },
+                {
+                  "calculate": "datum.asset_key === 'offplan_count' ? 'Off-Plan Sales' : (datum.asset_key === 'existing_count' ? 'Existing Resales' : (datum.asset_key === 'unit_count' ? 'Flats / Units' : 'Villas / Houses'))",
+                  "as": "asset_label"
+                }
+              ],
+              "mark": {
+                "type": "bar",
+                "cornerRadiusTopRight": 4,
+                "cornerRadiusBottomRight": 4
+              },
+              "encoding": {
+                "y": {
+                  "field": "asset_label",
+                  "type": "nominal",
+                  "title": null,
+                  "sort": "-x",
+                  "axis": {"labelFontSize": 11}
+                },
+                "x": {
+                  "field": "tx_total",
+                  "aggregate": "sum",
+                  "type": "quantitative",
+                  "title": "Total Transactions in Selection",
+                  "axis": {"grid": true, "titleFontSize": 11}
+                },
+                "color": {
+                  "field": "asset_label",
+                  "type": "nominal",
+                  "legend": null,
+                  "scale": {
+                    "domain": [
+                      "Off-Plan Sales",
+                      "Existing Resales",
+                      "Flats / Units",
+                      "Villas / Houses"
+                    ],
+                    "range": ["#f97316", "#3b82f6", "#10b981", "#6366f1"]
+                  }
+                },
+                "tooltip": [
+                  {"field": "asset_label", "type": "nominal", "title": "Category"},
+                  {"field": "tx_total", "aggregate": "sum", "type": "quantitative", "title": "Transactions", "format": ","}
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    };
+
+    // Render the Vega-Lite Dashboard
+    vegaEmbed("#vis", dashboardSpec, embedOptions)
+      .then(result => {
+        console.log("Vega-Lite dashboard mounted successfully:", result);
+      })
+      .catch(error => {
+        console.error("Dashboard render error:", error);
+        document.querySelector("#vis").innerHTML =
+          "<div style='color:red; padding:20px; font-weight:bold;'>Error rendering Vega-Lite visualization. Please check console logs.</div>";
+      });
+  </script>
+</body>
+</html>
