@@ -1072,11 +1072,17 @@
 
     const root = d3.hierarchy({
       name:"All sectors",
-      children:d3.groups(rows, d => d.sector).map(([sector, communities]) => ({
-        name:`Sector ${sector}`,
-        sector,
-        children:communities.map(d => ({...d, name:d.community_name, value:d.sales_count}))
-      }))
+      children:d3.groups(rows, d => d.sector).map(([sector, communities]) => {
+        const sectorSales = d3.sum(communities, d => d.sales_count);
+        const sectorOffplan = d3.sum(communities, d => Number(d.offplan_count) || 0);
+        return {
+          name:`Sector ${sector}`,
+          sector,
+          sales_count:sectorSales,
+          offplan_pct:sectorSales ? (sectorOffplan / sectorSales) * 100 : 0,
+          children:communities.map(d => ({...d, name:d.community_name, value:d.sales_count}))
+        };
+      })
     }).sum(d => d.value || 0).sort((a,b) => b.value-a.value);
 
     let current = root;
@@ -1102,11 +1108,11 @@
       groups.append("rect").attr("class","v2-tile")
         .attr("width",d => Math.max(0,d.x1-d.x0))
         .attr("height",d => Math.max(0,d.y1-d.y0)).attr("rx",4)
-        .attr("fill",d => d.children ? "#e2e8f0" : color(Number(d.data.offplan_pct)||0))
+        .attr("fill",d => color(Number(d.data.offplan_pct)||0))
         .on("mousemove",(event,d) => {
           const x=d.data;
           const content = d.children
-            ? `<strong>${x.name}</strong><br>${fmt(d.value)} sales<br>Click to explore communities`
+            ? `<strong>${x.name}</strong><br>Total sales: ${fmt(x.sales_count)}<br>Off-plan: ${pct(x.offplan_pct)}%<br>Existing: ${pct(100 - x.offplan_pct)}%<br>Click to explore communities`
             : `<strong>${x.community_name}</strong><br>Sector ${x.sector}<br>Sales: ${fmt(x.sales_count)}<br>Off-plan: ${pct(x.offplan_pct)}%<br>Existing: ${pct(x.existing_pct)}%<br>Median price: AED ${fmt(Math.round(Number(x.median_price_sqm)||0))}/m²`;
           tooltip.html(content).style("opacity",1)
             .style("left",Math.min(event.clientX+14,window.innerWidth-275)+"px")
@@ -1121,7 +1127,18 @@
         });
 
       groups.filter(d => d.children).append("text").attr("class","v2-sector-label")
-        .attr("x",8).attr("y",20).text(d => d.data.name);
+        .attr("x",8).attr("y",20)
+        .style("fill",d => {
+          const c=d3.color(color(Number(d.data.offplan_pct)||0));
+          const luminance=(0.299*c.r+0.587*c.g+0.114*c.b)/255;
+          return luminance>0.62 ? "#10213b" : "#ffffff";
+        })
+        .style("text-shadow",d => {
+          const c=d3.color(color(Number(d.data.offplan_pct)||0));
+          const luminance=(0.299*c.r+0.587*c.g+0.114*c.b)/255;
+          return luminance>0.62 ? "none" : "0 1px 2px rgba(0,0,0,.35)";
+        })
+        .text(d => d.data.name);
 
       const labelTiles = groups.filter(d => !d.children &&
         (d.x1-d.x0)>105 && (d.y1-d.y0)>38);
