@@ -29,7 +29,9 @@
     "hospitality_count": 0,
     "services_count": 0,
     "venue_density": 4.05,
-    "quadrant": "Emerging Suburban Corridor"
+    "quadrant": "Emerging Suburban Corridor",
+    "rated_venue_count": 7,
+    "insufficient_data": true
   },
   {
     "COMM_NUM": 323,
@@ -61,7 +63,9 @@
     "hospitality_count": 1,
     "services_count": 1,
     "venue_density": 4.19,
-    "quadrant": "Emerging Suburban Corridor"
+    "quadrant": "Emerging Suburban Corridor",
+    "rated_venue_count": 7,
+    "insufficient_data": true
   },
   {
     "COMM_NUM": 648,
@@ -93,7 +97,9 @@
     "hospitality_count": 3,
     "services_count": 0,
     "venue_density": 0.43,
-    "quadrant": "Emerging Suburban Corridor"
+    "quadrant": "Emerging Suburban Corridor",
+    "rated_venue_count": 7,
+    "insufficient_data": false
   },
   {
     "COMM_NUM": 594,
@@ -125,7 +131,9 @@
     "hospitality_count": 3,
     "services_count": 0,
     "venue_density": 0.37,
-    "quadrant": "Emerging Suburban Corridor"
+    "quadrant": "Emerging Suburban Corridor",
+    "rated_venue_count": 13,
+    "insufficient_data": true
   },
   {
     "COMM_NUM": 415,
@@ -157,7 +165,9 @@
     "hospitality_count": 1,
     "services_count": 0,
     "venue_density": 0.14,
-    "quadrant": "Exclusive Privacy Enclave"
+    "quadrant": "Exclusive Privacy Enclave",
+    "rated_venue_count": 1,
+    "insufficient_data": false
   },
   {
     "COMM_NUM": 124,
@@ -189,7 +199,9 @@
     "hospitality_count": 16,
     "services_count": 9,
     "venue_density": 54.3,
-    "quadrant": "Urban Lifestyle Hub"
+    "quadrant": "Urban Lifestyle Hub",
+    "rated_venue_count": 82,
+    "insufficient_data": true
   },
   {
     "COMM_NUM": 845,
@@ -214,14 +226,16 @@
     "villa_pct": 0.0,
     "dominant_type": "Mixed Typology",
     "venue_count": 4,
-    "avg_venue_rating": 0.0,
+    "avg_venue_rating": null,
     "dining_count": 1,
     "leisure_count": 0,
     "retail_count": 1,
     "hospitality_count": 0,
     "services_count": 2,
     "venue_density": 0.1,
-    "quadrant": "Emerging Suburban Corridor"
+    "quadrant": "Emerging Suburban Corridor",
+    "rated_venue_count": 0,
+    "insufficient_data": true
   },
   {
     "COMM_NUM": 376,
@@ -253,7 +267,9 @@
     "hospitality_count": 0,
     "services_count": 2,
     "venue_density": 3.74,
-    "quadrant": "Affordable Active Community"
+    "quadrant": "Affordable Active Community",
+    "rated_venue_count": 24,
+    "insufficient_data": true
   },
   {
     "COMM_NUM": 128,
@@ -285,7 +301,9 @@
     "hospitality_count": 0,
     "services_count": 1,
     "venue_density": 4.07,
-    "quadrant": "Emerging Suburban Corridor"
+    "quadrant": "Emerging Suburban Corridor",
+    "rated_venue_count": 5,
+    "insufficient_data": true
   },
   {
     "COMM_NUM": 531,
@@ -310,14 +328,16 @@
     "villa_pct": 11.3,
     "dominant_type": "Apartments / Units",
     "venue_count": 0,
-    "avg_venue_rating": 0.0,
+    "avg_venue_rating": null,
     "dining_count": 0,
     "leisure_count": 0,
     "retail_count": 0,
     "hospitality_count": 0,
     "services_count": 0,
     "venue_density": 0.0,
-    "quadrant": "Emerging Suburban Corridor"
+    "quadrant": "Emerging Suburban Corridor",
+    "rated_venue_count": 0,
+    "insufficient_data": false
   },
   {
     "COMM_NUM": 233,
@@ -349,7 +369,9 @@
     "hospitality_count": 2,
     "services_count": 1,
     "venue_density": 4.47,
-    "quadrant": "Emerging Suburban Corridor"
+    "quadrant": "Emerging Suburban Corridor",
+    "rated_venue_count": 8,
+    "insufficient_data": true
   },
   {
     "COMM_NUM": 228,
@@ -381,7 +403,9 @@
     "hospitality_count": 0,
     "services_count": 1,
     "venue_density": 1.68,
-    "quadrant": "Emerging Suburban Corridor"
+    "quadrant": "Emerging Suburban Corridor",
+    "rated_venue_count": 5,
+    "insufficient_data": true
   },
   {
     "COMM_NUM": 683,
@@ -406,14 +430,16 @@
     "villa_pct": 2.7,
     "dominant_type": "Mixed Typology",
     "venue_count": 0,
-    "avg_venue_rating": 0.0,
+    "avg_venue_rating": null,
     "dining_count": 0,
     "leisure_count": 0,
     "retail_count": 0,
     "hospitality_count": 0,
     "services_count": 0,
     "venue_density": 0.0,
-    "quadrant": "Exclusive Privacy Enclave"
+    "quadrant": "Exclusive Privacy Enclave",
+    "rated_venue_count": 0,
+    "insufficient_data": false
   },
   {
     "COMM_NUM": 674,
@@ -445,7 +471,9 @@
     "hospitality_count": 0,
     "services_count": 7,
     "venue_density": 7.42,
-    "quadrant": "Urban Lifestyle Hub"
+    "quadrant": "Urban Lifestyle Hub",
+    "rated_venue_count": 31,
+    "insufficient_data": false
   },
   {
     "COMM_NUM": 613,
@@ -477,7 +505,9 @@
     "hospitality_count": 0,
     "services_count": 0,
     "venue_density": 0.72,
-    "quadrant": "Emerging Suburban Corridor"
+    "quadrant": "Emerging Suburban Corridor",
+    "rated_venue_count": 3,
+    "insufficient_data": true
   },
   {
     "COMM_NUM": 665,
@@ -509,7 +539,9 @@
     "hospitality_count": 1,
     "services_count": 1,
     "venue_density": 0.95,
-    "quadrant": "Emerging Suburban Corridor"
+    "quadrant": "Emerging Suburban Corridor",
+    "rated_venue_count": 8,
+    "insufficient_data": false
   },
   {
     "COMM_NUM": 282,
@@ -541,7 +573,9 @@
     "hospitality_count": 0,
     "services_count": 2,
     "venue_density": 0.32,
-    "quadrant": "Emerging Suburban Corridor"
+    "quadrant": "Emerging Suburban Corridor",
+    "rated_venue_count": 4,
+    "insufficient_data": true
   },
   {
     "COMM_NUM": 216,
@@ -573,7 +607,9 @@
     "hospitality_count": 0,
     "services_count": 0,
     "venue_density": 2.07,
-    "quadrant": "Emerging Suburban Corridor"
+    "quadrant": "Emerging Suburban Corridor",
+    "rated_venue_count": 10,
+    "insufficient_data": false
   },
   {
     "COMM_NUM": 358,
@@ -605,7 +641,9 @@
     "hospitality_count": 0,
     "services_count": 0,
     "venue_density": 3.31,
-    "quadrant": "Exclusive Privacy Enclave"
+    "quadrant": "Exclusive Privacy Enclave",
+    "rated_venue_count": 8,
+    "insufficient_data": true
   },
   {
     "COMM_NUM": 354,
@@ -637,7 +675,9 @@
     "hospitality_count": 0,
     "services_count": 1,
     "venue_density": 1.12,
-    "quadrant": "Emerging Suburban Corridor"
+    "quadrant": "Emerging Suburban Corridor",
+    "rated_venue_count": 4,
+    "insufficient_data": false
   },
   {
     "COMM_NUM": 615,
@@ -669,7 +709,9 @@
     "hospitality_count": 0,
     "services_count": 1,
     "venue_density": 0.13,
-    "quadrant": "Emerging Suburban Corridor"
+    "quadrant": "Emerging Suburban Corridor",
+    "rated_venue_count": 1,
+    "insufficient_data": true
   },
   {
     "COMM_NUM": 516,
@@ -694,14 +736,16 @@
     "villa_pct": 0.0,
     "dominant_type": "Mixed Typology",
     "venue_count": 0,
-    "avg_venue_rating": 0.0,
+    "avg_venue_rating": null,
     "dining_count": 0,
     "leisure_count": 0,
     "retail_count": 0,
     "hospitality_count": 0,
     "services_count": 0,
     "venue_density": 0.0,
-    "quadrant": "Emerging Suburban Corridor"
+    "quadrant": "Emerging Suburban Corridor",
+    "rated_venue_count": 0,
+    "insufficient_data": true
   },
   {
     "COMM_NUM": 234,
@@ -733,7 +777,9 @@
     "hospitality_count": 0,
     "services_count": 0,
     "venue_density": 0.88,
-    "quadrant": "Emerging Suburban Corridor"
+    "quadrant": "Emerging Suburban Corridor",
+    "rated_venue_count": 2,
+    "insufficient_data": true
   },
   {
     "COMM_NUM": 671,
@@ -765,7 +811,9 @@
     "hospitality_count": 0,
     "services_count": 0,
     "venue_density": 0.17,
-    "quadrant": "Emerging Suburban Corridor"
+    "quadrant": "Emerging Suburban Corridor",
+    "rated_venue_count": 1,
+    "insufficient_data": true
   },
   {
     "COMM_NUM": 812,
@@ -797,7 +845,9 @@
     "hospitality_count": 0,
     "services_count": 1,
     "venue_density": 0.52,
-    "quadrant": "Exclusive Privacy Enclave"
+    "quadrant": "Exclusive Privacy Enclave",
+    "rated_venue_count": 6,
+    "insufficient_data": true
   },
   {
     "COMM_NUM": 251,
@@ -829,7 +879,9 @@
     "hospitality_count": 2,
     "services_count": 5,
     "venue_density": 8.88,
-    "quadrant": "Affordable Active Community"
+    "quadrant": "Affordable Active Community",
+    "rated_venue_count": 83,
+    "insufficient_data": false
   },
   {
     "COMM_NUM": 357,
@@ -861,7 +913,9 @@
     "hospitality_count": 0,
     "services_count": 0,
     "venue_density": 3.7,
-    "quadrant": "Emerging Suburban Corridor"
+    "quadrant": "Emerging Suburban Corridor",
+    "rated_venue_count": 7,
+    "insufficient_data": true
   },
   {
     "COMM_NUM": 226,
@@ -893,7 +947,9 @@
     "hospitality_count": 1,
     "services_count": 0,
     "venue_density": 4.3,
-    "quadrant": "Emerging Suburban Corridor"
+    "quadrant": "Emerging Suburban Corridor",
+    "rated_venue_count": 11,
+    "insufficient_data": true
   },
   {
     "COMM_NUM": 227,
@@ -925,7 +981,9 @@
     "hospitality_count": 0,
     "services_count": 0,
     "venue_density": 3.6,
-    "quadrant": "Emerging Suburban Corridor"
+    "quadrant": "Emerging Suburban Corridor",
+    "rated_venue_count": 4,
+    "insufficient_data": true
   },
   {
     "COMM_NUM": 261,
@@ -957,7 +1015,9 @@
     "hospitality_count": 0,
     "services_count": 0,
     "venue_density": 1.41,
-    "quadrant": "Emerging Suburban Corridor"
+    "quadrant": "Emerging Suburban Corridor",
+    "rated_venue_count": 7,
+    "insufficient_data": false
   },
   {
     "COMM_NUM": 247,
@@ -989,7 +1049,9 @@
     "hospitality_count": 0,
     "services_count": 0,
     "venue_density": 4.11,
-    "quadrant": "Emerging Suburban Corridor"
+    "quadrant": "Emerging Suburban Corridor",
+    "rated_venue_count": 3,
+    "insufficient_data": true
   },
   {
     "COMM_NUM": 118,
@@ -1021,7 +1083,9 @@
     "hospitality_count": 4,
     "services_count": 0,
     "venue_density": 13.33,
-    "quadrant": "Exclusive Privacy Enclave"
+    "quadrant": "Exclusive Privacy Enclave",
+    "rated_venue_count": 10,
+    "insufficient_data": true
   },
   {
     "COMM_NUM": 317,
@@ -1053,7 +1117,9 @@
     "hospitality_count": 10,
     "services_count": 3,
     "venue_density": 27.04,
-    "quadrant": "Urban Lifestyle Hub"
+    "quadrant": "Urban Lifestyle Hub",
+    "rated_venue_count": 53,
+    "insufficient_data": true
   },
   {
     "COMM_NUM": 664,
@@ -1085,7 +1151,9 @@
     "hospitality_count": 0,
     "services_count": 1,
     "venue_density": 1.28,
-    "quadrant": "Emerging Suburban Corridor"
+    "quadrant": "Emerging Suburban Corridor",
+    "rated_venue_count": 10,
+    "insufficient_data": false
   },
   {
     "COMM_NUM": 813,
@@ -1117,7 +1185,9 @@
     "hospitality_count": 0,
     "services_count": 1,
     "venue_density": 0.27,
-    "quadrant": "Emerging Suburban Corridor"
+    "quadrant": "Emerging Suburban Corridor",
+    "rated_venue_count": 2,
+    "insufficient_data": true
   },
   {
     "COMM_NUM": 922,
@@ -1149,7 +1219,9 @@
     "hospitality_count": 0,
     "services_count": 1,
     "venue_density": 0.14,
-    "quadrant": "Emerging Suburban Corridor"
+    "quadrant": "Emerging Suburban Corridor",
+    "rated_venue_count": 2,
+    "insufficient_data": false
   },
   {
     "COMM_NUM": 382,
@@ -1181,7 +1253,9 @@
     "hospitality_count": 7,
     "services_count": 14,
     "venue_density": 13.55,
-    "quadrant": "Urban Lifestyle Hub"
+    "quadrant": "Urban Lifestyle Hub",
+    "rated_venue_count": 58,
+    "insufficient_data": false
   },
   {
     "COMM_NUM": 101,
@@ -1206,14 +1280,16 @@
     "villa_pct": 0.0,
     "dominant_type": "Apartments / Units",
     "venue_count": 0,
-    "avg_venue_rating": 0.0,
+    "avg_venue_rating": null,
     "dining_count": 0,
     "leisure_count": 0,
     "retail_count": 0,
     "hospitality_count": 0,
     "services_count": 0,
     "venue_density": 0.0,
-    "quadrant": "Exclusive Privacy Enclave"
+    "quadrant": "Exclusive Privacy Enclave",
+    "rated_venue_count": 0,
+    "insufficient_data": false
   },
   {
     "COMM_NUM": 336,
@@ -1245,7 +1321,9 @@
     "hospitality_count": 2,
     "services_count": 2,
     "venue_density": 18.12,
-    "quadrant": "Urban Lifestyle Hub"
+    "quadrant": "Urban Lifestyle Hub",
+    "rated_venue_count": 25,
+    "insufficient_data": false
   },
   {
     "COMM_NUM": 925,
@@ -1270,14 +1348,16 @@
     "villa_pct": 0.0,
     "dominant_type": "Mixed Typology",
     "venue_count": 0,
-    "avg_venue_rating": 0.0,
+    "avg_venue_rating": null,
     "dining_count": 0,
     "leisure_count": 0,
     "retail_count": 0,
     "hospitality_count": 0,
     "services_count": 0,
     "venue_density": 0.0,
-    "quadrant": "Exclusive Privacy Enclave"
+    "quadrant": "Exclusive Privacy Enclave",
+    "rated_venue_count": 0,
+    "insufficient_data": false
   },
   {
     "COMM_NUM": 127,
@@ -1309,7 +1389,9 @@
     "hospitality_count": 0,
     "services_count": 0,
     "venue_density": 2.86,
-    "quadrant": "Emerging Suburban Corridor"
+    "quadrant": "Emerging Suburban Corridor",
+    "rated_venue_count": 5,
+    "insufficient_data": false
   },
   {
     "COMM_NUM": 626,
@@ -1341,7 +1423,9 @@
     "hospitality_count": 1,
     "services_count": 2,
     "venue_density": 3.47,
-    "quadrant": "Affordable Active Community"
+    "quadrant": "Affordable Active Community",
+    "rated_venue_count": 34,
+    "insufficient_data": false
   },
   {
     "COMM_NUM": 302,
@@ -1373,7 +1457,9 @@
     "hospitality_count": 1,
     "services_count": 1,
     "venue_density": 4.04,
-    "quadrant": "Exclusive Privacy Enclave"
+    "quadrant": "Exclusive Privacy Enclave",
+    "rated_venue_count": 4,
+    "insufficient_data": false
   },
   {
     "COMM_NUM": 383,
@@ -1405,7 +1491,9 @@
     "hospitality_count": 23,
     "services_count": 3,
     "venue_density": 50.47,
-    "quadrant": "Urban Lifestyle Hub"
+    "quadrant": "Urban Lifestyle Hub",
+    "rated_venue_count": 54,
+    "insufficient_data": false
   },
   {
     "COMM_NUM": 532,
@@ -1430,14 +1518,16 @@
     "villa_pct": 0.0,
     "dominant_type": "Mixed Typology",
     "venue_count": 1,
-    "avg_venue_rating": 0.0,
+    "avg_venue_rating": null,
     "dining_count": 0,
     "leisure_count": 0,
     "retail_count": 0,
     "hospitality_count": 1,
     "services_count": 0,
     "venue_density": 0.06,
-    "quadrant": "Emerging Suburban Corridor"
+    "quadrant": "Emerging Suburban Corridor",
+    "rated_venue_count": 0,
+    "insufficient_data": true
   },
   {
     "COMM_NUM": 675,
@@ -1469,7 +1559,9 @@
     "hospitality_count": 1,
     "services_count": 0,
     "venue_density": 0.31,
-    "quadrant": "Exclusive Privacy Enclave"
+    "quadrant": "Exclusive Privacy Enclave",
+    "rated_venue_count": 1,
+    "insufficient_data": false
   },
   {
     "COMM_NUM": 362,
@@ -1501,7 +1593,9 @@
     "hospitality_count": 1,
     "services_count": 4,
     "venue_density": 9.4,
-    "quadrant": "Affordable Active Community"
+    "quadrant": "Affordable Active Community",
+    "rated_venue_count": 30,
+    "insufficient_data": true
   },
   {
     "COMM_NUM": 343,
@@ -1533,7 +1627,9 @@
     "hospitality_count": 2,
     "services_count": 6,
     "venue_density": 9.24,
-    "quadrant": "Urban Lifestyle Hub"
+    "quadrant": "Urban Lifestyle Hub",
+    "rated_venue_count": 45,
+    "insufficient_data": false
   },
   {
     "COMM_NUM": 122,
@@ -1565,7 +1661,9 @@
     "hospitality_count": 2,
     "services_count": 1,
     "venue_density": 4.85,
-    "quadrant": "Exclusive Privacy Enclave"
+    "quadrant": "Exclusive Privacy Enclave",
+    "rated_venue_count": 5,
+    "insufficient_data": true
   },
   {
     "COMM_NUM": 284,
@@ -1590,14 +1688,16 @@
     "villa_pct": 0.0,
     "dominant_type": "Mixed Typology",
     "venue_count": 0,
-    "avg_venue_rating": 0.0,
+    "avg_venue_rating": null,
     "dining_count": 0,
     "leisure_count": 0,
     "retail_count": 0,
     "hospitality_count": 0,
     "services_count": 0,
     "venue_density": 0.0,
-    "quadrant": "Emerging Suburban Corridor"
+    "quadrant": "Emerging Suburban Corridor",
+    "rated_venue_count": 0,
+    "insufficient_data": true
   },
   {
     "COMM_NUM": 132,
@@ -1622,14 +1722,16 @@
     "villa_pct": 93.8,
     "dominant_type": "Villas / Townhouses",
     "venue_count": 0,
-    "avg_venue_rating": 0.0,
+    "avg_venue_rating": null,
     "dining_count": 0,
     "leisure_count": 0,
     "retail_count": 0,
     "hospitality_count": 0,
     "services_count": 0,
     "venue_density": 0.0,
-    "quadrant": "Emerging Suburban Corridor"
+    "quadrant": "Emerging Suburban Corridor",
+    "rated_venue_count": 0,
+    "insufficient_data": false
   },
   {
     "COMM_NUM": 366,
@@ -1661,7 +1763,9 @@
     "hospitality_count": 7,
     "services_count": 3,
     "venue_density": 14.18,
-    "quadrant": "Urban Lifestyle Hub"
+    "quadrant": "Urban Lifestyle Hub",
+    "rated_venue_count": 37,
+    "insufficient_data": false
   },
   {
     "COMM_NUM": 612,
@@ -1686,14 +1790,16 @@
     "villa_pct": 0.0,
     "dominant_type": "Apartments / Units",
     "venue_count": 0,
-    "avg_venue_rating": 0.0,
+    "avg_venue_rating": null,
     "dining_count": 0,
     "leisure_count": 0,
     "retail_count": 0,
     "hospitality_count": 0,
     "services_count": 0,
     "venue_density": 0.0,
-    "quadrant": "Exclusive Privacy Enclave"
+    "quadrant": "Exclusive Privacy Enclave",
+    "rated_venue_count": 0,
+    "insufficient_data": false
   },
   {
     "COMM_NUM": 134,
@@ -1725,7 +1831,9 @@
     "hospitality_count": 1,
     "services_count": 3,
     "venue_density": 3.79,
-    "quadrant": "Affordable Active Community"
+    "quadrant": "Affordable Active Community",
+    "rated_venue_count": 22,
+    "insufficient_data": false
   },
   {
     "COMM_NUM": 126,
@@ -1757,7 +1865,9 @@
     "hospitality_count": 0,
     "services_count": 0,
     "venue_density": 0.79,
-    "quadrant": "Emerging Suburban Corridor"
+    "quadrant": "Emerging Suburban Corridor",
+    "rated_venue_count": 1,
+    "insufficient_data": false
   },
   {
     "COMM_NUM": 245,
@@ -1789,7 +1899,9 @@
     "hospitality_count": 0,
     "services_count": 3,
     "venue_density": 4.74,
-    "quadrant": "Exclusive Privacy Enclave"
+    "quadrant": "Exclusive Privacy Enclave",
+    "rated_venue_count": 11,
+    "insufficient_data": true
   },
   {
     "COMM_NUM": 368,
@@ -1821,7 +1933,9 @@
     "hospitality_count": 0,
     "services_count": 3,
     "venue_density": 4.55,
-    "quadrant": "Affordable Active Community"
+    "quadrant": "Affordable Active Community",
+    "rated_venue_count": 20,
+    "insufficient_data": true
   },
   {
     "COMM_NUM": 971,
@@ -1846,14 +1960,16 @@
     "villa_pct": 0.0,
     "dominant_type": "Mixed Typology",
     "venue_count": 2,
-    "avg_venue_rating": 0.0,
+    "avg_venue_rating": null,
     "dining_count": 1,
     "leisure_count": 0,
     "retail_count": 1,
     "hospitality_count": 0,
     "services_count": 0,
     "venue_density": 0.01,
-    "quadrant": "Emerging Suburban Corridor"
+    "quadrant": "Emerging Suburban Corridor",
+    "rated_venue_count": 0,
+    "insufficient_data": true
   },
   {
     "COMM_NUM": 617,
@@ -1885,7 +2001,9 @@
     "hospitality_count": 0,
     "services_count": 0,
     "venue_density": 0.32,
-    "quadrant": "Emerging Suburban Corridor"
+    "quadrant": "Emerging Suburban Corridor",
+    "rated_venue_count": 2,
+    "insufficient_data": true
   },
   {
     "COMM_NUM": 643,
@@ -1917,7 +2035,9 @@
     "hospitality_count": 0,
     "services_count": 2,
     "venue_density": 0.19,
-    "quadrant": "Emerging Suburban Corridor"
+    "quadrant": "Emerging Suburban Corridor",
+    "rated_venue_count": 2,
+    "insufficient_data": false
   },
   {
     "COMM_NUM": 303,
@@ -1942,14 +2062,16 @@
     "villa_pct": 6.5,
     "dominant_type": "Apartments / Units",
     "venue_count": 0,
-    "avg_venue_rating": 0.0,
+    "avg_venue_rating": null,
     "dining_count": 0,
     "leisure_count": 0,
     "retail_count": 0,
     "hospitality_count": 0,
     "services_count": 0,
     "venue_density": 0.0,
-    "quadrant": "Exclusive Privacy Enclave"
+    "quadrant": "Exclusive Privacy Enclave",
+    "rated_venue_count": 0,
+    "insufficient_data": false
   },
   {
     "COMM_NUM": 352,
@@ -1981,7 +2103,9 @@
     "hospitality_count": 2,
     "services_count": 1,
     "venue_density": 7.56,
-    "quadrant": "Affordable Active Community"
+    "quadrant": "Affordable Active Community",
+    "rated_venue_count": 26,
+    "insufficient_data": true
   },
   {
     "COMM_NUM": 321,
@@ -2013,7 +2137,9 @@
     "hospitality_count": 3,
     "services_count": 2,
     "venue_density": 0.54,
-    "quadrant": "Exclusive Privacy Enclave"
+    "quadrant": "Exclusive Privacy Enclave",
+    "rated_venue_count": 12,
+    "insufficient_data": false
   },
   {
     "COMM_NUM": 916,
@@ -2038,14 +2164,16 @@
     "villa_pct": 11.8,
     "dominant_type": "Mixed Typology",
     "venue_count": 0,
-    "avg_venue_rating": 0.0,
+    "avg_venue_rating": null,
     "dining_count": 0,
     "leisure_count": 0,
     "retail_count": 0,
     "hospitality_count": 0,
     "services_count": 0,
     "venue_density": 0.0,
-    "quadrant": "Emerging Suburban Corridor"
+    "quadrant": "Emerging Suburban Corridor",
+    "rated_venue_count": 0,
+    "insufficient_data": false
   },
   {
     "COMM_NUM": 313,
@@ -2077,7 +2205,9 @@
     "hospitality_count": 2,
     "services_count": 2,
     "venue_density": 21.69,
-    "quadrant": "Urban Lifestyle Hub"
+    "quadrant": "Urban Lifestyle Hub",
+    "rated_venue_count": 18,
+    "insufficient_data": true
   },
   {
     "COMM_NUM": 811,
@@ -2109,7 +2239,9 @@
     "hospitality_count": 0,
     "services_count": 1,
     "venue_density": 0.19,
-    "quadrant": "Emerging Suburban Corridor"
+    "quadrant": "Emerging Suburban Corridor",
+    "rated_venue_count": 2,
+    "insufficient_data": false
   },
   {
     "COMM_NUM": 618,
@@ -2141,7 +2273,9 @@
     "hospitality_count": 5,
     "services_count": 2,
     "venue_density": 0.51,
-    "quadrant": "Exclusive Privacy Enclave"
+    "quadrant": "Exclusive Privacy Enclave",
+    "rated_venue_count": 11,
+    "insufficient_data": false
   },
   {
     "COMM_NUM": 231,
@@ -2173,7 +2307,9 @@
     "hospitality_count": 1,
     "services_count": 1,
     "venue_density": 4.12,
-    "quadrant": "Emerging Suburban Corridor"
+    "quadrant": "Emerging Suburban Corridor",
+    "rated_venue_count": 7,
+    "insufficient_data": true
   },
   {
     "COMM_NUM": 513,
@@ -2205,7 +2341,9 @@
     "hospitality_count": 3,
     "services_count": 3,
     "venue_density": 1.59,
-    "quadrant": "Affordable Active Community"
+    "quadrant": "Affordable Active Community",
+    "rated_venue_count": 66,
+    "insufficient_data": false
   },
   {
     "COMM_NUM": 912,
@@ -2237,7 +2375,9 @@
     "hospitality_count": 0,
     "services_count": 0,
     "venue_density": 0.23,
-    "quadrant": "Emerging Suburban Corridor"
+    "quadrant": "Emerging Suburban Corridor",
+    "rated_venue_count": 2,
+    "insufficient_data": true
   },
   {
     "COMM_NUM": 921,
@@ -2269,7 +2409,9 @@
     "hospitality_count": 0,
     "services_count": 0,
     "venue_density": 0.11,
-    "quadrant": "Exclusive Privacy Enclave"
+    "quadrant": "Exclusive Privacy Enclave",
+    "rated_venue_count": 2,
+    "insufficient_data": false
   },
   {
     "COMM_NUM": 511,
@@ -2301,7 +2443,9 @@
     "hospitality_count": 0,
     "services_count": 3,
     "venue_density": 0.29,
-    "quadrant": "Exclusive Privacy Enclave"
+    "quadrant": "Exclusive Privacy Enclave",
+    "rated_venue_count": 7,
+    "insufficient_data": false
   },
   {
     "COMM_NUM": 392,
@@ -2333,7 +2477,9 @@
     "hospitality_count": 23,
     "services_count": 9,
     "venue_density": 11.26,
-    "quadrant": "Urban Lifestyle Hub"
+    "quadrant": "Urban Lifestyle Hub",
+    "rated_venue_count": 100,
+    "insufficient_data": false
   },
   {
     "COMM_NUM": 381,
@@ -2365,7 +2511,9 @@
     "hospitality_count": 25,
     "services_count": 9,
     "venue_density": 3.7,
-    "quadrant": "Urban Lifestyle Hub"
+    "quadrant": "Urban Lifestyle Hub",
+    "rated_venue_count": 99,
+    "insufficient_data": false
   },
   {
     "COMM_NUM": 112,
@@ -2397,7 +2545,9 @@
     "hospitality_count": 1,
     "services_count": 0,
     "venue_density": 23.33,
-    "quadrant": "Exclusive Privacy Enclave"
+    "quadrant": "Exclusive Privacy Enclave",
+    "rated_venue_count": 7,
+    "insufficient_data": true
   },
   {
     "COMM_NUM": 113,
@@ -2429,7 +2579,9 @@
     "hospitality_count": 0,
     "services_count": 1,
     "venue_density": 11.11,
-    "quadrant": "Exclusive Privacy Enclave"
+    "quadrant": "Exclusive Privacy Enclave",
+    "rated_venue_count": 2,
+    "insufficient_data": true
   },
   {
     "COMM_NUM": 266,
@@ -2454,14 +2606,16 @@
     "villa_pct": 50.0,
     "dominant_type": "Villas / Townhouses",
     "venue_count": 0,
-    "avg_venue_rating": 0.0,
+    "avg_venue_rating": null,
     "dining_count": 0,
     "leisure_count": 0,
     "retail_count": 0,
     "hospitality_count": 0,
     "services_count": 0,
     "venue_density": 0.0,
-    "quadrant": "Emerging Suburban Corridor"
+    "quadrant": "Emerging Suburban Corridor",
+    "rated_venue_count": 0,
+    "insufficient_data": true
   },
   {
     "COMM_NUM": 281,
@@ -2493,7 +2647,9 @@
     "hospitality_count": 1,
     "services_count": 2,
     "venue_density": 1.04,
-    "quadrant": "Affordable Active Community"
+    "quadrant": "Affordable Active Community",
+    "rated_venue_count": 17,
+    "insufficient_data": false
   },
   {
     "COMM_NUM": 115,
@@ -2518,14 +2674,16 @@
     "villa_pct": 0.0,
     "dominant_type": "Mixed Typology",
     "venue_count": 0,
-    "avg_venue_rating": 0.0,
+    "avg_venue_rating": null,
     "dining_count": 0,
     "leisure_count": 0,
     "retail_count": 0,
     "hospitality_count": 0,
     "services_count": 0,
     "venue_density": 0.0,
-    "quadrant": "Exclusive Privacy Enclave"
+    "quadrant": "Exclusive Privacy Enclave",
+    "rated_venue_count": 0,
+    "insufficient_data": true
   },
   {
     "COMM_NUM": 521,
@@ -2557,7 +2715,9 @@
     "hospitality_count": 3,
     "services_count": 2,
     "venue_density": 0.08,
-    "quadrant": "Exclusive Privacy Enclave"
+    "quadrant": "Exclusive Privacy Enclave",
+    "rated_venue_count": 9,
+    "insufficient_data": false
   },
   {
     "COMM_NUM": 369,
@@ -2589,7 +2749,9 @@
     "hospitality_count": 0,
     "services_count": 0,
     "venue_density": 0.21,
-    "quadrant": "Emerging Suburban Corridor"
+    "quadrant": "Emerging Suburban Corridor",
+    "rated_venue_count": 1,
+    "insufficient_data": true
   },
   {
     "COMM_NUM": 324,
@@ -2621,7 +2783,9 @@
     "hospitality_count": 0,
     "services_count": 2,
     "venue_density": 3.75,
-    "quadrant": "Exclusive Privacy Enclave"
+    "quadrant": "Exclusive Privacy Enclave",
+    "rated_venue_count": 3,
+    "insufficient_data": false
   },
   {
     "COMM_NUM": 367,
@@ -2653,7 +2817,9 @@
     "hospitality_count": 1,
     "services_count": 0,
     "venue_density": 4.86,
-    "quadrant": "Emerging Suburban Corridor"
+    "quadrant": "Emerging Suburban Corridor",
+    "rated_venue_count": 9,
+    "insufficient_data": false
   },
   {
     "COMM_NUM": 333,
@@ -2685,7 +2851,9 @@
     "hospitality_count": 0,
     "services_count": 0,
     "venue_density": 1.01,
-    "quadrant": "Exclusive Privacy Enclave"
+    "quadrant": "Exclusive Privacy Enclave",
+    "rated_venue_count": 2,
+    "insufficient_data": false
   },
   {
     "COMM_NUM": 646,
@@ -2717,7 +2885,9 @@
     "hospitality_count": 0,
     "services_count": 1,
     "venue_density": 5.55,
-    "quadrant": "Urban Lifestyle Hub"
+    "quadrant": "Urban Lifestyle Hub",
+    "rated_venue_count": 38,
+    "insufficient_data": false
   },
   {
     "COMM_NUM": 616,
@@ -2749,7 +2919,9 @@
     "hospitality_count": 0,
     "services_count": 0,
     "venue_density": 0.32,
-    "quadrant": "Emerging Suburban Corridor"
+    "quadrant": "Emerging Suburban Corridor",
+    "rated_venue_count": 2,
+    "insufficient_data": false
   },
   {
     "COMM_NUM": 116,
@@ -2774,14 +2946,16 @@
     "villa_pct": 0.0,
     "dominant_type": "Mixed Typology",
     "venue_count": 0,
-    "avg_venue_rating": 0.0,
+    "avg_venue_rating": null,
     "dining_count": 0,
     "leisure_count": 0,
     "retail_count": 0,
     "hospitality_count": 0,
     "services_count": 0,
     "venue_density": 0.0,
-    "quadrant": "Exclusive Privacy Enclave"
+    "quadrant": "Exclusive Privacy Enclave",
+    "rated_venue_count": 0,
+    "insufficient_data": true
   },
   {
     "COMM_NUM": 319,
@@ -2813,7 +2987,9 @@
     "hospitality_count": 8,
     "services_count": 5,
     "venue_density": 30.26,
-    "quadrant": "Urban Lifestyle Hub"
+    "quadrant": "Urban Lifestyle Hub",
+    "rated_venue_count": 46,
+    "insufficient_data": true
   },
   {
     "COMM_NUM": 422,
@@ -2845,7 +3021,9 @@
     "hospitality_count": 0,
     "services_count": 1,
     "venue_density": 1.69,
-    "quadrant": "Emerging Suburban Corridor"
+    "quadrant": "Emerging Suburban Corridor",
+    "rated_venue_count": 6,
+    "insufficient_data": true
   },
   {
     "COMM_NUM": 335,
@@ -2877,7 +3055,9 @@
     "hospitality_count": 9,
     "services_count": 2,
     "venue_density": 40.96,
-    "quadrant": "Urban Lifestyle Hub"
+    "quadrant": "Urban Lifestyle Hub",
+    "rated_venue_count": 34,
+    "insufficient_data": false
   },
   {
     "COMM_NUM": 711,
@@ -2909,7 +3089,9 @@
     "hospitality_count": 0,
     "services_count": 4,
     "venue_density": 0.18,
-    "quadrant": "Emerging Suburban Corridor"
+    "quadrant": "Emerging Suburban Corridor",
+    "rated_venue_count": 5,
+    "insufficient_data": true
   },
   {
     "COMM_NUM": 265,
@@ -2941,7 +3123,9 @@
     "hospitality_count": 0,
     "services_count": 0,
     "venue_density": 0.28,
-    "quadrant": "Emerging Suburban Corridor"
+    "quadrant": "Emerging Suburban Corridor",
+    "rated_venue_count": 1,
+    "insufficient_data": true
   },
   {
     "COMM_NUM": 987,
@@ -2966,14 +3150,16 @@
     "villa_pct": 0.0,
     "dominant_type": "Mixed Typology",
     "venue_count": 0,
-    "avg_venue_rating": 0.0,
+    "avg_venue_rating": null,
     "dining_count": 0,
     "leisure_count": 0,
     "retail_count": 0,
     "hospitality_count": 0,
     "services_count": 0,
     "venue_density": 0.0,
-    "quadrant": "Emerging Suburban Corridor"
+    "quadrant": "Emerging Suburban Corridor",
+    "rated_venue_count": 0,
+    "insufficient_data": true
   },
   {
     "COMM_NUM": 117,
@@ -3005,7 +3191,9 @@
     "hospitality_count": 1,
     "services_count": 0,
     "venue_density": 20.51,
-    "quadrant": "Exclusive Privacy Enclave"
+    "quadrant": "Exclusive Privacy Enclave",
+    "rated_venue_count": 8,
+    "insufficient_data": true
   },
   {
     "COMM_NUM": 423,
@@ -3037,7 +3225,9 @@
     "hospitality_count": 0,
     "services_count": 0,
     "venue_density": 0.16,
-    "quadrant": "Emerging Suburban Corridor"
+    "quadrant": "Emerging Suburban Corridor",
+    "rated_venue_count": 1,
+    "insufficient_data": true
   },
   {
     "COMM_NUM": 359,
@@ -3069,7 +3259,9 @@
     "hospitality_count": 0,
     "services_count": 1,
     "venue_density": 0.45,
-    "quadrant": "Emerging Suburban Corridor"
+    "quadrant": "Emerging Suburban Corridor",
+    "rated_venue_count": 1,
+    "insufficient_data": false
   },
   {
     "COMM_NUM": 364,
@@ -3101,7 +3293,9 @@
     "hospitality_count": 1,
     "services_count": 10,
     "venue_density": 6.83,
-    "quadrant": "Affordable Active Community"
+    "quadrant": "Affordable Active Community",
+    "rated_venue_count": 33,
+    "insufficient_data": true
   },
   {
     "COMM_NUM": 682,
@@ -3133,7 +3327,9 @@
     "hospitality_count": 0,
     "services_count": 4,
     "venue_density": 1.31,
-    "quadrant": "Emerging Suburban Corridor"
+    "quadrant": "Emerging Suburban Corridor",
+    "rated_venue_count": 12,
+    "insufficient_data": false
   },
   {
     "COMM_NUM": 416,
@@ -3165,7 +3361,9 @@
     "hospitality_count": 0,
     "services_count": 2,
     "venue_density": 1.81,
-    "quadrant": "Affordable Active Community"
+    "quadrant": "Affordable Active Community",
+    "rated_venue_count": 15,
+    "insufficient_data": false
   },
   {
     "COMM_NUM": 672,
@@ -3197,7 +3395,9 @@
     "hospitality_count": 1,
     "services_count": 1,
     "venue_density": 1.26,
-    "quadrant": "Exclusive Privacy Enclave"
+    "quadrant": "Exclusive Privacy Enclave",
+    "rated_venue_count": 6,
+    "insufficient_data": false
   },
   {
     "COMM_NUM": 599,
@@ -3229,7 +3429,9 @@
     "hospitality_count": 1,
     "services_count": 0,
     "venue_density": 0.05,
-    "quadrant": "Emerging Suburban Corridor"
+    "quadrant": "Emerging Suburban Corridor",
+    "rated_venue_count": 1,
+    "insufficient_data": false
   },
   {
     "COMM_NUM": 271,
@@ -3261,7 +3463,9 @@
     "hospitality_count": 0,
     "services_count": 1,
     "venue_density": 0.08,
-    "quadrant": "Emerging Suburban Corridor"
+    "quadrant": "Emerging Suburban Corridor",
+    "rated_venue_count": 2,
+    "insufficient_data": true
   },
   {
     "COMM_NUM": 129,
@@ -3293,7 +3497,9 @@
     "hospitality_count": 14,
     "services_count": 7,
     "venue_density": 30.0,
-    "quadrant": "Urban Lifestyle Hub"
+    "quadrant": "Urban Lifestyle Hub",
+    "rated_venue_count": 81,
+    "insufficient_data": false
   },
   {
     "COMM_NUM": 373,
@@ -3325,7 +3531,9 @@
     "hospitality_count": 13,
     "services_count": 4,
     "venue_density": 24.81,
-    "quadrant": "Urban Lifestyle Hub"
+    "quadrant": "Urban Lifestyle Hub",
+    "rated_venue_count": 98,
+    "insufficient_data": false
   },
   {
     "COMM_NUM": 325,
@@ -3357,7 +3565,9 @@
     "hospitality_count": 0,
     "services_count": 1,
     "venue_density": 0.49,
-    "quadrant": "Exclusive Privacy Enclave"
+    "quadrant": "Exclusive Privacy Enclave",
+    "rated_venue_count": 2,
+    "insufficient_data": false
   },
   {
     "COMM_NUM": 375,
@@ -3389,7 +3599,9 @@
     "hospitality_count": 0,
     "services_count": 0,
     "venue_density": 0.61,
-    "quadrant": "Emerging Suburban Corridor"
+    "quadrant": "Emerging Suburban Corridor",
+    "rated_venue_count": 3,
+    "insufficient_data": false
   },
   {
     "COMM_NUM": 346,
@@ -3421,7 +3633,9 @@
     "hospitality_count": 16,
     "services_count": 1,
     "venue_density": 6.53,
-    "quadrant": "Urban Lifestyle Hub"
+    "quadrant": "Urban Lifestyle Hub",
+    "rated_venue_count": 43,
+    "insufficient_data": false
   },
   {
     "COMM_NUM": 123,
@@ -3453,7 +3667,9 @@
     "hospitality_count": 4,
     "services_count": 1,
     "venue_density": 9.91,
-    "quadrant": "Emerging Suburban Corridor"
+    "quadrant": "Emerging Suburban Corridor",
+    "rated_venue_count": 11,
+    "insufficient_data": false
   },
   {
     "COMM_NUM": 345,
@@ -3485,7 +3701,9 @@
     "hospitality_count": 10,
     "services_count": 8,
     "venue_density": 37.59,
-    "quadrant": "Urban Lifestyle Hub"
+    "quadrant": "Urban Lifestyle Hub",
+    "rated_venue_count": 100,
+    "insufficient_data": false
   },
   {
     "COMM_NUM": 685,
@@ -3517,7 +3735,9 @@
     "hospitality_count": 2,
     "services_count": 0,
     "venue_density": 0.61,
-    "quadrant": "Emerging Suburban Corridor"
+    "quadrant": "Emerging Suburban Corridor",
+    "rated_venue_count": 10,
+    "insufficient_data": false
   },
   {
     "COMM_NUM": 686,
@@ -3542,14 +3762,16 @@
     "villa_pct": 0.0,
     "dominant_type": "Mixed Typology",
     "venue_count": 0,
-    "avg_venue_rating": 0.0,
+    "avg_venue_rating": null,
     "dining_count": 0,
     "leisure_count": 0,
     "retail_count": 0,
     "hospitality_count": 0,
     "services_count": 0,
     "venue_density": 0.0,
-    "quadrant": "Exclusive Privacy Enclave"
+    "quadrant": "Exclusive Privacy Enclave",
+    "rated_venue_count": 0,
+    "insufficient_data": false
   },
   {
     "COMM_NUM": 318,
@@ -3581,7 +3803,9 @@
     "hospitality_count": 2,
     "services_count": 5,
     "venue_density": 30.81,
-    "quadrant": "Urban Lifestyle Hub"
+    "quadrant": "Urban Lifestyle Hub",
+    "rated_venue_count": 65,
+    "insufficient_data": true
   },
   {
     "COMM_NUM": 421,
@@ -3613,7 +3837,9 @@
     "hospitality_count": 0,
     "services_count": 0,
     "venue_density": 2.12,
-    "quadrant": "Emerging Suburban Corridor"
+    "quadrant": "Emerging Suburban Corridor",
+    "rated_venue_count": 5,
+    "insufficient_data": true
   },
   {
     "COMM_NUM": 262,
@@ -3645,7 +3871,9 @@
     "hospitality_count": 0,
     "services_count": 1,
     "venue_density": 2.04,
-    "quadrant": "Emerging Suburban Corridor"
+    "quadrant": "Emerging Suburban Corridor",
+    "rated_venue_count": 14,
+    "insufficient_data": true
   },
   {
     "COMM_NUM": 413,
@@ -3677,7 +3905,9 @@
     "hospitality_count": 0,
     "services_count": 1,
     "venue_density": 0.13,
-    "quadrant": "Emerging Suburban Corridor"
+    "quadrant": "Emerging Suburban Corridor",
+    "rated_venue_count": 1,
+    "insufficient_data": true
   },
   {
     "COMM_NUM": 322,
@@ -3709,7 +3939,9 @@
     "hospitality_count": 2,
     "services_count": 0,
     "venue_density": 9.09,
-    "quadrant": "Emerging Suburban Corridor"
+    "quadrant": "Emerging Suburban Corridor",
+    "rated_venue_count": 8,
+    "insufficient_data": true
   },
   {
     "COMM_NUM": 915,
@@ -3741,7 +3973,9 @@
     "hospitality_count": 1,
     "services_count": 1,
     "venue_density": 0.11,
-    "quadrant": "Emerging Suburban Corridor"
+    "quadrant": "Emerging Suburban Corridor",
+    "rated_venue_count": 1,
+    "insufficient_data": false
   },
   {
     "COMM_NUM": 684,
@@ -3766,14 +4000,16 @@
     "villa_pct": 8.2,
     "dominant_type": "Apartments / Units",
     "venue_count": 0,
-    "avg_venue_rating": 0.0,
+    "avg_venue_rating": null,
     "dining_count": 0,
     "leisure_count": 0,
     "retail_count": 0,
     "hospitality_count": 0,
     "services_count": 0,
     "venue_density": 0.0,
-    "quadrant": "Exclusive Privacy Enclave"
+    "quadrant": "Exclusive Privacy Enclave",
+    "rated_venue_count": 0,
+    "insufficient_data": false
   },
   {
     "COMM_NUM": 334,
@@ -3805,7 +4041,9 @@
     "hospitality_count": 0,
     "services_count": 0,
     "venue_density": 0.37,
-    "quadrant": "Exclusive Privacy Enclave"
+    "quadrant": "Exclusive Privacy Enclave",
+    "rated_venue_count": 1,
+    "insufficient_data": false
   },
   {
     "COMM_NUM": 611,
@@ -3830,14 +4068,16 @@
     "villa_pct": 0.0,
     "dominant_type": "Apartments / Units",
     "venue_count": 0,
-    "avg_venue_rating": 0.0,
+    "avg_venue_rating": null,
     "dining_count": 0,
     "leisure_count": 0,
     "retail_count": 0,
     "hospitality_count": 0,
     "services_count": 0,
     "venue_density": 0.0,
-    "quadrant": "Exclusive Privacy Enclave"
+    "quadrant": "Exclusive Privacy Enclave",
+    "rated_venue_count": 0,
+    "insufficient_data": false
   },
   {
     "COMM_NUM": 263,
@@ -3862,14 +4102,16 @@
     "villa_pct": 100.0,
     "dominant_type": "Villas / Townhouses",
     "venue_count": 0,
-    "avg_venue_rating": 0.0,
+    "avg_venue_rating": null,
     "dining_count": 0,
     "leisure_count": 0,
     "retail_count": 0,
     "hospitality_count": 0,
     "services_count": 0,
     "venue_density": 0.0,
-    "quadrant": "Emerging Suburban Corridor"
+    "quadrant": "Emerging Suburban Corridor",
+    "rated_venue_count": 0,
+    "insufficient_data": true
   },
   {
     "COMM_NUM": 512,
@@ -3901,7 +4143,9 @@
     "hospitality_count": 1,
     "services_count": 1,
     "venue_density": 0.12,
-    "quadrant": "Emerging Suburban Corridor"
+    "quadrant": "Emerging Suburban Corridor",
+    "rated_venue_count": 6,
+    "insufficient_data": true
   },
   {
     "COMM_NUM": 214,
@@ -3933,7 +4177,9 @@
     "hospitality_count": 10,
     "services_count": 5,
     "venue_density": 12.87,
-    "quadrant": "Affordable Active Community"
+    "quadrant": "Affordable Active Community",
+    "rated_venue_count": 52,
+    "insufficient_data": true
   },
   {
     "COMM_NUM": 315,
@@ -3965,7 +4211,9 @@
     "hospitality_count": 11,
     "services_count": 5,
     "venue_density": 16.18,
-    "quadrant": "Urban Lifestyle Hub"
+    "quadrant": "Urban Lifestyle Hub",
+    "rated_venue_count": 55,
+    "insufficient_data": false
   },
   {
     "COMM_NUM": 622,
@@ -3997,7 +4245,9 @@
     "hospitality_count": 1,
     "services_count": 0,
     "venue_density": 0.23,
-    "quadrant": "Emerging Suburban Corridor"
+    "quadrant": "Emerging Suburban Corridor",
+    "rated_venue_count": 2,
+    "insufficient_data": true
   },
   {
     "COMM_NUM": 133,
@@ -4029,7 +4279,9 @@
     "hospitality_count": 1,
     "services_count": 1,
     "venue_density": 23.19,
-    "quadrant": "Affordable Active Community"
+    "quadrant": "Affordable Active Community",
+    "rated_venue_count": 32,
+    "insufficient_data": true
   },
   {
     "COMM_NUM": 624,
@@ -4054,14 +4306,16 @@
     "villa_pct": 0.0,
     "dominant_type": "Apartments / Units",
     "venue_count": 0,
-    "avg_venue_rating": 0.0,
+    "avg_venue_rating": null,
     "dining_count": 0,
     "leisure_count": 0,
     "retail_count": 0,
     "hospitality_count": 0,
     "services_count": 0,
     "venue_density": 0.0,
-    "quadrant": "Emerging Suburban Corridor"
+    "quadrant": "Emerging Suburban Corridor",
+    "rated_venue_count": 0,
+    "insufficient_data": false
   },
   {
     "COMM_NUM": 244,
@@ -4086,14 +4340,16 @@
     "villa_pct": 50.0,
     "dominant_type": "Villas / Townhouses",
     "venue_count": 0,
-    "avg_venue_rating": 0.0,
+    "avg_venue_rating": null,
     "dining_count": 0,
     "leisure_count": 0,
     "retail_count": 0,
     "hospitality_count": 0,
     "services_count": 0,
     "venue_density": 0.0,
-    "quadrant": "Emerging Suburban Corridor"
+    "quadrant": "Emerging Suburban Corridor",
+    "rated_venue_count": 0,
+    "insufficient_data": true
   },
   {
     "COMM_NUM": 597,
@@ -4118,14 +4374,16 @@
     "villa_pct": 25.5,
     "dominant_type": "Mixed Typology",
     "venue_count": 0,
-    "avg_venue_rating": 0.0,
+    "avg_venue_rating": null,
     "dining_count": 0,
     "leisure_count": 0,
     "retail_count": 0,
     "hospitality_count": 0,
     "services_count": 0,
     "venue_density": 0.0,
-    "quadrant": "Exclusive Privacy Enclave"
+    "quadrant": "Exclusive Privacy Enclave",
+    "rated_venue_count": 0,
+    "insufficient_data": false
   },
   {
     "COMM_NUM": 533,
@@ -4150,14 +4408,16 @@
     "villa_pct": 0.0,
     "dominant_type": "Mixed Typology",
     "venue_count": 0,
-    "avg_venue_rating": 0.0,
+    "avg_venue_rating": null,
     "dining_count": 0,
     "leisure_count": 0,
     "retail_count": 0,
     "hospitality_count": 0,
     "services_count": 0,
     "venue_density": 0.0,
-    "quadrant": "Emerging Suburban Corridor"
+    "quadrant": "Emerging Suburban Corridor",
+    "rated_venue_count": 0,
+    "insufficient_data": false
   },
   {
     "COMM_NUM": 598,
@@ -4189,7 +4449,9 @@
     "hospitality_count": 4,
     "services_count": 3,
     "venue_density": 1.34,
-    "quadrant": "Affordable Active Community"
+    "quadrant": "Affordable Active Community",
+    "rated_venue_count": 23,
+    "insufficient_data": false
   },
   {
     "COMM_NUM": 621,
@@ -4221,7 +4483,9 @@
     "hospitality_count": 4,
     "services_count": 0,
     "venue_density": 5.46,
-    "quadrant": "Affordable Active Community"
+    "quadrant": "Affordable Active Community",
+    "rated_venue_count": 46,
+    "insufficient_data": false
   },
   {
     "COMM_NUM": 388,
@@ -4253,7 +4517,9 @@
     "hospitality_count": 2,
     "services_count": 4,
     "venue_density": 7.29,
-    "quadrant": "Urban Lifestyle Hub"
+    "quadrant": "Urban Lifestyle Hub",
+    "rated_venue_count": 28,
+    "insufficient_data": false
   },
   {
     "COMM_NUM": 393,
@@ -4285,7 +4551,9 @@
     "hospitality_count": 4,
     "services_count": 7,
     "venue_density": 5.25,
-    "quadrant": "Affordable Active Community"
+    "quadrant": "Affordable Active Community",
+    "rated_venue_count": 51,
+    "insufficient_data": false
   },
   {
     "COMM_NUM": 363,
@@ -4317,7 +4585,9 @@
     "hospitality_count": 0,
     "services_count": 2,
     "venue_density": 4.11,
-    "quadrant": "Emerging Suburban Corridor"
+    "quadrant": "Emerging Suburban Corridor",
+    "rated_venue_count": 9,
+    "insufficient_data": true
   },
   {
     "COMM_NUM": 337,
@@ -4349,7 +4619,9 @@
     "hospitality_count": 8,
     "services_count": 1,
     "venue_density": 2.97,
-    "quadrant": "Urban Lifestyle Hub"
+    "quadrant": "Urban Lifestyle Hub",
+    "rated_venue_count": 32,
+    "insufficient_data": false
   },
   {
     "COMM_NUM": 125,
@@ -4381,7 +4653,9 @@
     "hospitality_count": 9,
     "services_count": 2,
     "venue_density": 29.63,
-    "quadrant": "Affordable Active Community"
+    "quadrant": "Affordable Active Community",
+    "rated_venue_count": 24,
+    "insufficient_data": true
   },
   {
     "COMM_NUM": 248,
@@ -4413,7 +4687,9 @@
     "hospitality_count": 0,
     "services_count": 1,
     "venue_density": 0.42,
-    "quadrant": "Emerging Suburban Corridor"
+    "quadrant": "Emerging Suburban Corridor",
+    "rated_venue_count": 1,
+    "insufficient_data": true
   },
   {
     "COMM_NUM": 518,
@@ -4445,7 +4721,9 @@
     "hospitality_count": 0,
     "services_count": 1,
     "venue_density": 0.06,
-    "quadrant": "Exclusive Privacy Enclave"
+    "quadrant": "Exclusive Privacy Enclave",
+    "rated_venue_count": 2,
+    "insufficient_data": false
   },
   {
     "COMM_NUM": 676,
@@ -4477,7 +4755,9 @@
     "hospitality_count": 0,
     "services_count": 0,
     "venue_density": 0.23,
-    "quadrant": "Exclusive Privacy Enclave"
+    "quadrant": "Exclusive Privacy Enclave",
+    "rated_venue_count": 1,
+    "insufficient_data": false
   },
   {
     "COMM_NUM": 316,
@@ -4509,7 +4789,9 @@
     "hospitality_count": 6,
     "services_count": 2,
     "venue_density": 18.7,
-    "quadrant": "Urban Lifestyle Hub"
+    "quadrant": "Urban Lifestyle Hub",
+    "rated_venue_count": 23,
+    "insufficient_data": true
   },
   {
     "COMM_NUM": 673,
@@ -4541,7 +4823,9 @@
     "hospitality_count": 0,
     "services_count": 2,
     "venue_density": 0.53,
-    "quadrant": "Exclusive Privacy Enclave"
+    "quadrant": "Exclusive Privacy Enclave",
+    "rated_venue_count": 2,
+    "insufficient_data": false
   },
   {
     "COMM_NUM": 412,
@@ -4573,7 +4857,9 @@
     "hospitality_count": 6,
     "services_count": 8,
     "venue_density": 10.14,
-    "quadrant": "Urban Lifestyle Hub"
+    "quadrant": "Urban Lifestyle Hub",
+    "rated_venue_count": 64,
+    "insufficient_data": false
   },
   {
     "COMM_NUM": 326,
@@ -4605,7 +4891,9 @@
     "hospitality_count": 8,
     "services_count": 3,
     "venue_density": 2.49,
-    "quadrant": "Urban Lifestyle Hub"
+    "quadrant": "Urban Lifestyle Hub",
+    "rated_venue_count": 18,
+    "insufficient_data": false
   },
   {
     "COMM_NUM": 677,
@@ -4637,7 +4925,9 @@
     "hospitality_count": 0,
     "services_count": 0,
     "venue_density": 0.31,
-    "quadrant": "Emerging Suburban Corridor"
+    "quadrant": "Emerging Suburban Corridor",
+    "rated_venue_count": 1,
+    "insufficient_data": false
   },
   {
     "COMM_NUM": 645,
@@ -4669,7 +4959,9 @@
     "hospitality_count": 0,
     "services_count": 0,
     "venue_density": 0.1,
-    "quadrant": "Exclusive Privacy Enclave"
+    "quadrant": "Exclusive Privacy Enclave",
+    "rated_venue_count": 3,
+    "insufficient_data": false
   },
   {
     "COMM_NUM": 314,
@@ -4701,7 +4993,9 @@
     "hospitality_count": 3,
     "services_count": 0,
     "venue_density": 10.2,
-    "quadrant": "Exclusive Privacy Enclave"
+    "quadrant": "Exclusive Privacy Enclave",
+    "rated_venue_count": 10,
+    "insufficient_data": true
   },
   {
     "COMM_NUM": 372,
@@ -4733,7 +5027,9 @@
     "hospitality_count": 10,
     "services_count": 3,
     "venue_density": 5.96,
-    "quadrant": "Urban Lifestyle Hub"
+    "quadrant": "Urban Lifestyle Hub",
+    "rated_venue_count": 35,
+    "insufficient_data": false
   },
   {
     "COMM_NUM": 342,
@@ -4765,7 +5061,9 @@
     "hospitality_count": 3,
     "services_count": 0,
     "venue_density": 7.78,
-    "quadrant": "Urban Lifestyle Hub"
+    "quadrant": "Urban Lifestyle Hub",
+    "rated_venue_count": 26,
+    "insufficient_data": false
   },
   {
     "COMM_NUM": 114,
@@ -4797,7 +5095,9 @@
     "hospitality_count": 0,
     "services_count": 0,
     "venue_density": 20.0,
-    "quadrant": "Exclusive Privacy Enclave"
+    "quadrant": "Exclusive Privacy Enclave",
+    "rated_venue_count": 3,
+    "insufficient_data": true
   },
   {
     "COMM_NUM": 347,
@@ -4829,7 +5129,9 @@
     "hospitality_count": 0,
     "services_count": 0,
     "venue_density": 0.1,
-    "quadrant": "Exclusive Privacy Enclave"
+    "quadrant": "Exclusive Privacy Enclave",
+    "rated_venue_count": 1,
+    "insufficient_data": false
   },
   {
     "COMM_NUM": 356,
@@ -4861,7 +5163,9 @@
     "hospitality_count": 0,
     "services_count": 3,
     "venue_density": 13.52,
-    "quadrant": "Urban Lifestyle Hub"
+    "quadrant": "Urban Lifestyle Hub",
+    "rated_venue_count": 38,
+    "insufficient_data": false
   },
   {
     "COMM_NUM": 918,
@@ -4886,14 +5190,16 @@
     "villa_pct": 30.5,
     "dominant_type": "Mixed Typology",
     "venue_count": 0,
-    "avg_venue_rating": 0.0,
+    "avg_venue_rating": null,
     "dining_count": 0,
     "leisure_count": 0,
     "retail_count": 0,
     "hospitality_count": 0,
     "services_count": 0,
     "venue_density": 0.0,
-    "quadrant": "Emerging Suburban Corridor"
+    "quadrant": "Emerging Suburban Corridor",
+    "rated_venue_count": 0,
+    "insufficient_data": false
   },
   {
     "COMM_NUM": 312,
@@ -4925,7 +5231,9 @@
     "hospitality_count": 3,
     "services_count": 6,
     "venue_density": 41.38,
-    "quadrant": "Urban Lifestyle Hub"
+    "quadrant": "Urban Lifestyle Hub",
+    "rated_venue_count": 36,
+    "insufficient_data": true
   },
   {
     "COMM_NUM": 631,
@@ -4957,7 +5265,9 @@
     "hospitality_count": 0,
     "services_count": 2,
     "venue_density": 0.08,
-    "quadrant": "Exclusive Privacy Enclave"
+    "quadrant": "Exclusive Privacy Enclave",
+    "rated_venue_count": 3,
+    "insufficient_data": false
   },
   {
     "COMM_NUM": 332,
@@ -4989,7 +5299,9 @@
     "hospitality_count": 6,
     "services_count": 6,
     "venue_density": 9.74,
-    "quadrant": "Urban Lifestyle Hub"
+    "quadrant": "Urban Lifestyle Hub",
+    "rated_venue_count": 97,
+    "insufficient_data": false
   },
   {
     "COMM_NUM": 241,
@@ -5021,7 +5333,9 @@
     "hospitality_count": 1,
     "services_count": 2,
     "venue_density": 7.69,
-    "quadrant": "Affordable Active Community"
+    "quadrant": "Affordable Active Community",
+    "rated_venue_count": 17,
+    "insufficient_data": true
   },
   {
     "COMM_NUM": 424,
@@ -5053,7 +5367,9 @@
     "hospitality_count": 0,
     "services_count": 0,
     "venue_density": 0.58,
-    "quadrant": "Emerging Suburban Corridor"
+    "quadrant": "Emerging Suburban Corridor",
+    "rated_venue_count": 3,
+    "insufficient_data": true
   },
   {
     "COMM_NUM": 283,
@@ -5078,14 +5394,16 @@
     "villa_pct": 0.0,
     "dominant_type": "Mixed Typology",
     "venue_count": 0,
-    "avg_venue_rating": 0.0,
+    "avg_venue_rating": null,
     "dining_count": 0,
     "leisure_count": 0,
     "retail_count": 0,
     "hospitality_count": 0,
     "services_count": 0,
     "venue_density": 0.0,
-    "quadrant": "Emerging Suburban Corridor"
+    "quadrant": "Emerging Suburban Corridor",
+    "rated_venue_count": 0,
+    "insufficient_data": true
   },
   {
     "COMM_NUM": 681,
@@ -5117,7 +5435,9 @@
     "hospitality_count": 2,
     "services_count": 0,
     "venue_density": 0.59,
-    "quadrant": "Emerging Suburban Corridor"
+    "quadrant": "Emerging Suburban Corridor",
+    "rated_venue_count": 4,
+    "insufficient_data": false
   },
   {
     "COMM_NUM": 501,
@@ -5142,14 +5462,16 @@
     "villa_pct": 0.0,
     "dominant_type": "Mixed Typology",
     "venue_count": 0,
-    "avg_venue_rating": 0.0,
+    "avg_venue_rating": null,
     "dining_count": 0,
     "leisure_count": 0,
     "retail_count": 0,
     "hospitality_count": 0,
     "services_count": 0,
     "venue_density": 0.0,
-    "quadrant": "Exclusive Privacy Enclave"
+    "quadrant": "Exclusive Privacy Enclave",
+    "rated_venue_count": 0,
+    "insufficient_data": false
   },
   {
     "COMM_NUM": 394,
@@ -5181,7 +5503,9 @@
     "hospitality_count": 1,
     "services_count": 1,
     "venue_density": 2.08,
-    "quadrant": "Affordable Active Community"
+    "quadrant": "Affordable Active Community",
+    "rated_venue_count": 23,
+    "insufficient_data": false
   },
   {
     "COMM_NUM": 591,
@@ -5213,6 +5537,8 @@
     "hospitality_count": 2,
     "services_count": 2,
     "venue_density": 2.3,
-    "quadrant": "Affordable Active Community"
+    "quadrant": "Affordable Active Community",
+    "rated_venue_count": 49,
+    "insufficient_data": false
   }
 ]
