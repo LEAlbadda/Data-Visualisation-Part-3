@@ -134,6 +134,50 @@
       text-decoration: underline;
     }
 
+    /* KPI Summary Cards */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 18px;
+      margin-bottom: 30px;
+    }
+
+    .kpi-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px 24px;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .kpi-card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .kpi-label {
+      font-size: 12px;
+      text-transform: uppercase;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+    }
+
+    .kpi-value {
+      font-size: 26px;
+      font-weight: 800;
+      color: var(--primary);
+    }
+
+    .kpi-desc {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
     /* Visualization Card */
     .viz-card {
       background: var(--card-bg);
@@ -301,6 +345,17 @@
       border-top: 1px solid var(--border);
     }
   
+    .cleaning-section {
+      background: var(--card-bg); border: 1px solid var(--border); border-radius: 14px;
+      padding: 26px 24px; box-shadow: var(--shadow-md); margin: 0 0 30px;
+    }
+    .cleaning-section h2 { color: var(--primary-dark); font-size: 21px; margin-bottom: 8px; }
+    .cleaning-section .section-intro { color: var(--text-muted); font-size: 14px; margin-bottom: 18px; }
+    .cleaning-table-wrap { width: 100%; overflow-x: auto; }
+    table.cleaning-table { width: 100%; border-collapse: collapse; font-size: 13px; min-width: 650px; }
+    .cleaning-table th { text-align:left; background:#eff6ff; color:#1e3a8a; padding:12px; }
+    .cleaning-table td { border-bottom:1px solid var(--border); padding:12px; vertical-align:top; color:#334155; }
+    .cleaning-table tr:last-child td { border-bottom:0; }
     .explain-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:14px; margin:-18px 0 38px; }
     .explain-card { background:#fff; border:1px solid var(--border); border-radius:12px; padding:17px 18px; }
     .explain-card h3 { color:var(--primary-dark); font-size:15px; margin:0 0 7px; }
@@ -365,7 +420,69 @@
   <div class="container">
 
 
+    <!-- Data cleaning summary -->
+    <section class="cleaning-section" aria-labelledby="cleaning-title">
+      <h2 id="cleaning-title">How we cleaned the data</h2>
+      <p class="section-intro">Both visualizations use the same Dubai Land Department sales dataset and community-level aggregation. We applied these checks before interpreting the results.</p>
+      <div class="cleaning-table-wrap">
+        <table class="cleaning-table">
+          <thead>
+            <tr><th>Data issue / decision</th><th>What we did</th><th>Effect on the data</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Transactions cover different types</strong></td>
+              <td>Kept records labelled <code>Sales</code> for property price analysis. Mortgages and gifts were not treated as market sales.</td>
+              <td>Raw file: 89,212 records, including 68,286 sales, 17,617 mortgages and 3,309 gifts.</td>
+            </tr>
+            <tr>
+              <td><strong>Dates outside the project period</strong></td>
+              <td>Kept transactions from 1 January 2015 through the latest date in the supplied file (17 September 2026).</td>
+              <td>51,731 sales fall within the selected period before the price check.</td>
+            </tr>
+            <tr>
+              <td><strong>Invalid price per m²</strong></td>
+              <td>Removed the one sale with a non-positive <code>meter_sale_price</code>. The remaining positive values are used for the price and community summaries.</td>
+              <td>51,730 qualifying sales remain.</td>
+            </tr>
+            <tr>
+              <td><strong>Community matching</strong></td>
+              <td>Joined transaction summaries to the community and venue data using the community code, rather than matching on names.</td>
+              <td>163 communities with qualifying sales are represented; 2,674 venues are linked to those communities.</td>
+            </tr>
+            <tr>
+              <td><strong>Small community samples</strong></td>
+              <td>The dashboard includes a minimum-sales filter so users can exclude communities with too few transactions when comparing median prices. The treemap focuses on sales volume and off-plan share.</td>
+              <td>Users can adjust the minimum-sales threshold instead of treating every small-sample median as equally reliable.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
 
+    <!-- KPI Summary Banner -->
+    <section class="kpi-grid">
+      <div class="kpi-card">
+        <span class="kpi-label">Sales Analysed</span>
+        <span class="kpi-value">51,730</span>
+        <span class="kpi-desc">Sales (2015–2026) with a valid price per m²</span>
+      </div>
+      <div class="kpi-card">
+        <span class="kpi-label">Communities With Sales</span>
+        <span class="kpi-value">163</span>
+        <span class="kpi-desc">Out of 226 communities (91 have 10+ sales; 60 have more than 100)</span>
+      </div>
+      <div class="kpi-card">
+        <span class="kpi-label">Venues Used</span>
+        <span class="kpi-value">2,674</span>
+        <span class="kpi-desc">Foursquare venues in those communities (2,955 in the source file)</span>
+      </div>
+      <div class="kpi-card">
+        <span class="kpi-label">Linked Charts</span>
+        <span class="kpi-value">3 Charts</span>
+        <span class="kpi-desc">The scatterplot brush filters the two bar charts</span>
+      </div>
+    </section>
 
     <!-- Interactive Visualization Card -->
     <section id="visualization1" class="viz-card">
