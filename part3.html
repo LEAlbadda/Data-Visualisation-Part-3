@@ -459,10 +459,15 @@
     #visualization2 #v2-chart svg { width:100%; height:auto; display:block; }
     #visualization2 .v2-tile { stroke:#fff; stroke-width:2px; cursor:pointer; }
     #visualization2 .v2-tile:hover { stroke:#0f172a; stroke-width:3px; }
+    #visualization2 .v2-tile:focus { outline:none; stroke:#f59e0b; stroke-width:4px; }
     #visualization2 .v2-tile-label { font-weight:700; pointer-events:none; }
-    #visualization2 .v2-sector-label { fill:#0f172a; font-size:15px; font-weight:700; pointer-events:none; }
+    #visualization2 .v2-chips { display:flex; flex-wrap:wrap; gap:8px; margin-top:14px; }
+    #visualization2 .v2-chip { display:inline-flex; align-items:center; gap:7px; border:1px solid #e2e8f0; background:#fff; color:#334155; border-radius:999px; padding:5px 11px; font-size:12px; cursor:pointer; }
+    #visualization2 .v2-chip:hover { border-color:#93c5fd; background:#f8fbff; }
+    #visualization2 .v2-chip.active { border-color:#1d4ed8; background:#eff6ff; box-shadow:0 0 0 1px #1d4ed8 inset; }
+    #visualization2 .v2-swatch { width:12px; height:12px; border-radius:3px; flex:none; }
     #visualization2 .v2-legend { display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-top:12px; font-size:12px; color:#64748b; }
-    #visualization2 .v2-gradient { width:190px; height:11px; border-radius:99px; background:linear-gradient(90deg,#deebf7,#9ecae1,#4292c6,#08519c); }
+    #visualization2 .v2-gradient { width:190px; height:11px; border-radius:99px; }
     #v2-tooltip { position:fixed; z-index:1000; pointer-events:none; opacity:0; background:#0f172a; color:#fff; padding:10px 12px; border-radius:9px; font-size:12px; line-height:1.5; box-shadow:0 8px 25px rgba(0,0,0,.2); max-width:260px; }
     #visualization2 .v2-method { display:grid; grid-template-columns:1fr 1fr; gap:18px; margin-top:18px; }
     #visualization2 .v2-method h3 { color:#10213b; margin:0 0 5px; font-size:15px; }
@@ -486,7 +491,7 @@
       </div>
       <h1>Dubai Real Estate: The Urban Livability & Valuation Matrix</h1>
       <p class="header-subtitle">
-        An interactive dashboard that links 51,730 Dubai Land Department property sales (2015–2026) to 2,674 Foursquare venues in 163 Dubai communities.
+        An interactive, multi-view study of 51,730 Dubai Land Department property sales (2015–2026) across 163 communities in 9 sectors, linked to 2,674 Foursquare venues.
       </p>
     </div>
   </header>
@@ -593,7 +598,7 @@
       </article>
       <article class="explain-card">
         <h3>What it helps us see</h3>
-        <p>The dashboard compares property values with nearby amenities and lets users inspect amenity composition and transaction types for selected communities. In the default 50+ sales view, the relationship between venue count and median price is weak (Spearman correlation ≈ 0.04).</p>
+        <p>The dashboard compares property values with nearby amenities and lets users inspect amenity composition and transaction types for selected communities. In the default view (60 communities with more than 100 sales), there is essentially no relationship between venue count and median price (Spearman ρ ≈ −0.005).</p>
       </article>
     </div>
 
@@ -608,7 +613,7 @@
       <div class="v2-stats">
         <div class="v2-stat"><strong id="v2-total-sales">—</strong><span>Sales analysed</span></div>
         <div class="v2-stat"><strong id="v2-community-count">—</strong><span>Communities represented</span></div>
-        <div class="v2-stat"><strong>2015–2026</strong><span>Analysis period</span></div>
+        <div class="v2-stat"><strong id="v2-sector-count">—</strong><span>Sectors (all shown below, 2015–2026 sales)</span></div>
       </div>
 
       <div class="v2-chart-head">
@@ -620,9 +625,11 @@
       </div>
       <div id="v2-chart" role="img" aria-label="Treemap of property sales by Dubai sector and community"></div>
       <div class="v2-legend">
-        <span>Off-plan share</span><span>0%</span><span class="v2-gradient" aria-hidden="true"></span><span>100%</span>
-        <span style="margin-left:auto">Select a sector to explore its communities</span>
+        <span style="white-space:nowrap">Off-plan share&nbsp; 0% <span id="v2-gradient" class="v2-gradient" aria-hidden="true" style="display:inline-block;vertical-align:middle;width:150px"></span> 100%</span>
+        <span style="margin-left:auto">Click a tile or a sector below to explore its communities</span>
       </div>
+      <div id="v2-sector-chips" class="v2-chips" aria-label="Select a sector"></div>
+      <p class="v2-intro" style="font-size:12px;margin:8px 0 0">Sectors 2, 7 and 8 together hold 332 sales (0.6% of the total), so their rectangles are too small to see at full scale. Use the buttons above to open them.</p>
 
       <div class="v2-method">
         <div>
@@ -631,7 +638,7 @@
         </div>
         <div>
           <h3>Interaction</h3>
-          <p>Click a sector to explore its communities; use “All sectors” to return. Hover over a community for its sales count, off-plan share, existing-sales share and median price per m².</p>
+          <p>Click a sector tile (or its button below the chart, or press Enter on a focused tile) to explore its communities; use “All sectors” to return. Hover over a sector or community for its sales, off-plan and existing shares; community tooltips also show median price per m² and flag samples under 10 sales.</p>
         </div>
       </div>
       <p class="v2-intro" style="text-align:center;font-size:12px;margin:18px 0 0">Data: Dubai Land Department transactions supplied for CS333; community-level aggregation in community_data.js. Sales are filtered to 2015–2026 with a positive price per m².</p>
@@ -645,11 +652,11 @@
       </article>
       <article class="explain-card">
         <h3>Interaction</h3>
-        <p>Select a sector to zoom in and compare its communities. Use the “All sectors” control to return to the overview. Hover over a community to see its sales count, off-plan share, existing-sales share and median price per m².</p>
+        <p>Select a sector tile or sector button to zoom in and compare its communities. Use “All sectors” to return. Hover for sales, off-plan and existing shares and median price per m².</p>
       </article>
       <article class="explain-card">
         <h3>What it helps us see</h3>
-        <p>The treemap makes it easy to identify where sales are concentrated and compare the balance between off-plan and existing transactions across Dubai communities.</p>
+        <p>Sales are highly concentrated: Sectors 6 and 3 hold 77.6% of the 51,730 sales, and the top 10 of 163 communities hold 46.3%. Overall, 54.2% of sales are off-plan, but sectors differ widely, from 71.7% (Sector 4) to 4.9% (Sector 2).</p>
       </article>
     </div>
 
@@ -674,7 +681,7 @@
             <li><strong>Y-axis:</strong> median sale price per m² in AED, on a log scale from 1,000 to 100,000. The log scale is used because prices are right-skewed: most communities sit below AED 30,000/m² and a few are far higher. The cheapest community shown at the 10-sales minimum is about AED 1,280/m².</li>
             <li><strong>Circle size:</strong> number of sales in the community, 2015 to 2026.</li>
             <li><strong>Circle colour:</strong> dominant housing type. <span style="color:#2563eb; font-weight:bold;">Blue</span> means apartments (65% or more of sales), <span style="color:#059669; font-weight:bold;">green</span> means villas and townhouses (45% or more), and <span style="color:#d97706; font-weight:bold;">orange</span> means a mix.</li>
-            <li><strong>Brush highlighting:</strong> circles inside the brush keep their colour (88% opacity). The rest turn grey (22% opacity).</li>
+            <li><strong>Brush highlighting:</strong> circles inside the brush keep their colour (94% opacity). The rest turn grey (16% opacity).</li>
             <li><strong>Dashed lines:</strong> at 15 venues and AED 13,000/m². These are thresholds we chose, not medians. The medians of the 91 communities with 10 or more sales are 7 venues and AED 14,484/m². A community counts as "high" when it is at or above the line, and each corner of the chart is labelled with its rule.</li>
           </ul>
         </li>
@@ -698,14 +705,14 @@
       <p>The slider and dropdown decide which communities are eligible, and the brush then picks from those. All three apply at once.</p>
 
       <h3 id="findings">5. Findings</h3>
-      <p><strong>Research question: does paying more for property in Dubai mean getting a better lifestyle through access to nearby amenities?</strong> In this data, mostly not. Among the 67 communities with 50 or more sales (the default view), the rank correlation between venue count and median price per m² is about 0.04, or about 0.16 with the 10-sales minimum. Price and recorded amenities are only weakly related. The figures below are for the default view.</p>
+      <p><strong>Research question: does paying more for property in Dubai mean getting a better lifestyle through access to nearby amenities?</strong> In this data, mostly not. Among the 60 communities with more than 100 sales (the default view), the Spearman rank correlation between venue count and median price per m² is about −0.005, i.e. no monotonic relationship; even with a looser 10-sales minimum (91 communities) it is only 0.16. The figures below are for the default view.</p>
 
       <div class="quadrant-grid">
         <div class="quadrant-box q1">
           <div class="quadrant-title">1. Urban Lifestyle Hubs (price of AED 13,000/m² or more, 15+ venues)</div>
           <div class="quadrant-desc">
-            <strong>16 communities, e.g.</strong> Business Bay (3,660 sales, 43 venues, AED 20,318/m²), Marsa Dubai / Marina (2,967 sales, 100 venues, AED 21,739/m²), Burj Khalifa / Downtown (1,754 sales, 100 venues, AED 25,485/m²).<br>
-            <strong>Note:</strong> High prices go with many venues here. The median is AED 22,808/m² and about 40 venues. Dining &amp; Cafes is 46% of venues, hospitality 18% and leisure 16%. Foursquare collection stops at 100 venues per community, so Marina and Downtown are understated.
+            <strong>13 communities, e.g.</strong> Business Bay (3,660 sales, 43 venues, AED 20,318/m²), Marsa Dubai / Marina (2,967 sales, 100 venues, AED 21,739/m²), Burj Khalifa / Downtown (1,754 sales, 100 venues, AED 25,485/m²).<br>
+            <strong>Note:</strong> High prices go with many venues here. The median is AED 20,832/m² and 43 venues. All 13 are mainly apartments. Dining &amp; Cafes is 46% of venues, hospitality 18% and leisure 16%. Foursquare collection stops at 100 venues per community, so Marina and Downtown are understated.
           </div>
         </div>
 
@@ -713,23 +720,23 @@
           <div class="quadrant-title">2. Affordable Active Communities (below AED 13,000/m², 15+ venues)</div>
           <div class="quadrant-desc">
             <strong>8 communities, e.g.</strong> Jabal Ali First (1,987 sales, 49 venues, AED 11,748/m²), Al Thanyah Fifth (1,786 sales, 51 venues, AED 12,490/m²), Warsan First (1,205 sales, 46 venues, AED 7,005/m²).<br>
-            <strong>Note:</strong> The smallest group. Median price is AED 9,207/m², about 40% of the hub median, with a similar number of venues. Only 32% of sales are off-plan.
+            <strong>Note:</strong> The smallest group. Median price is AED 9,207/m², about 44% of the hub median, with a similar number of venues (median 47.5). Only 32% of sales are off-plan.
           </div>
         </div>
 
         <div class="quadrant-box q3">
           <div class="quadrant-title">3. Exclusive Privacy Enclaves (AED 13,000/m² or more, fewer than 15 venues)</div>
           <div class="quadrant-desc">
-            <strong>26 communities, the largest group, e.g.</strong> Madinat Al Mataar (2,083 sales, 12 venues, AED 14,483/m²), Al Merkadh (1,768 sales, 1 venue, AED 18,932/m²), Hadaeq Sheikh Mohammed Bin Rashid (1,746 sales, 3 venues, AED 19,165/m²).<br>
-            <strong>Note:</strong> The typical community here has 1 venue but a median price of AED 17,147/m². Most (18 of 26) are mainly apartments and about 67% of sales are off-plan. That points to newer developments whose shops and cafes may not be built or listed yet, more than to villa areas chosen for privacy. The data cannot tell these apart. Private facilities are also not in the Foursquare data.
+            <strong>24 communities, the largest group, e.g.</strong> Madinat Al Mataar (2,083 sales, 12 venues, AED 14,483/m²), Al Merkadh (1,768 sales, 1 venue, AED 18,932/m²), Hadaeq Sheikh Mohammed Bin Rashid (1,746 sales, 3 venues, AED 19,165/m²).<br>
+            <strong>Note:</strong> The typical community here has 1 venue but a median price of AED 17,147/m². Most (17 of 24) are mainly apartments and about 67% of sales are off-plan. That points to newer developments whose shops and cafes may not be built or listed yet, more than to villa areas chosen for privacy. The data cannot tell these apart. Private facilities are also not in the Foursquare data.
           </div>
         </div>
 
         <div class="quadrant-box q4">
           <div class="quadrant-title">4. Emerging Suburban Corridors (below AED 13,000/m², fewer than 15 venues)</div>
           <div class="quadrant-desc">
-            <strong>17 communities, e.g.</strong> Al Barsha South Fourth / JVC (4,004 sales, 4 venues, AED 12,924/m²), Wadi Al Safa 5 (2,183 sales, 7 venues, AED 12,578/m²), Al Hebiah Fourth (1,406 sales, 12 venues, AED 10,536/m²).<br>
-            <strong>Note:</strong> Many sales and few recorded venues. About 54% of sales are off-plan overall, which fits with housing being sold before commercial amenities arrive, though this data does not prove it.
+            <strong>15 communities, e.g.</strong> Al Barsha South Fourth / JVC (4,004 sales, 4 venues, AED 12,924/m²), Wadi Al Safa 5 (2,183 sales, 7 venues, AED 12,578/m²), Al Hebiah Fourth (1,406 sales, 12 venues, AED 10,536/m²).<br>
+            <strong>Note:</strong> Many sales and few recorded venues (median 2). About 54% of sales are off-plan overall, which fits with housing being sold before commercial amenities arrive, though this data does not prove it.
           </div>
         </div>
       </div>
@@ -741,7 +748,7 @@
 
       <h3>Datasets</h3>
       <ul>
-        <li><strong>Property transactions (<code>transactions.csv</code>):</strong> the course's Dubai Land Department file. We kept records marked "Sales", registered 2015 to 2026, with a positive price per m². That leaves 51,730 sales in 163 communities. We did not re-check the raw row count of the file.</li>
+        <li><strong>Property transactions (<code>transactions.csv</code>):</strong> the course's Dubai Land Department file. We kept records marked "Sales", registered 2015 to 2026, with a positive price per m². That leaves 51,730 sales in 163 communities. We re-checked the raw file: 89,212 records (68,286 sales, 17,617 mortgages, 3,309 gifts); 51,731 sales fall in 2015–2026 and one has a non-positive price per m².</li>
         <li><strong>Venues (<code>dubai_venues.csv</code>):</strong> 2,955 Foursquare venues. 2,674 are inside the 163 communities with sales and are the ones used. The other 281 are in 63 communities with no qualifying sales. Venues are sorted into five groups with simple keyword rules, so some are misplaced (pubs, BBQ and sandwich places end up in Services &amp; Community). Of the 2,674 venues: Dining &amp; Cafes 50.8%, Retail &amp; Shopping 13.4%, Hospitality &amp; Nightlife 13.2%, Leisure &amp; Wellness 12.8%, Services &amp; Community 9.8%.</li>
         <li><strong>Boundaries (<code>dubai.geojson</code>):</strong> community names, areas and 2019 population for 226 communities.</li>
       </ul>
@@ -1044,7 +1051,7 @@
       });
   </script>
 
-  <div id="v2-tooltip"></div>
+  <div id="v2-tooltip" role="tooltip"></div>
   <script>
   (() => {
     const source = (typeof communityData !== "undefined" ? communityData : []);
@@ -1060,43 +1067,83 @@
     const total = d3.sum(rows, d => d.sales_count);
     d3.select("#v2-total-sales").text(d3.format(",")(total));
     d3.select("#v2-community-count").text(d3.format(",")(rows.length));
+    d3.select("#v2-sector-count").text(new Set(rows.map(d => d.sector)).size);
 
-    const W = 1120, H = 650;
-    const color = d3.scaleSequential().domain([0,100]).interpolator(d3.interpolateBlues);
-    const svg = d3.select("#v2-chart").append("svg")
-      .attr("viewBox", `0 0 ${W} ${H}`).attr("preserveAspectRatio","xMidYMid meet");
+    // Drawing size follows the container so labels stay readable on phones (taller layout there).
+    let W = 1120, H = 650;
+    function measure() {
+      const cw = Math.max(300, Math.round(document.getElementById("v2-chart").clientWidth || 1120));
+      W = cw; H = cw < 640 ? Math.round(cw * 1.35) : Math.round(cw * 0.58);
+    }
+    // Start the Blues ramp at 0.15 so a 0% off-plan tile is still visibly blue on the white card.
+    const ramp = t => d3.interpolateBlues(0.15 + 0.85 * t);
+    const color = d3.scaleSequential().domain([0,100]).interpolator(ramp);
+    const textColour = v => {
+      const c = d3.color(color(v));
+      return (0.299*c.r + 0.587*c.g + 0.114*c.b)/255 > 0.6 ? "#10213b" : "#ffffff";
+    };
+    const svg = d3.select("#v2-chart").append("svg").attr("preserveAspectRatio","xMidYMid meet");
     const tooltip = d3.select("#v2-tooltip");
     const backButton = document.getElementById("v2-back-button");
     const fmt = d3.format(",");
     const pct = d3.format(".1f");
 
-    const root = d3.hierarchy({
-      name:"All sectors",
-      children:d3.groups(rows, d => d.sector).map(([sector, communities]) => {
-        const sectorSales = d3.sum(communities, d => d.sales_count);
-        const sectorOffplan = d3.sum(communities, d => Number(d.offplan_count) || 0);
-        return {
-          name:`Sector ${sector}`,
-          sector,
-          sales_count:sectorSales,
-          offplan_pct:sectorSales ? (sectorOffplan / sectorSales) * 100 : 0,
-          children:communities.map(d => ({...d, name:d.community_name, value:d.sales_count}))
-        };
-      })
-    }).sum(d => d.value || 0).sort((a,b) => b.value-a.value);
+    // Legend gradient is generated from the same colour scale used by the tiles.
+    d3.select("#v2-gradient").style("background",
+      "linear-gradient(90deg," + d3.range(0, 101, 10).map(v => color(v) + " " + v + "%").join(",") + ")");
+
+    // Sector colour = combined off-plan sales / combined sales (not an average of community %).
+    const sectors = d3.groups(rows, d => d.sector).map(([sector, communities]) => {
+      const sectorSales = d3.sum(communities, d => d.sales_count);
+      const sectorOffplan = d3.sum(communities, d => Number(d.offplan_count) || 0);
+      return {
+        name:`Sector ${sector}`,
+        sector,
+        sales_count:sectorSales,
+        offplan_count:sectorOffplan,
+        community_count:communities.length,
+        offplan_pct:sectorSales ? (sectorOffplan / sectorSales) * 100 : 0,
+        children:communities.map(d => ({...d, name:d.community_name, value:d.sales_count}))
+      };
+    });
+    const root = d3.hierarchy({ name:"All sectors", children:sectors })
+      .sum(d => d.value || 0).sort((a,b) => b.value-a.value);
+
+    function showTip(event, html) {
+      tooltip.html(html).style("opacity",1)
+        .style("left",Math.max(8, Math.min(event.clientX+14, window.innerWidth-275))+"px")
+        .style("top",Math.max(8, Math.min(event.clientY+14, window.innerHeight-170))+"px");
+    }
+    const hideTip = () => tooltip.style("opacity",0);
+    const sectorTip = x => `<strong>${x.name}</strong><br>Communities: ${x.community_count}<br>Total sales: ${fmt(x.sales_count)} (${pct(x.sales_count/total*100)}% of all)<br>Off-plan: ${pct(x.offplan_pct)}% · Existing: ${pct(100 - x.offplan_pct)}%<br><em>Click to explore its communities</em>`;
+    const communityTip = x => `<strong>${x.community_name}</strong><br>Sector ${x.sector}<br>Sales: ${fmt(x.sales_count)}<br>Off-plan: ${pct(x.offplan_pct)}%<br>Existing: ${pct(x.existing_pct)}%<br>Median price: AED ${fmt(Math.round(Number(x.median_price_sqm)||0))}/m²` +
+      (x.insufficient_data ? `<br><span style="color:#fcd34d">Fewer than 10 sales: median price is not reliable</span>` : "");
+
+    // Sector chips: every sector stays selectable, including ones too small to see in the treemap.
+    const chips = d3.select("#v2-sector-chips").selectAll("button")
+      .data(root.children, d => d.data.name).join("button")
+      .attr("type","button").attr("class","v2-chip")
+      .on("click",(event,d) => render(d))
+      .on("mousemove",(event,d) => showTip(event, sectorTip(d.data)))
+      .on("mouseleave",hideTip);
+    chips.append("span").attr("class","v2-swatch").style("background",d => color(d.data.offplan_pct));
+    chips.append("span").html(d => `<strong>${d.data.name}</strong> ${fmt(d.data.sales_count)} sales · ${pct(d.data.offplan_pct)}% off-plan`);
 
     let current = root;
     function render(node) {
       current = node;
+      hideTip();
       backButton.disabled = node === root;
+      chips.classed("active", d => d === node);
       d3.select("#v2-view-title").text(node === root ? "All sectors" : node.data.name);
       d3.select("#v2-view-hint").text(node === root
         ? "Rectangle area = sales volume · Colour = off-plan share · Select a sector to explore"
-        : "Communities in " + node.data.name + " · Rectangle area = sales volume · Colour = off-plan share");
+        : `${node.data.community_count} ${node.data.community_count === 1 ? "community" : "communities"} · ${fmt(node.data.sales_count)} sales · ${pct(node.data.offplan_pct)}% off-plan overall`);
 
+      measure();
+      svg.attr("viewBox", `0 0 ${W} ${H}`);
       const displayRoot = node.copy();
-      d3.treemap().size([W,H]).paddingOuter(5)
-        .paddingTop(node === root ? 29 : 5).paddingInner(3)
+      d3.treemap().size([W,H]).paddingOuter(5).paddingInner(3)
         .round(true).tile(d3.treemapSquarify)(displayRoot);
 
       svg.selectAll("*").remove();
@@ -1105,74 +1152,58 @@
         .join("g").attr("class","v2-tile-group")
         .attr("transform",d => `translate(${d.x0},${d.y0})`);
 
+      const isSector = d => node === root && d.children;
       groups.append("rect").attr("class","v2-tile")
         .attr("width",d => Math.max(0,d.x1-d.x0))
         .attr("height",d => Math.max(0,d.y1-d.y0)).attr("rx",4)
         .attr("fill",d => color(Number(d.data.offplan_pct)||0))
-        .on("mousemove",(event,d) => {
-          const x=d.data;
-          const content = d.children
-            ? `<strong>${x.name}</strong><br>Total sales: ${fmt(x.sales_count)}<br>Off-plan: ${pct(x.offplan_pct)}%<br>Existing: ${pct(100 - x.offplan_pct)}%<br>Click to explore communities`
-            : `<strong>${x.community_name}</strong><br>Sector ${x.sector}<br>Sales: ${fmt(x.sales_count)}<br>Off-plan: ${pct(x.offplan_pct)}%<br>Existing: ${pct(x.existing_pct)}%<br>Median price: AED ${fmt(Math.round(Number(x.median_price_sqm)||0))}/m²`;
-          tooltip.html(content).style("opacity",1)
-            .style("left",Math.min(event.clientX+14,window.innerWidth-275)+"px")
-            .style("top",Math.min(event.clientY+14,window.innerHeight-130)+"px");
-        })
-        .on("mouseleave",() => tooltip.style("opacity",0))
-        .on("click",(event,d) => {
-          if (d.children && node === root) {
-            const selected = current.children.find(c => c.data.name === d.data.name);
-            if (selected) render(selected);
+        .style("cursor",d => isSector(d) ? "pointer" : "default")
+        .attr("tabindex",d => isSector(d) ? 0 : null)
+        .attr("role",d => isSector(d) ? "button" : null)
+        .attr("aria-label",d => isSector(d) ? `${d.data.name}: ${fmt(d.data.sales_count)} sales, ${pct(d.data.offplan_pct)}% off-plan` : null)
+        .on("mousemove",(event,d) => showTip(event, d.children ? sectorTip(d.data) : communityTip(d.data)))
+        .on("mouseleave",hideTip)
+        .on("click",(event,d) => { if (isSector(d)) render(root.children.find(c => c.data.name === d.data.name)); })
+        .on("keydown",(event,d) => {
+          if (isSector(d) && (event.key === "Enter" || event.key === " ")) {
+            event.preventDefault(); render(root.children.find(c => c.data.name === d.data.name));
           }
         });
 
-      groups.filter(d => d.children).append("text").attr("class","v2-sector-label")
-        .attr("x",8).attr("y",20)
-        .style("fill",d => {
-          const c=d3.color(color(Number(d.data.offplan_pct)||0));
-          const luminance=(0.299*c.r+0.587*c.g+0.114*c.b)/255;
-          return luminance>0.62 ? "#10213b" : "#ffffff";
-        })
-        .style("text-shadow",d => {
-          const c=d3.color(color(Number(d.data.offplan_pct)||0));
-          const luminance=(0.299*c.r+0.587*c.g+0.114*c.b)/255;
-          return luminance>0.62 ? "none" : "0 1px 2px rgba(0,0,0,.35)";
-        })
-        .text(d => d.data.name);
-
-      const labelTiles = groups.filter(d => !d.children &&
-        (d.x1-d.x0)>105 && (d.y1-d.y0)>38);
-      labelTiles.append("clipPath").attr("id",(d,i) => `v2-tile-clip-${i}`)
-        .append("rect")
-        .attr("width",d => Math.max(0,d.x1-d.x0-12))
-        .attr("height",d => Math.max(0,d.y1-d.y0-8));
-
-      labelTiles.append("text").attr("class","v2-tile-label")
-        .attr("clip-path",(d,i) => `url(#v2-tile-clip-${i})`)
-        .attr("x",7).attr("y",18)
-        .style("font-size",d => (d.x1-d.x0)>180 ? "12px" : "10px")
-        .style("fill",d => {
-          const c=d3.color(color(Number(d.data.offplan_pct)||0));
-          const luminance=(0.299*c.r+0.587*c.g+0.114*c.b)/255;
-          return luminance>0.62 ? "#10213b" : "#ffffff";
-        })
-        .style("text-shadow",d => {
-          const c=d3.color(color(Number(d.data.offplan_pct)||0));
-          const luminance=(0.299*c.r+0.587*c.g+0.114*c.b)/255;
-          return luminance>0.62 ? "none" : "0 1px 2px rgba(0,0,0,.35)";
-        })
-        .text(d => d.data.community_name || "");
-
-      if (node !== root) {
-        groups.selectAll("rect.v2-tile").style("cursor","default").on("click",null);
-        groups.selectAll("text.v2-sector-label").remove();
-      }
+      // Labels: only drawn where they fit, and clipped to their tile so they never overflow.
+      groups.each(function(d, i) {
+        const w = d.x1-d.x0, h = d.y1-d.y0, g = d3.select(this);
+        const big = node === root ? (w > 110 && h > 46) : (w > 120 && h > 44);
+        const fits = node === root ? (w > 70 && h > 24) : (w > 95 && h > 26);
+        if (!fits) return;
+        const v = Number(d.data.offplan_pct)||0;
+        const id = `v2-clip-${node === root ? "root" : node.data.sector}-${i}`;
+        g.append("clipPath").attr("id",id).append("rect")
+          .attr("width",Math.max(0,w-10)).attr("height",Math.max(0,h-4));
+        const t = g.append("text").attr("class","v2-tile-label").attr("clip-path",`url(#${id})`)
+          .style("fill",textColour(v));
+        t.append("tspan").attr("x",7).attr("y",node === root ? 21 : 18)
+          .style("font-size",node === root ? (W < 640 ? "13px" : "15px") : (w > 180 ? "12.5px" : "11px"))
+          .text(d.data.name);
+        if (big) {
+          t.append("tspan").attr("x",7).attr("dy",node === root ? 18 : 15)
+            .style("font-size","11px").style("font-weight","500")
+            .text(`${fmt(d.data.sales_count)} sales · ${pct(v)}% off-plan`);
+        }
+      });
     }
     backButton.addEventListener("click",() => render(root));
+    let lastWidth = 0, resizeTimer;
+    window.addEventListener("resize",() => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => {
+        const w = document.getElementById("v2-chart").clientWidth;
+        if (w !== lastWidth) { lastWidth = w; render(current); }
+      }, 150);
+    });
     render(root);
   })();
   </script>
-  <div id="v2-tooltip"></div>
 
 </body>
 </html>
