@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CS333 Part 3 | Dubai Community Transaction Treemap</title>
+  <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+  <script src="community_data.js"></script>
+  <style>
+    :root { --navy:#10213b; --blue:#1d4ed8; --muted:#64748b; --line:#e2e8f0; --bg:#f5f7fb; }
+    * { box-sizing:border-box; }
+    body { margin:0; font-family:Arial,Helvetica,sans-serif; color:#1e293b; background:var(--bg); line-height:1.55; }
+    header { background:#fff; border-bottom:1px solid var(--line); }
+    .wrap { max-width:1200px; margin:auto; padding:24px 22px; }
+    .eyebrow { color:#1d4ed8; background:#eff6ff; border-radius:999px; display:inline-block; padding:5px 10px; font-size:12px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; }
+    h1 { color:var(--navy); margin:12px 0 7px; font-size:clamp(27px,4vw,38px); line-height:1.2; }
+    .subtitle { color:var(--muted); margin:0; max-width:850px; }
+    nav { display:flex; gap:10px; flex-wrap:wrap; margin-top:20px; }
+    nav a { color:#1d4ed8; text-decoration:none; font-weight:700; font-size:13px; padding:7px 10px; border:1px solid var(--line); border-radius:8px; background:#fff; }
+    main { max-width:1200px; margin:25px auto; padding:0 22px 45px; }
+    .card { background:#fff; border:1px solid var(--line); border-radius:15px; padding:22px; box-shadow:0 5px 18px rgba(15,23,42,.04); margin-bottom:18px; }
+    .question { font-size:18px; font-weight:700; color:var(--navy); margin:0 0 6px; }
+    .muted { color:var(--muted); font-size:14px; margin:0; }
+    .stats { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px; margin:18px 0; }
+    .stat { background:#f8fafc; border:1px solid var(--line); border-radius:10px; padding:13px 15px; }
+    .stat strong { display:block; font-size:22px; color:var(--navy); }
+    .stat span { color:var(--muted); font-size:12px; }
+    .chart-head { display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; margin-bottom:12px; }
+    .chart-head h2 { margin:0; font-size:19px; color:var(--navy); }
+    button { border:1px solid #bfdbfe; color:#1d4ed8; background:#eff6ff; border-radius:8px; padding:8px 12px; font-weight:700; cursor:pointer; }
+    button:disabled { opacity:.45; cursor:default; }
+    #chart { width:100%; overflow:hidden; }
+    #chart svg { width:100%; height:auto; display:block; }
+    .tile { stroke:#fff; stroke-width:2px; cursor:pointer; }
+    .tile:hover { stroke:#0f172a; stroke-width:3px; }
+    .tile-label { fill:#fff; font-weight:700; pointer-events:none; text-shadow:0 1px 3px rgba(0,0,0,.5); }
+    .sector-label { fill:#0f172a; font-size:15px; font-weight:700; pointer-events:none; }
+    .legend { display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-top:12px; font-size:12px; color:var(--muted); }
+    .gradient { width:190px; height:11px; border-radius:99px; background:linear-gradient(90deg,#deebf7,#9ecae1,#4292c6,#08519c); }
+    .tooltip { position:fixed; z-index:10; pointer-events:none; opacity:0; background:#0f172a; color:#fff; padding:10px 12px; border-radius:9px; font-size:12px; line-height:1.5; box-shadow:0 8px 25px rgba(0,0,0,.2); max-width:260px; }
+    .method { display:grid; grid-template-columns:1fr 1fr; gap:18px; }
+    .method h3 { color:var(--navy); margin:0 0 5px; font-size:15px; }
+    .method p { color:var(--muted); margin:0; font-size:13px; }
+    @media(max-width:650px) { .stats{grid-template-columns:1fr;} .method{grid-template-columns:1fr;} .wrap{padding:20px 16px;} main{padding:0 14px 30px;} .card{padding:17px;} }
+  </style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <span class="eyebrow">CS333 · Part 3 · Visualization 2</span>
+    <h1>Where Are Dubai’s Property Transactions Concentrated?</h1>
+    <p class="subtitle">An interactive treemap of Dubai communities. Larger rectangles represent more property sales; colour represents the share of those sales that are off-plan.</p>
+    <nav>
+      <a href="index.html">← Part 3 Home</a>
+      <a href="part3.html">Visualization 1: Livability Dashboard</a>
+      <a href="visualization2.html">Visualization 2: Transaction Treemap</a>
+    </nav>
+  </div>
+</header>
+<main>
+  <section class="card">
+    <p class="question">Research question: Which Dubai communities account for the most property sales, and how does off-plan reliance differ between them?</p>
+    <p class="muted">Each rectangle is a community, grouped by its Dubai sector. Select a sector to zoom in and compare its communities. Select “All sectors” to return to the full view.</p>
+    <div class="stats">
+      <div class="stat"><strong id="totalSales">51,730</strong><span>Sales analysed</span></div>
+      <div class="stat"><strong id="communityCount">163</strong><span>Communities represented</span></div>
+      <div class="stat"><strong>2015–2026</strong><span>Analysis period</span></div>
+    </div>
+  </section>
+
+  <section class="card">
+    <div class="chart-head">
+      <div>
+        <h2 id="viewTitle">All sectors</h2>
+        <p class="muted" id="viewHint">Rectangle area = sales volume · Colour = off-plan share</p>
+      </div>
+      <button id="backButton" type="button" disabled>← All sectors</button>
+    </div>
+    <div id="chart" role="img" aria-label="Treemap of property sales by Dubai sector and community"></div>
+    <div class="legend">
+      <span>Off-plan share</span><span>0%</span><span class="gradient" aria-hidden="true"></span><span>100%</span>
+      <span style="margin-left:auto">Click a sector to zoom in</span>
+    </div>
+  </section>
+
+  <section class="card">
+    <div class="method">
+      <div>
+        <h3>Encoding</h3>
+        <p>Rectangle area encodes the number of qualifying sales in each community. Colour uses a sequential blue scale to encode the percentage of sales registered as off-plan. The hierarchy groups communities by sector.</p>
+      </div>
+      <div>
+        <h3>Interaction and value added</h3>
+        <p>Click a sector to expand its communities; use “All sectors” to return. Hover over any rectangle for the community name, sales count, off-plan share, existing-sales share and median price per m². This reveals both transaction concentration and the balance between off-plan and existing sales.</p>
+      </div>
+    </div>
+  </section>
+  <p class="muted" style="text-align:center;font-size:12px">Data: Dubai Land Department transactions supplied for CS333; community-level aggregation in community_data.js. Sales are filtered to 2015–2026 with meter_sale_price greater than zero.</p>
+</main>
+<div class="tooltip" id="tooltip"></div>
+<script>
+(() => {
+  const source = (typeof communityData !== "undefined" ? communityData : []);
+  const data = source.filter(d => Number(d.sales_count) > 0 && d.sector !== null && d.sector !== undefined)
+    .map(d => ({
+      ...d,
+      sector: String(d.sector),
+      sales_count: Number(d.sales_count) || 0,
+      offplan_pct: Math.max(0, Math.min(100, Number(d.offplan_pct) || 0)),
+      existing_pct: Math.max(0, 100 - (Number(d.offplan_pct) || 0))
+    }));
+
+  const total = d3.sum(data, d => d.sales_count);
+  d3.select("#totalSales").text(d3.format(",")(total));
+  d3.select("#communityCount").text(d3.format(",")(data.length));
+
+  const W = 1120, H = 650;
+  const color = d3.scaleSequential().domain([0,100]).interpolator(d3.interpolateBlues);
+  const svg = d3.select("#chart").append("svg").attr("viewBox", `0 0 ${W} ${H}`)
+    .attr("preserveAspectRatio","xMidYMid meet");
+  const tooltip = d3.select("#tooltip");
+  const backButton = document.getElementById("backButton");
+  const fmt = d3.format(",");
+  const pct = d3.format(".1f");
+  const root = d3.hierarchy({
+    name:"All sectors",
+    children:d3.groups(data, d => d.sector).map(([sector, rows]) => ({
+      name:`Sector ${sector}`,
+      sector,
+      children:rows.map(d => ({...d, name:d.community_name, value:d.sales_count}))
+    }))
+  }).sum(d => d.value || 0).sort((a,b) => b.value-a.value);
+
+  const treemap = d3.treemap().size([W,H]).paddingOuter(5).paddingTop(29).paddingInner(3)
+    .round(true).tile(d3.treemapSquarify);
+  treemap(root);
+
+  let current = root;
+  function showTooltip(event,d) {
+    const x = d.data;
+    const html = d.children
+      ? `<strong>${x.name}</strong><br>${fmt(d.value)} sales<br>Click to explore communities`
+      : `<strong>${x.community_name}</strong><br>Sector ${x.sector}<br>Sales: ${fmt(x.sales_count)}<br>Off-plan: ${pct(x.offplan_pct)}%<br>Existing: ${pct(x.existing_pct)}%<br>Median price: AED ${fmt(Math.round(Number(x.median_price_sqm)||0))}/m²`;
+    tooltip.html(html).style("opacity",1)
+      .style("left",Math.min(event.clientX+14,window.innerWidth-275)+"px")
+      .style("top",Math.min(event.clientY+14,window.innerHeight-125)+"px");
+  }
+  function render(node) {
+    current = node;
+    backButton.disabled = node === root;
+    d3.select("#viewTitle").text(node === root ? "All sectors" : node.data.name);
+    d3.select("#viewHint").text(node === root
+      ? "Rectangle area = sales volume · Colour = off-plan share · Select a sector to explore"
+      : "Communities in " + node.data.name + " · Rectangle area = sales volume · Colour = off-plan share");
+
+    const children = node.children || [];
+    const layout = d3.treemap().size([W,H]).paddingOuter(5)
+      .paddingTop(node === root ? 29 : 5).paddingInner(3).round(true).tile(d3.treemapSquarify);
+    layout(node.copy());
+
+    const displayRoot = node.copy();
+    layout(displayRoot);
+    const nodes = displayRoot.children || [];
+    svg.selectAll("*").remove();
+
+    const groups = svg.selectAll("g.tile-group").data(nodes, d => d.data.name).join("g")
+      .attr("class","tile-group").attr("transform",d => `translate(${d.x0},${d.y0})`);
+
+    groups.append("rect").attr("class","tile")
+      .attr("width",d => Math.max(0,d.x1-d.x0)).attr("height",d => Math.max(0,d.y1-d.y0))
+      .attr("rx",4)
+      .attr("fill",d => d.children ? "#e2e8f0" : color(Number(d.data.offplan_pct)||0))
+      .on("mousemove",(event,d) => showTooltip(event,d))
+      .on("mouseleave",() => tooltip.style("opacity",0))
+      .on("click",(event,d) => { if (d.children) render(node.children.find(c => c.data.name === d.data.name)); });
+
+    groups.filter(d => d.children).append("text").attr("class","sector-label")
+      .attr("x",8).attr("y",20).text(d => d.data.name);
+
+    groups.filter(d => !d.children && (d.x1-d.x0)>75 && (d.y1-d.y0)>34)
+      .append("text").attr("class","tile-label")
+      .attr("x",7).attr("y",18)
+      .style("font-size",d => (d.x1-d.x0)>150 ? "13px" : "10px")
+      .text(d => {
+        const name=d.data.community_name || "";
+        return name.length>24 ? name.slice(0,22)+"…" : name;
+      });
+
+    // When viewing the root, sector rectangles are clickable and their child communities
+    // are shown after zooming. In a sector view, each rectangle represents a community.
+    if (node !== root) {
+      groups.selectAll("rect").style("cursor","default");
+      groups.selectAll("text.sector-label").remove();
+      groups.selectAll("rect").on("click",null);
+    }
+  }
+  backButton.addEventListener("click",() => render(root));
+  render(root);
+})();
+</script>
+</body>
+</html>
