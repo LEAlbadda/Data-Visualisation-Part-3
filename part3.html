@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>CS333 Part 3: Dubai Real Estate Livability & Valuation Matrix</title>
 
-  <!-- D3 for Visualizations 2, 3 and 4 -->
+  <!-- D3 for Visualizations 2 to 5 -->
   <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
 
   <!-- Vega, Vega-Lite, and Vega-Embed libraries -->
@@ -15,8 +15,10 @@
 
   <!-- Community data (keep community_data.js in the same folder as this file) -->
   <script src="community_data.js"></script>
-  <!-- Transaction-level prices for Visualization 3 (built by prepare_viz3_data.py) -->
+  <!-- Transaction-level prices for Visualization 4 (built by prepare_viz3_data.py) -->
   <script src="price_data.js"></script>
+  <!-- Yearly home-sale summaries for Visualization 3 (built by prepare_trajectories.py) -->
+  <script src="trajectory_data.js"></script>
 
   <style>
     :root {
@@ -403,7 +405,7 @@
   </style>
 
   <style>
-    /* Shared styles for Visualizations 3 and 4 (prefixed dx- so they do not affect 1 and 2). */
+    /* Shared styles for Visualizations 3 to 5 (prefixed dx- so they do not affect 1 and 2). */
     .dx-controls { display:flex; flex-wrap:wrap; align-items:flex-end; gap:18px 26px; padding:14px 18px; margin-bottom:14px;
       background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; font-size:13px; }
     .dx-control { display:flex; flex-direction:column; gap:6px; }
@@ -464,7 +466,7 @@
     <!-- Data cleaning summary -->
     <section class="cleaning-section" aria-labelledby="cleaning-title">
       <h2 id="cleaning-title">How we cleaned the data</h2>
-      <p class="section-intro">All four visualizations use the same Dubai Land Department sales data and cleaning rules: Visualizations 1, 2 and 4 use the community-level summary, and Visualization 3 uses the individual sales.</p>
+      <p class="section-intro">All five visualizations use the same Dubai Land Department sales data and cleaning rules: Visualizations 1, 2 and 5 use the community-level summary, Visualization 3 uses yearly summaries of home sales, and Visualization 4 uses the individual sales.</p>
       <div class="cleaning-table-wrap">
         <table class="cleaning-table">
           <thead>
@@ -614,10 +616,61 @@
 
 
 
-    <!-- Visualization 3: Property Price Distribution Explorer -->
+    <!-- Visualization 3: Market Trajectories (connected scatterplot) -->
     <section id="visualization3" class="viz-card">
       <div class="viz-header">
-        <h2>Visualization 3: Property Price Distribution Explorer</h2>
+        <h2>Visualization 3: Market Trajectories, 2015–2026</h2>
+        <p>How did Dubai's busiest communities move through the off-plan boom: did prices rise because of new off-plan launches, or in established resale markets?</p>
+      </div>
+
+      <div class="instructions-box">
+        <div><strong>How to use it</strong></div>
+        <div>1. <strong>Play or drag the year slider:</strong> each community's path grows year by year; the large dot is where it is in the selected year.</div>
+        <div>2. <strong>Community buttons:</strong> turn paths on and off. Paths that are off stay as faint grey context.</div>
+        <div>3. <strong>Click a path, dot or button name</strong> to show that community's price compared with all of Dubai in the chart below.</div>
+        <div>4. <strong>Hover a dot</strong> for that year's sales, off-plan share and median price.</div>
+      </div>
+
+      <div class="dx-controls">
+        <div class="dx-control">
+          <span class="dx-label">Year: <strong id="t-year-value">2026</strong></span>
+          <div style="display:flex;align-items:center;gap:10px">
+            <button id="t-play" class="dx-button" type="button" aria-label="Play animation">▶ Play</button>
+            <input id="t-year" type="range" min="2015" max="2026" step="1" value="2026" aria-label="Year">
+          </div>
+        </div>
+        <div class="dx-control" style="flex:1;min-width:260px">
+          <span class="dx-label">Communities (click a name to focus it)</span>
+          <div id="t-chips" class="dx-toggle-group" role="group" aria-label="Communities"></div>
+        </div>
+        <button id="t-reset" class="dx-button" type="button">Reset</button>
+      </div>
+
+      <div id="t-summary" class="dx-summary" aria-live="polite"></div>
+      <div class="dx-scroll"><div id="t-chart" class="dx-chart" style="min-width:640px"></div></div>
+      <div class="dx-scroll"><div id="t-detail" class="dx-chart" style="min-width:640px"></div></div>
+      <p class="dx-note">Homes only (flats and villas, 46,653 sales), so land plots do not distort price per m². A community-year with fewer than 20 sales is left out and drawn as a gap. Medians also move when the mix of projects sold changes, so a rise is not the same as existing homes gaining value. 2026 runs to <span id="t-lastdate">—</span> only.</p>
+    </section>
+
+    <div class="explain-grid" aria-label="Visualization 3 explanation">
+      <article class="explain-card">
+        <h3>Encoding</h3>
+        <p>Connected scatterplot: x = share of a community's home sales that were off-plan, y = median price per m² (log), one dot per year joined in time order, dot area = sales that year. The black dashed path is all of Dubai. The linked bar chart shows the focused community's median as % above or below Dubai's each year, coloured by off-plan share (same blues as Visualization 2).</p>
+      </article>
+      <article class="explain-card">
+        <h3>Interaction</h3>
+        <p>A year slider with Play animates the paths over time. Buttons choose which paths are highlighted. Clicking a path or name focuses that community, updating the linked bar chart and the summary. Tooltips give each year's exact values.</p>
+      </article>
+      <article class="explain-card">
+        <h3>What it helps us see</h3>
+        <p>Dubai's home sales moved from 36.9% to 69.8% off-plan (2015→2025) while the median rose from AED 10,869 to 18,299/m². Wadi Al Safa 5 went from 7.4% to 82.7% off-plan and its price doubled. Marsa Dubai rose 83% with off-plan staying below half, and in Burj Khalifa the off-plan share fell from 56% to 33% while prices still rose 38%.</p>
+      </article>
+    </div>
+
+    <!-- Visualization 4: Property Price Distribution Explorer -->
+    <section id="visualization4" class="viz-card">
+      <div class="viz-header">
+        <h2>Visualization 4: Property Price Distribution Explorer</h2>
         <p>How widely do sale prices per m² vary within and between property types, and how do off-plan and existing sales differ?</p>
       </div>
 
@@ -656,7 +709,7 @@
       <p class="dx-note">Price axis is logarithmic (AED 500 to 200,000/m²). The <span id="v3-outside">—</span> filtered sales outside that range are included in the medians and boxplots but are not drawn in the histogram. 2026 runs to <span id="v3-lastdate">—</span> only.</p>
     </section>
 
-    <div class="explain-grid" aria-label="Visualization 3 explanation">
+    <div class="explain-grid" aria-label="Visualization 4 explanation">
       <article class="explain-card">
         <h3>Encoding</h3>
         <p>The yearly bars stack off-plan (orange) and existing (blue) sales. The histogram uses bar height for the number of sales in each price bin, coloured by property type. Each boxplot shows the median, the middle 50% of prices (box) and whiskers at 1.5 × IQR on the log scale. Dots are outliers. The histogram and boxplots share one log price axis.</p>
@@ -671,10 +724,10 @@
       </article>
     </div>
 
-    <!-- Visualization 4: Community Profile Parallel Coordinates -->
-    <section id="visualization4" class="viz-card">
+    <!-- Visualization 5: Community Profile Parallel Coordinates -->
+    <section id="visualization5" class="viz-card">
       <div class="viz-header">
-        <h2>Visualization 4: Community Profile Parallel Coordinates</h2>
+        <h2>Visualization 5: Community Profile Parallel Coordinates</h2>
         <p>Which communities share a similar profile across price, sales volume, off-plan reliance, housing mix, amenities and population density?</p>
       </div>
 
@@ -711,7 +764,7 @@
       <p class="dx-note">Median price, sales and population density use log-type axes. Population density is the 2019 population divided by community area, so it predates many new developments; some high-sales communities had almost no recorded residents in 2019.</p>
     </section>
 
-    <div class="explain-grid" aria-label="Visualization 4 explanation">
+    <div class="explain-grid" aria-label="Visualization 5 explanation">
       <article class="explain-card">
         <h3>Encoding</h3>
         <p>Each line is a community and each vertical axis is one attribute. Where a line crosses an axis shows the community's value on it. Colour shows the dominant housing type, using the same colours as Visualization 1.</p>
@@ -1156,7 +1209,7 @@
   <div id="dx-tooltip" class="dx-tooltip" role="tooltip"></div>
 
   <!-- ================================================================
-       Visualization 3: Property Price Distribution Explorer (D3)
+       Visualization 4: Property Price Distribution Explorer (D3)
        Data: price_data.js (one entry per qualifying sale, 51,730 sales)
        ================================================================ -->
   <script>
@@ -1400,7 +1453,7 @@
   </script>
 
   <!-- ================================================================
-       Visualization 4: Community Profile Parallel Coordinates (D3)
+       Visualization 5: Community Profile Parallel Coordinates (D3)
        Data: community_data.js (same community table as Visualizations 1 and 2)
        ================================================================ -->
   <script>
@@ -1507,6 +1560,231 @@
     window.addEventListener("resize", () => {
       clearTimeout(timer);
       timer = setTimeout(() => { const w = document.getElementById("v4-chart").clientWidth; if (w !== lastW) { lastW = w; draw(); } }, 150);
+    });
+    draw();
+  })();
+  </script>
+
+  <!-- ================================================================
+       Visualization 3: Market Trajectories (D3 connected scatterplot)
+       Data: trajectory_data.js (built by prepare_trajectories.py)
+       ================================================================ -->
+  <script>
+  (() => {
+    if (typeof trajectoryData === "undefined") {
+      document.getElementById("t-chart").innerHTML = "<p style='color:#b91c1c'>Could not load trajectory_data.js. Keep it in the same folder as part3.html.</p>";
+      return;
+    }
+    const fmt = d3.format(","), pct = d3.format(".1f"), signed = d3.format("+.0f");
+    const tip = d3.select("#dx-tooltip");
+    const showTip = (e, html) => tip.html(html).style("opacity", 1)
+      .style("left", Math.max(8, Math.min(e.clientX + 14, window.innerWidth - 295)) + "px")
+      .style("top", Math.max(8, Math.min(e.clientY + 14, window.innerHeight - 170)) + "px");
+    const hideTip = () => tip.style("opacity", 0);
+    d3.select("#t-lastdate").text(d3.timeFormat("%-d %B %Y")(new Date(trajectoryData.lastDate)));
+
+    // ---- Data: one entity = Dubai overall or one community, with one point per year ----
+    const entities = trajectoryData.entities;
+    const dubai = entities.find(e => e.id === "dubai");
+    const communities = entities.filter(e => e.id !== "dubai");
+    const years = dubai.points.map(p => p.year);
+    const dubaiByYear = new Map(dubai.points.map(p => [p.year, p]));
+    const palette = ["#2563eb", "#dc2626", "#059669", "#d97706", "#7c3aed", "#0891b2", "#db2777", "#65a30d", "#9333ea", "#ea580c", "#0d9488", "#4f46e5"];
+    const colour = new Map(communities.map((e, i) => [e.id, palette[i % palette.length]]));
+    colour.set("dubai", "#0f172a");
+
+    // ---- State ----
+    const DEFAULT_ON = ["Business Bay", "Marsa Dubai", "Wadi Al Safa 5", "Burj Khalifa", "Al Barsha South Fourth"];
+    const state = {
+      year: years[years.length - 1],
+      on: new Set(communities.filter(e => DEFAULT_ON.includes(e.name)).map(e => e.id)),
+      focus: communities.find(e => e.name === "Wadi Al Safa 5").id
+    };
+    let timer = null;
+
+    // ---- Controls ----
+    const chips = d3.select("#t-chips").selectAll("button").data(communities).join("button")
+      .attr("type", "button").attr("class", "dx-toggle")
+      .on("click", (e, d) => {
+        if (state.on.has(d.id) && state.focus !== d.id) { state.focus = d.id; }      // already on: focus it
+        else if (state.on.has(d.id)) { state.on.delete(d.id); state.focus = [...state.on][0] || null; }
+        else { state.on.add(d.id); state.focus = d.id; }
+        draw();
+      });
+    chips.append("i").style("background", d => colour.get(d.id));
+    chips.append("span").text(d => d.name === "Al Barsha South Fourth" ? "Al Barsha South Fourth (JVC)" : d.name);
+
+    const slider = d3.select("#t-year").attr("min", years[0]).attr("max", years[years.length - 1]);
+    slider.on("input", e => { stop(); state.year = +e.target.value; draw(true); });
+    function stop() { if (timer) { clearInterval(timer); timer = null; d3.select("#t-play").text("▶ Play"); } }
+    d3.select("#t-play").on("click", () => {
+      if (timer) return stop();
+      if (state.year >= years[years.length - 1]) state.year = years[0] - 1;
+      d3.select("#t-play").text("❚❚ Pause");
+      timer = setInterval(() => {
+        state.year += 1;
+        draw(true);
+        if (state.year >= years[years.length - 1]) stop();
+      }, 900);
+    });
+    d3.select("#t-reset").on("click", () => {
+      stop();
+      state.year = years[years.length - 1];
+      state.on = new Set(communities.filter(e => DEFAULT_ON.includes(e.name)).map(e => e.id));
+      state.focus = communities.find(e => e.name === "Wadi Al Safa 5").id;
+      draw();
+    });
+
+    // ---- Scales (fixed across years so movement is comparable) ----
+    const allPts = entities.flatMap(e => e.points.filter(p => !p.too_few));
+    const y = d3.scaleLog().domain([d3.min(allPts, p => p.median) * 0.9, d3.max(allPts, p => p.median) * 1.08]);
+    const x = d3.scaleLinear().domain([0, 100]);
+    const r = d3.scaleSqrt().domain([0, d3.max(allPts, p => p.n)]).range([0, 13]);
+
+    const svg = d3.select("#t-chart").append("svg");
+    const detail = d3.select("#t-detail").append("svg");
+    const pointText = (e, p) => {
+      const dp = dubaiByYear.get(p.year);
+      return `<strong>${e.name}, ${p.year}</strong>${p.year === years[years.length - 1] ? " (to " + trajectoryData.lastDate + ")" : ""}<br>Home sales: ${fmt(p.n)}<br>Off-plan: ${pct(p.offplan_pct)}%<br>Median price: AED ${fmt(p.median)}/m²` +
+        (e.id !== "dubai" && dp ? `<br>vs all of Dubai: ${signed((p.median / dp.median - 1) * 100)}%` : "");
+    };
+
+    function draw(animate = false) {
+      const W = Math.max(640, document.getElementById("t-chart").clientWidth || 1000), H = 470;
+      const M = { top: 34, right: 150, bottom: 46, left: 74 };
+      x.range([M.left, W - M.right]); y.range([H - M.bottom, M.top]);
+      svg.attr("viewBox", `0 0 ${W} ${H}`);
+      slider.property("value", state.year);
+      d3.select("#t-year-value").text(state.year);
+      chips.attr("aria-pressed", d => state.on.has(d.id))
+        .style("box-shadow", d => d.id === state.focus ? "0 0 0 2px " + colour.get(d.id) + " inset" : null);
+
+      // Static parts (axes, grid, labels) are redrawn only when not animating
+      if (!animate || svg.select(".t-axes").empty()) {
+        svg.selectAll("*").remove();
+        const ax = svg.append("g").attr("class", "t-axes");
+        ax.append("g").attr("class", "dx-axis").attr("transform", `translate(0,${H - M.bottom})`)
+          .call(d3.axisBottom(x).ticks(10).tickFormat(d => d + "%").tickSize(-(H - M.top - M.bottom)))
+          .call(g => g.selectAll(".tick line").attr("stroke", "#f1f5f9"));
+        ax.append("g").attr("class", "dx-axis").attr("transform", `translate(${M.left},0)`)
+          .call(d3.axisLeft(y).tickValues([5000, 7500, 10000, 15000, 20000, 30000, 40000].filter(v => v > y.domain()[0] && v < y.domain()[1]))
+            .tickFormat(d => "AED " + fmt(d)).tickSize(-(W - M.left - M.right)))
+          .call(g => g.selectAll(".tick line").attr("stroke", "#f1f5f9"));
+        ax.append("text").attr("class", "dx-sub").attr("x", (M.left + W - M.right) / 2).attr("y", H - 8).attr("text-anchor", "middle")
+          .text("Off-plan share of the year's home sales →");
+        ax.append("text").attr("class", "dx-sub").attr("x", M.left).attr("y", 14)
+          .text("↑ Median price per m² (AED, log scale)");
+        ax.append("text").attr("class", "dx-sub").attr("x", W - M.right - 6).attr("y", M.top + 12).attr("text-anchor", "end")
+          .style("font-style", "italic").text("expensive, mostly off-plan");
+        ax.append("text").attr("class", "dx-sub").attr("x", M.left + 6).attr("y", H - M.bottom - 8)
+          .style("font-style", "italic").text("cheaper, mostly resale");
+        svg.append("g").attr("class", "t-context");
+        svg.append("g").attr("class", "t-paths");
+        svg.append("g").attr("class", "t-dots");
+        svg.append("g").attr("class", "t-years");
+        svg.append("g").attr("class", "t-labels");
+      }
+
+      const upto = e => e.points.filter(p => p.year <= state.year);
+      const line = d3.line().defined(p => !p.too_few).x(p => x(p.offplan_pct)).y(p => y(p.median)).curve(d3.curveLinear);   // straight segments: each one joins two consecutive years
+      const shown = [dubai, ...communities.filter(e => state.on.has(e.id))];
+
+      // Faint context: the full path of every community that is switched off
+      svg.select(".t-context").selectAll("path").data(communities.filter(e => !state.on.has(e.id)), e => e.id).join("path")
+        .attr("d", e => line(e.points)).attr("fill", "none").attr("stroke", "#dbe2ea").attr("stroke-width", 1.1)
+        .style("cursor", "pointer").on("click", (ev, e) => { state.on.add(e.id); state.focus = e.id; draw(); })
+        .on("mousemove", (ev, e) => showTip(ev, `<strong>${e.name}</strong><br>Click to show its path`)).on("mouseleave", hideTip);
+
+      // Highlighted paths up to the selected year
+      svg.select(".t-paths").selectAll("path").data(shown, e => e.id).join("path")
+        .attr("d", e => line(upto(e))).attr("fill", "none")
+        .attr("stroke", e => colour.get(e.id))
+        .attr("stroke-width", e => e.id === state.focus ? 3.5 : e.id === "dubai" ? 2.5 : 2)
+        .attr("stroke-dasharray", e => e.id === "dubai" ? "6 4" : null)
+        .attr("stroke-opacity", e => e.id === state.focus || e.id === "dubai" ? 1 : 0.7)
+        .style("cursor", "pointer").on("click", (ev, e) => { if (e.id !== "dubai") { state.focus = e.id; draw(); } });
+
+      // Dots: one per year so far; the selected year is drawn larger
+      const dots = shown.flatMap(e => upto(e).filter(p => !p.too_few).map(p => ({ e, p })));
+      svg.select(".t-dots").selectAll("circle").data(dots, d => d.e.id + d.p.year).join(
+        enter => enter.append("circle").attr("cx", d => x(d.p.offplan_pct)).attr("cy", d => y(d.p.median)).attr("r", 0),
+        update => update, exit => exit.remove())
+        .style("cursor", "pointer")
+        .on("mousemove", (ev, d) => showTip(ev, pointText(d.e, d.p))).on("mouseleave", hideTip)
+        .on("click", (ev, d) => { if (d.e.id !== "dubai") { state.focus = d.e.id; draw(); } })
+        .attr("fill", d => d.p.year === state.year ? colour.get(d.e.id) : "#fff")
+        .attr("stroke", d => colour.get(d.e.id)).attr("stroke-width", 1.6)
+        .transition().duration(animate ? 500 : 0)
+        .attr("r", d => d.p.year === state.year ? Math.max(5, r(d.p.n)) : Math.max(2.5, r(d.p.n) * 0.55));
+
+      // Year labels ('15, '16 ...) on the focused community's dots, so the direction of travel is readable
+      const focusE = shown.find(e => e.id === state.focus);
+      svg.select(".t-years").selectAll("text").data(focusE ? upto(focusE).filter(p => !p.too_few) : [], p => p.year).join("text")
+        .attr("class", "dx-sub").style("font-size", "10px").style("fill", "#334155")
+        .style("paint-order", "stroke").style("stroke", "#fff").style("stroke-width", "3px").attr("pointer-events", "none")
+        .attr("x", p => x(p.offplan_pct)).attr("y", p => y(p.median) - 8).attr("text-anchor", "middle")
+        .text(p => "'" + String(p.year).slice(2));
+
+      // Labels at each path's latest point (name + year)
+      const ends = shown.map(e => ({ e, p: upto(e).filter(p => !p.too_few).pop() })).filter(d => d.p);
+      svg.select(".t-labels").selectAll("text").data(ends, d => d.e.id).join("text")
+        .attr("class", "dx-sub").style("font-weight", 700).style("fill", d => colour.get(d.e.id))
+        .style("paint-order", "stroke").style("stroke", "#fff").style("stroke-width", "3px")
+        .attr("x", d => x(d.p.offplan_pct) + 10).attr("y", d => y(d.p.median) + 4)
+        .text(d => (d.e.id === "dubai" ? "All of Dubai" : d.e.name.replace("Al Barsha South Fourth", "JVC")) + (d.p.year !== state.year ? " (" + d.p.year + ")" : ""));
+
+      drawDetail();
+    }
+
+    // ---- Linked view: focused community vs all of Dubai, year by year ----
+    const offColour = d3.scaleSequential().domain([0, 100]).interpolator(t => d3.interpolateBlues(0.15 + 0.85 * t));
+    function drawDetail() {
+      const W = Math.max(640, document.getElementById("t-detail").clientWidth || 1000), H = 230;
+      const M = { top: 40, right: 30, bottom: 30, left: 70 };
+      detail.attr("viewBox", `0 0 ${W} ${H}`).selectAll("*").remove();
+      const e = entities.find(x => x.id === state.focus);
+      if (!e) {
+        detail.append("text").attr("class", "dx-sub").attr("x", 0).attr("y", 20).text("Switch on a community to compare it with all of Dubai.");
+        d3.select("#t-summary").html("No community selected.");
+        return;
+      }
+      const rows = years.map(yr => {
+        const p = e.points.find(q => q.year === yr), dp = dubaiByYear.get(yr);
+        return { year: yr, p, prem: p && !p.too_few ? (p.median / dp.median - 1) * 100 : null };
+      });
+      const lim = Math.max(20, d3.max(rows, d => Math.abs(d.prem || 0)) * 1.1);
+      const xb = d3.scaleBand().domain(years).range([M.left, W - M.right]).padding(0.25);
+      const yb = d3.scaleLinear().domain([-lim, lim]).range([H - M.bottom, M.top]).nice();
+      detail.append("text").attr("class", "dx-title").attr("x", 0).attr("y", 14).style("fill", colour.get(e.id))
+        .text(`${e.name}: median price compared with all of Dubai`);
+      detail.append("text").attr("class", "dx-sub").attr("x", 0).attr("y", 30)
+        .text("Bar = % above (up) or below (down) Dubai's median that year · colour = off-plan share (darker = more off-plan)");
+      detail.append("g").attr("class", "dx-axis").attr("transform", `translate(${M.left},0)`)
+        .call(d3.axisLeft(yb).ticks(5).tickFormat(d => signed(d) + "%").tickSize(-(W - M.left - M.right)))
+        .call(g => g.selectAll(".tick line").attr("stroke", "#f1f5f9"));
+      detail.append("line").attr("x1", M.left).attr("x2", W - M.right).attr("y1", yb(0)).attr("y2", yb(0)).attr("stroke", "#0f172a");
+      detail.append("g").selectAll("rect").data(rows.filter(d => d.prem !== null)).join("rect")
+        .attr("x", d => xb(d.year)).attr("width", xb.bandwidth())
+        .attr("y", d => yb(Math.max(0, d.prem))).attr("height", d => Math.abs(yb(d.prem) - yb(0)))
+        .attr("fill", d => offColour(d.p.offplan_pct)).attr("stroke", d => d.year === state.year ? "#0f172a" : "none").attr("stroke-width", 2)
+        .on("mousemove", (ev, d) => showTip(ev, pointText(e, d.p))).on("mouseleave", hideTip);
+      detail.append("g").selectAll("text").data(rows.filter(d => d.prem === null)).join("text")
+        .attr("class", "dx-sub").attr("x", d => xb(d.year) + xb.bandwidth() / 2).attr("y", yb(0) - 6).attr("text-anchor", "middle").text("<20");
+      detail.append("g").attr("class", "dx-axis").attr("transform", `translate(0,${H - M.bottom})`)
+        .call(d3.axisBottom(xb).tickSize(0).tickPadding(8)).call(g => g.select(".domain").remove());
+
+      // Summary line for the focused community
+      const valid = e.points.filter(p => !p.too_few && p.year < years[years.length - 1]);
+      const a = valid[0], b = valid[valid.length - 1];
+      const cur = e.points.find(p => p.year === state.year);
+      d3.select("#t-summary").html(`<strong style="color:${colour.get(e.id)}">${e.name}</strong>: ${a.year}→${b.year} off-plan ${pct(a.offplan_pct)}% → ${pct(b.offplan_pct)}%, median AED ${fmt(a.median)} → ${fmt(b.median)}/m² (${signed((b.median / a.median - 1) * 100)}%)` +
+        (cur && !cur.too_few ? ` · in ${state.year}: ${fmt(cur.n)} home sales, ${signed((cur.median / dubaiByYear.get(state.year).median - 1) * 100)}% vs Dubai` : ` · fewer than 20 sales in ${state.year}`));
+    }
+
+    let lastW = 0, rt;
+    window.addEventListener("resize", () => {
+      clearTimeout(rt);
+      rt = setTimeout(() => { const w = document.getElementById("t-chart").clientWidth; if (w !== lastW) { lastW = w; draw(); } }, 150);
     });
     draw();
   })();
