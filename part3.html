@@ -415,7 +415,7 @@
       <div class="kpi-card">
         <span class="kpi-label">Communities With Sales</span>
         <span class="kpi-value">163</span>
-        <span class="kpi-desc">Out of 226 communities (91 have 10+ sales)</span>
+        <span class="kpi-desc">Out of 226 communities (91 have 10+ sales; 60 have more than 100)</span>
       </div>
       <div class="kpi-card">
         <span class="kpi-label">Venues Used</span>
@@ -439,7 +439,7 @@
       <div class="instructions-box">
         <div><strong>How to use it</strong></div>
         <div>1. <strong>Brush:</strong> drag a rectangle over the scatterplot. Circles inside stay coloured and the rest turn grey, and the two bar charts below show only the selected communities. Drag the rectangle to move it, drag its edges to resize it, and double-click the chart to clear it.</div>
-        <div>2. <strong>Minimum sales slider:</strong> hides communities with fewer sales than the value you pick. It starts at 10 because medians from fewer sales are unreliable (a few communities with 1&ndash;3 sales show AED 1&ndash;11/m&sup2;). Set it to 100 for the &ldquo;more than 100 transactions&rdquo; filter from the Part 1 feedback.</div>
+        <div>2. <strong>Minimum sales slider:</strong> shows only communities with more sales than the value you pick. It starts at 100, matching the Part 1 feedback about filtering transactions greater than 100.</div>
         <div>3. <strong>Quadrant dropdown:</strong> shows one quadrant only. &ldquo;All Quadrants&rdquo; brings everything back.</div>
         <div>4. <strong>Together:</strong> the slider and dropdown choose which communities are eligible, and the brush picks from those.</div>
         <div>5. <strong>Tooltips:</strong> hover over a circle or bar for details. A missing rating reads &ldquo;No rated venues&rdquo;.</div>
@@ -480,7 +480,7 @@
         <li>
           <strong>Sub-Vis 2, two bar charts for the selected communities:</strong>
           <ul>
-            <li><strong>Left, amenity composition:</strong> total venues in each of five categories (Dining &amp; Cafes, Retail &amp; Shopping, Hospitality &amp; Hotels, Leisure &amp; Wellness, Services &amp; Community).</li>
+            <li><strong>Left, amenity composition:</strong> total venues in each of five categories (Dining &amp; Cafes, Retail &amp; Shopping, Hospitality &amp; Nightlife, Leisure &amp; Wellness, Services &amp; Community).</li>
             <li><strong>Right, sales by stage and property type:</strong> off-plan and existing sales add up to total sales. Flats and villas are a separate breakdown of the same sales and do not add up to the total, because land and other property types are left out.</li>
           </ul>
         </li>
@@ -489,7 +489,7 @@
       <h3>4. Interaction</h3>
       <ul>
         <li><strong>Brush:</strong> drag a rectangle over the scatterplot to select communities. The bar charts then show only those communities. Double-click the chart to clear it. The brush is defined once at the top level of the Vega-Lite spec and attached to the scatterplot only (<code>views: ["scatter"]</code>). The bar charts read it with <code>{"filter": {"param": "brush"}}</code>. The link goes one way, from the scatterplot to the bar charts.</li>
-        <li><strong>Minimum sales slider:</strong> hides communities with fewer sales than the chosen value in all three charts (range 10 to 500, default 50). It answers the Part 1 feedback about small samples; set it to 100 for the "more than 100 transactions" filter.</li>
+        <li><strong>Minimum sales slider:</strong> keeps communities with more sales than the chosen value in all three charts (range 100 to 500, default 100). The default therefore applies the "more than 100 transactions" filter requested in the Part 1 feedback.</li>
         <li><strong>Quadrant dropdown:</strong> shows one quadrant only, in all three charts.</li>
         <li><strong>Tooltips:</strong> hover over a circle for the community name and number, quadrant, median price, sales, venues, housing type, off-plan share, average venue rating and area. A missing rating reads "No rated venues".</li>
       </ul>
@@ -554,7 +554,7 @@
         <li><strong>Median price:</strong> we use the median price per m² instead of the mean so that a few extreme sales do not distort a community's figure.</li>
         <li><strong>Venue density:</strong> venues divided by community area in km².</li>
         <li><strong>Off-plan share:</strong> off-plan sales divided by total sales, times 100.</li>
-        <li><strong>Small samples:</strong> the slider starts at 10 sales. The 72 communities with fewer than 10 sales (243 sales in total) stay in the data files, flagged <code>insufficient_data</code>, but are never drawn. Their medians are not reliable; for example AED 1, 2 and 11/m² come from 1 to 3 sales. We cannot tell from the aggregated data whether those values are entry errors or nominal transfers.</li>
+        <li><strong>Small samples:</strong> the data-preparation reliability flag uses 10 sales as its minimum. The 72 communities with fewer than 10 sales (243 sales in total) stay in the data files, flagged <code>insufficient_data</code>, but are never drawn. Their medians are not reliable; for example AED 1, 2 and 11/m² come from 1 to 3 sales. We cannot tell from the aggregated data whether those values are entry errors or nominal transfers.</li>
         <li><strong>Missing ratings:</strong> a community's average rating uses only rated venues. It is null when there are none, which affects 28 communities (25 with no venues, 3 whose venues are all unrated). It is never stored as 0.</li>
         <li><strong>Quadrant lines:</strong> 15 venues and AED 13,000/m² are chosen thresholds, not medians.</li>
       </ul>
@@ -614,7 +614,7 @@
     // Filters shared by the scatterplot and the two lower charts
     // (slider + dropdown). The lower charts add the brush on top of these.
     const sharedFilters = [
-      { "filter": "datum.sales_count >= min_sales" },
+      { "filter": "datum.sales_count > min_sales" },
       { "filter": "quadrant_filter === 'All Quadrants' || datum.quadrant === quadrant_filter" }
     ];
 
@@ -672,8 +672,8 @@
       "params": [
         {
           "name": "min_sales",
-          "value": 50,
-          "bind": { "input": "range", "min": 10, "max": 500, "step": 10, "name": "Filter by Min Sales Volume: " }
+          "value": 100,
+          "bind": { "input": "range", "min": 100, "max": 500, "step": 10, "name": "Filter communities with more than this many sales: " }
         },
         {
           "name": "quadrant_filter",
@@ -808,9 +808,9 @@
               ["Venues in the selection, grouped into five", "amenity categories."],
               ["dining_count", "leisure_count", "retail_count", "hospitality_count", "services_count"],
               "amenity_key", "venue_total",
-              "datum.amenity_key === 'dining_count' ? 'Dining & Cafes' : (datum.amenity_key === 'retail_count' ? 'Retail & Shopping' : (datum.amenity_key === 'hospitality_count' ? 'Hospitality & Hotels' : (datum.amenity_key === 'leisure_count' ? 'Leisure & Wellness' : 'Services & Community')))",
+              "datum.amenity_key === 'dining_count' ? 'Dining & Cafes' : (datum.amenity_key === 'retail_count' ? 'Retail & Shopping' : (datum.amenity_key === 'hospitality_count' ? 'Hospitality & Nightlife' : (datum.amenity_key === 'leisure_count' ? 'Leisure & Wellness' : 'Services & Community')))",
               "category_name",
-              ["Dining & Cafes", "Retail & Shopping", "Hospitality & Hotels", "Leisure & Wellness", "Services & Community"],
+              ["Dining & Cafes", "Retail & Shopping", "Hospitality & Nightlife", "Leisure & Wellness", "Services & Community"],
               ["#ef4444", "#8b5cf6", "#f59e0b", "#06b6d4", "#64748b"],
               "Total Venues in Selection", "Amenity Type", "Venues in Selection"
             ),
