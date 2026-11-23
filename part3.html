@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>CS333 Part 3: Dubai Real Estate Livability & Valuation Matrix</title>
 
-  <!-- D3 for Visualization 2 treemap -->
+  <!-- D3 for Visualizations 2, 3 and 4 -->
   <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
 
   <!-- Vega, Vega-Lite, and Vega-Embed libraries -->
@@ -15,6 +15,8 @@
 
   <!-- Community data (keep community_data.js in the same folder as this file) -->
   <script src="community_data.js"></script>
+  <!-- Transaction-level prices for Visualization 3 (built by prepare_viz3_data.py) -->
+  <script src="price_data.js"></script>
 
   <style>
     :root {
@@ -400,6 +402,45 @@
     }
   </style>
 
+  <style>
+    /* Shared styles for Visualizations 3 and 4 (prefixed dx- so they do not affect 1 and 2). */
+    .dx-controls { display:flex; flex-wrap:wrap; align-items:flex-end; gap:18px 26px; padding:14px 18px; margin-bottom:14px;
+      background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; font-size:13px; }
+    .dx-control { display:flex; flex-direction:column; gap:6px; }
+    .dx-label { font-weight:600; color:#334155; }
+    .dx-control select { padding:5px 8px; border-radius:6px; border:1px solid #cbd5e1; background:#fff; font-size:13px; cursor:pointer; }
+    .dx-control input[type="range"] { accent-color:#2563eb; cursor:pointer; width:180px; }
+    .dx-toggle-group { display:flex; flex-wrap:wrap; gap:6px; }
+    .dx-toggle { display:inline-flex; align-items:center; gap:6px; border:1px solid #cbd5e1; background:#fff; color:#94a3b8;
+      border-radius:999px; padding:4px 11px; font-size:12px; font-weight:600; cursor:pointer; }
+    .dx-toggle i { width:10px; height:10px; border-radius:3px; opacity:.35; }
+    .dx-toggle[aria-pressed="true"] { color:#0f172a; border-color:#94a3b8; }
+    .dx-toggle[aria-pressed="true"] i { opacity:1; }
+    .dx-button { border:1px solid #bfdbfe; color:#1d4ed8; background:#eff6ff; border-radius:8px; padding:7px 12px; font-weight:700; cursor:pointer; font-size:13px; }
+    .dx-button:hover { background:#dbeafe; }
+    .dx-summary { font-size:13px; color:#334155; background:#fff; border-left:4px solid #1d4ed8; padding:8px 12px; margin:4px 0 10px; }
+    .dx-chart { width:100%; }
+    .dx-chart svg { display:block; width:100%; height:auto; overflow:visible; }
+    .dx-chart text { font-family:inherit; }
+    .dx-axis text { font-size:11px; fill:#475569; }
+    .dx-axis path, .dx-axis line { stroke:#cbd5e1; }
+    .dx-title { font-size:13px; font-weight:700; fill:#334155; }
+    .dx-sub { font-size:11.5px; fill:#64748b; }
+    .dx-note { font-size:12px; color:#64748b; margin-top:10px; }
+    .dx-legend { display:flex; flex-wrap:wrap; gap:12px; font-size:12px; color:#334155; }
+    .dx-legend i { display:inline-block; width:14px; height:4px; border-radius:2px; margin-right:6px; vertical-align:middle; }
+    .dx-scroll { width:100%; overflow-x:auto; }
+    #v4-chart { min-width:760px; }
+    .dx-list { display:flex; flex-wrap:wrap; gap:6px; margin-top:12px; font-size:12px; max-height:150px; overflow-y:auto; }
+    .dx-list span { border:1px solid #e2e8f0; border-radius:999px; padding:3px 9px; background:#fff; color:#334155; }
+    .dx-tooltip { position:fixed; z-index:1000; pointer-events:none; opacity:0; background:#0f172a; color:#fff; padding:10px 12px;
+      border-radius:9px; font-size:12px; line-height:1.5; box-shadow:0 8px 25px rgba(0,0,0,.2); max-width:280px; }
+    #v4-chart .dx-axis text { paint-order:stroke; stroke:#fff; stroke-width:3px; stroke-linejoin:round; font-weight:600; }
+    .v4-line { fill:none; stroke-width:1.6; }
+    .v4-line.dim { stroke:#cbd5e1 !important; stroke-opacity:.35; }
+    .v4-line.hot { stroke-width:3.5; stroke-opacity:1 !important; }
+    @media (max-width:650px) { .dx-controls { gap:14px; } .dx-control input[type="range"] { width:150px; } }
+  </style>
 </head>
 <body>
 
@@ -423,7 +464,7 @@
     <!-- Data cleaning summary -->
     <section class="cleaning-section" aria-labelledby="cleaning-title">
       <h2 id="cleaning-title">How we cleaned the data</h2>
-      <p class="section-intro">Both visualizations use the same Dubai Land Department sales dataset and community-level aggregation. We applied these checks before interpreting the results.</p>
+      <p class="section-intro">All four visualizations use the same Dubai Land Department sales data and cleaning rules: Visualizations 1, 2 and 4 use the community-level summary, and Visualization 3 uses the individual sales.</p>
       <div class="cleaning-table-wrap">
         <table class="cleaning-table">
           <thead>
@@ -452,7 +493,7 @@
             </tr>
             <tr>
               <td><strong>Small community samples</strong></td>
-              <td>The dashboard includes a minimum-sales filter so users can exclude communities with too few transactions when comparing median prices. The treemap focuses on sales volume and off-plan share.</td>
+              <td>The dashboard includes a minimum-sales filter so users can exclude communities with too few transactions when comparing median prices. The treemap focuses on sales volume and off-plan share. The parallel coordinates use the same &ldquo;more than 100 sales&rdquo; default.</td>
               <td>Users can adjust the minimum-sales threshold instead of treating every small-sample median as equally reliable.</td>
             </tr>
           </tbody>
@@ -572,6 +613,118 @@
     </div>
 
 
+
+    <!-- Visualization 3: Property Price Distribution Explorer -->
+    <section id="visualization3" class="viz-card">
+      <div class="viz-header">
+        <h2>Visualization 3: Property Price Distribution Explorer</h2>
+        <p>How widely do sale prices per m² vary within and between property types, and how do off-plan and existing sales differ?</p>
+      </div>
+
+      <div class="instructions-box">
+        <div><strong>How to use it</strong></div>
+        <div>1. <strong>Year brush:</strong> drag across the yearly bar chart to keep only those years. Click an empty part of that chart (or press Reset) to select all years again.</div>
+        <div>2. <strong>Property type buttons and registration menu:</strong> choose which sales are included in the histogram and boxplots.</div>
+        <div>3. <strong>Bins slider:</strong> changes how many bins the histogram uses.</div>
+        <div>4. <strong>Tooltips:</strong> hover over a bar or a box for exact values.</div>
+      </div>
+
+      <div class="dx-controls">
+        <div class="dx-control">
+          <span class="dx-label">Property type</span>
+          <div id="v3-types" class="dx-toggle-group" role="group" aria-label="Property types"></div>
+        </div>
+        <label class="dx-control">
+          <span class="dx-label">Registration</span>
+          <select id="v3-reg">
+            <option value="all">All sales</option>
+            <option value="O">Off-plan only</option>
+            <option value="E">Existing only</option>
+          </select>
+        </label>
+        <label class="dx-control">
+          <span class="dx-label">Histogram bins: <strong id="v3-bins-value">40</strong></span>
+          <input id="v3-bins" type="range" min="10" max="80" step="5" value="40">
+        </label>
+        <button id="v3-reset" class="dx-button" type="button">Reset</button>
+      </div>
+
+      <div id="v3-summary" class="dx-summary" aria-live="polite"></div>
+      <div id="v3-years" class="dx-chart"></div>
+      <div id="v3-hist" class="dx-chart"></div>
+      <div id="v3-box" class="dx-chart"></div>
+      <p class="dx-note">Price axis is logarithmic (AED 500 to 200,000/m²). The <span id="v3-outside">—</span> filtered sales outside that range are included in the medians and boxplots but are not drawn in the histogram. 2026 runs to <span id="v3-lastdate">—</span> only.</p>
+    </section>
+
+    <div class="explain-grid" aria-label="Visualization 3 explanation">
+      <article class="explain-card">
+        <h3>Encoding</h3>
+        <p>The yearly bars stack off-plan (orange) and existing (blue) sales. The histogram uses bar height for the number of sales in each price bin, coloured by property type. Each boxplot shows the median, the middle 50% of prices (box) and whiskers at 1.5 × IQR on the log scale. Dots are outliers. The histogram and boxplots share one log price axis.</p>
+      </article>
+      <article class="explain-card">
+        <h3>Interaction</h3>
+        <p>The year brush, type buttons and registration menu cross-filter the histogram and boxplots together. The bins slider changes how much the histogram aggregates. Tooltips give exact counts and quartiles.</p>
+      </article>
+      <article class="explain-card">
+        <h3>What it helps us see</h3>
+        <p>Flats have the highest median (AED 16,322/m²) and villas the lowest (AED 10,769/m²). Buildings vary the most (IQR AED 24,067/m²). Off-plan flats have a median 51% higher than existing flats (AED 18,412 vs 12,217/m²). Land and buildings have no off-plan sales.</p>
+      </article>
+    </div>
+
+    <!-- Visualization 4: Community Profile Parallel Coordinates -->
+    <section id="visualization4" class="viz-card">
+      <div class="viz-header">
+        <h2>Visualization 4: Community Profile Parallel Coordinates</h2>
+        <p>Which communities share a similar profile across price, sales volume, off-plan reliance, housing mix, amenities and population density?</p>
+      </div>
+
+      <div class="instructions-box">
+        <div><strong>How to use it</strong></div>
+        <div>1. <strong>Brush an axis:</strong> drag vertically along any axis to keep the communities in that range. Brush several axes to combine conditions. Click an axis outside its brush to clear it.</div>
+        <div>2. <strong>Minimum sales menu:</strong> chooses which communities are drawn (the default matches Visualization 1).</div>
+        <div>3. <strong>Hover a line</strong> for that community's values. The selected communities are listed under the chart.</div>
+      </div>
+
+      <div class="dx-controls">
+        <label class="dx-control">
+          <span class="dx-label">Communities shown</span>
+          <select id="v4-min">
+            <option value="100">More than 100 sales</option>
+            <option value="50">More than 50 sales</option>
+            <option value="9">10 or more sales</option>
+          </select>
+        </label>
+        <div class="dx-control">
+          <span class="dx-label">Line colour = dominant housing type</span>
+          <div class="dx-legend">
+            <span><i style="background:#2563eb"></i>Apartments / Units</span>
+            <span><i style="background:#059669"></i>Villas / Townhouses</span>
+            <span><i style="background:#d97706"></i>Mixed Typology</span>
+          </div>
+        </div>
+        <button id="v4-reset" class="dx-button" type="button">Clear brushes</button>
+      </div>
+
+      <div id="v4-summary" class="dx-summary" aria-live="polite"></div>
+      <div class="dx-scroll"><div id="v4-chart" class="dx-chart"></div></div>
+      <div id="v4-list" class="dx-list"></div>
+      <p class="dx-note">Median price, sales and population density use log-type axes. Population density is the 2019 population divided by community area, so it predates many new developments; some high-sales communities had almost no recorded residents in 2019.</p>
+    </section>
+
+    <div class="explain-grid" aria-label="Visualization 4 explanation">
+      <article class="explain-card">
+        <h3>Encoding</h3>
+        <p>Each line is a community and each vertical axis is one attribute. Where a line crosses an axis shows the community's value on it. Colour shows the dominant housing type, using the same colours as Visualization 1.</p>
+      </article>
+      <article class="explain-card">
+        <h3>Interaction</h3>
+        <p>Brushing one or more axes filters the communities, so only lines that pass every brush stay coloured. The minimum-sales menu reduces unreliable small samples. Hovering highlights one line and shows its values.</p>
+      </article>
+      <article class="explain-card">
+        <h3>What it helps us see</h3>
+        <p>For the 60 communities with more than 100 sales, price rises with off-plan share (ρ = 0.51) and flat share (ρ = 0.54) and falls with villa share (ρ = −0.62). Price is unrelated to venue count (ρ ≈ 0.00), while venues go with population density (ρ = 0.46).</p>
+      </article>
+    </div>
 
   </div>
 
@@ -998,6 +1151,364 @@
       }, 150);
     });
     render(root);
+  })();
+  </script>
+  <div id="dx-tooltip" class="dx-tooltip" role="tooltip"></div>
+
+  <!-- ================================================================
+       Visualization 3: Property Price Distribution Explorer (D3)
+       Data: price_data.js (one entry per qualifying sale, 51,730 sales)
+       ================================================================ -->
+  <script>
+  (() => {
+    if (typeof priceData === "undefined") {
+      document.getElementById("v3-hist").innerHTML = "<p style='color:#b91c1c'>Could not load price_data.js. Keep it in the same folder as part3.html.</p>";
+      return;
+    }
+    const fmt = d3.format(","), pct = d3.format(".1f");
+    const tip = d3.select("#dx-tooltip");
+    const showTip = (e, html) => tip.html(html).style("opacity", 1)
+      .style("left", Math.max(8, Math.min(e.clientX + 14, window.innerWidth - 295)) + "px")
+      .style("top", Math.max(8, Math.min(e.clientY + 14, window.innerHeight - 190)) + "px");
+    const hideTip = () => tip.style("opacity", 0);
+
+    // ---- 1. Unpack the columnar data file into one object per sale ----
+    const TYPES = [
+      { code: "U", name: "Flats / Units", color: "#2563eb" },
+      { code: "V", name: "Villas", color: "#059669" },
+      { code: "L", name: "Land", color: "#b45309" },
+      { code: "B", name: "Buildings", color: "#7c3aed" }
+    ];
+    const typeByCode = Object.fromEntries(TYPES.map(t => [t.code, t]));
+    const sales = priceData.p.map((price, i) => ({
+      price,
+      type: priceData.t[i],
+      reg: priceData.r[i],
+      year: priceData.firstYear + priceData.y.charCodeAt(i) - 97
+    }));
+    const years = d3.range(priceData.firstYear, d3.max(sales, d => d.year) + 1);
+    d3.select("#v3-lastdate").text(d3.timeFormat("%-d %B %Y")(new Date(priceData.lastDate)));
+
+    // ---- 2. Interaction state ----
+    const DOMAIN = [500, 200000];             // log price axis shared by histogram and boxplots
+    const state = { types: new Set(TYPES.map(t => t.code)), reg: "all", bins: 40, yearRange: null };
+
+    // Type toggle buttons
+    const toggles = d3.select("#v3-types").selectAll("button").data(TYPES).join("button")
+      .attr("type", "button").attr("class", "dx-toggle").attr("aria-pressed", "true")
+      .on("click", (e, t) => {
+        if (state.types.has(t.code)) { if (state.types.size > 1) state.types.delete(t.code); }
+        else state.types.add(t.code);
+        toggles.attr("aria-pressed", d => state.types.has(d.code));
+        update();
+      });
+    toggles.append("i").style("background", d => d.color);
+    toggles.append("span").text(d => d.name);
+
+    d3.select("#v3-reg").on("change", e => { state.reg = e.target.value; update(); });
+    d3.select("#v3-bins").on("input", e => { state.bins = +e.target.value; d3.select("#v3-bins-value").text(state.bins); update(); });
+    d3.select("#v3-reset").on("click", () => {
+      state.types = new Set(TYPES.map(t => t.code)); state.reg = "all"; state.bins = 40; state.yearRange = null;
+      toggles.attr("aria-pressed", "true");
+      d3.select("#v3-reg").property("value", "all");
+      d3.select("#v3-bins").property("value", 40); d3.select("#v3-bins-value").text(40);
+      drawAll();
+    });
+
+    // Filters: the year chart ignores the year brush (so you can still see every year), the others use everything.
+    const passTypeReg = d => state.types.has(d.type) && (state.reg === "all" || d.reg === state.reg);
+    const passYear = d => !state.yearRange || (d.year >= state.yearRange[0] && d.year <= state.yearRange[1]);
+
+    // ---- 3. Layout helpers (charts are drawn at the container's real width) ----
+    let W = 1000;
+    const M = { left: 118, right: 30 };
+    const measure = () => { W = Math.max(320, document.getElementById("v3-hist").clientWidth || 1000); M.left = W < 600 ? 84 : 118; };
+    const x = d3.scaleLog().domain(DOMAIN).clamp(true);
+    const priceTicks = [500, 1000, 2000, 5000, 10000, 20000, 50000, 100000, 200000];
+    const priceFmt = v => v >= 1000 ? (v / 1000) + "k" : v;
+
+    // ---- 4. Year chart with brush (stacked off-plan / existing) ----
+    const yearSvg = d3.select("#v3-years").append("svg");
+    function drawYears() {
+      const H = 150, top = 34, bottom = 24;
+      yearSvg.attr("viewBox", `0 0 ${W} ${H}`).selectAll("*").remove();
+      const rows = sales.filter(passTypeReg);
+      const counts = years.map(y => {
+        const ys = rows.filter(d => d.year === y);
+        return { year: y, O: ys.filter(d => d.reg === "O").length, E: ys.filter(d => d.reg === "E").length };
+      });
+      const xb = d3.scaleBand().domain(years).range([M.left, W - M.right]).padding(0.18);
+      const yb = d3.scaleLinear().domain([0, d3.max(counts, d => d.O + d.E) || 1]).nice().range([H - bottom, top]);
+      yearSvg.append("text").attr("class", "dx-title").attr("x", 0).attr("y", 13).text("Sales per year");
+      yearSvg.append("text").attr("class", "dx-sub").attr("x", 0).attr("y", 28)
+        .text(W < 600 ? "Drag across years to filter" : "Orange = off-plan, blue = existing. Drag across years to filter the charts below.");
+      const g = yearSvg.append("g");
+      const stack = d3.stack().keys(["O", "E"])(counts);
+      const regColor = { O: "#f97316", E: "#3b82f6" };
+      g.selectAll("g").data(stack).join("g").attr("fill", s => regColor[s.key])
+        .selectAll("rect").data(s => s.map(v => ({ ...v, key: s.key }))).join("rect")
+        .attr("class", "v3-yearbar")
+        .attr("x", d => xb(d.data.year)).attr("width", xb.bandwidth())
+        .attr("y", d => yb(d[1])).attr("height", d => Math.max(0, yb(d[0]) - yb(d[1])))
+        .attr("opacity", d => passYear({ year: d.data.year }) ? 1 : 0.25);
+      yearSvg.append("g").attr("class", "dx-axis").attr("transform", `translate(0,${H - bottom})`)
+        .call(d3.axisBottom(xb).tickValues(W < 600 ? years.filter(y => y % 2 === 1) : years).tickSizeOuter(0));
+      yearSvg.append("g").attr("class", "dx-axis").attr("transform", `translate(${M.left},0)`)
+        .call(d3.axisLeft(yb).ticks(3).tickFormat(d3.format("~s")));
+
+      // Brush snaps to whole years
+      const brush = d3.brushX().extent([[M.left, top - 4], [W - M.right, H - bottom]])
+        .on("end", ({ selection, sourceEvent }) => {
+          if (!sourceEvent) return;                       // ignore programmatic moves
+          if (!selection) { state.yearRange = null; drawAll(); return; }
+          const inside = years.filter(y => xb(y) + xb.bandwidth() > selection[0] && xb(y) < selection[1]);
+          state.yearRange = inside.length ? [inside[0], inside[inside.length - 1]] : null;
+          drawAll();
+        });
+      const bg = yearSvg.append("g").attr("class", "v3-brush").call(brush);
+      if (state.yearRange) {
+        bg.call(brush.move, [xb(state.yearRange[0]) - xb.step() * xb.padding() / 2,
+                             xb(state.yearRange[1]) + xb.bandwidth() + xb.step() * xb.padding() / 2]);
+      }
+      // Tooltips on the bars (the brush overlay sits on top, so use its mousemove)
+      bg.select(".overlay").on("mousemove.tip", e => {
+        const [mx] = d3.pointer(e); const yr = years.find(y => mx >= xb(y) - 2 && mx <= xb(y) + xb.bandwidth() + 2);
+        if (!yr) return hideTip();
+        const c = counts.find(d => d.year === yr), tot = c.O + c.E;
+        showTip(e, `<strong>${yr}${yr === years[years.length - 1] ? " (to " + priceData.lastDate + ")" : ""}</strong><br>Sales: ${fmt(tot)}<br>Off-plan: ${fmt(c.O)} (${tot ? pct(c.O / tot * 100) : 0}%)<br>Existing: ${fmt(c.E)}`);
+      }).on("mouseleave.tip", hideTip);
+    }
+
+    // ---- 5. Histogram (log-spaced bins, stacked by property type) ----
+    const histSvg = d3.select("#v3-hist").append("svg");
+    function drawHist(rows) {
+      const H = W < 600 ? 280 : 320, top = 36, bottom = 42;
+      histSvg.attr("viewBox", `0 0 ${W} ${H}`).selectAll("*").remove();
+      x.range([M.left, W - M.right]);
+      const [lo, hi] = DOMAIN.map(Math.log10);
+      const thresholds = d3.range(1, state.bins).map(i => Math.pow(10, lo + (hi - lo) * i / state.bins));
+      const inRange = rows.filter(d => d.price >= DOMAIN[0] && d.price <= DOMAIN[1]);
+      const bins = d3.bin().value(d => d.price).domain(DOMAIN).thresholds(thresholds)(inRange);
+      const active = TYPES.filter(t => state.types.has(t.code));
+      const table = bins.map(b => {
+        const o = { x0: b.x0, x1: b.x1, total: b.length };
+        active.forEach(t => o[t.code] = 0);
+        b.forEach(d => o[d.type]++);
+        return o;
+      });
+      const stack = d3.stack().keys(active.map(t => t.code))(table);
+      const y = d3.scaleLinear().domain([0, d3.max(table, d => d.total) || 1]).nice().range([H - bottom, top]);
+
+      histSvg.append("text").attr("class", "dx-title").attr("x", 0).attr("y", 13).text("Distribution of sale price per m²");
+      histSvg.append("text").attr("class", "dx-sub").attr("x", 0).attr("y", 28).text("Bar height = number of sales in each price bin");
+      histSvg.append("g").attr("class", "dx-axis").attr("transform", `translate(${M.left},0)`)
+        .call(d3.axisLeft(y).ticks(5).tickFormat(d3.format("~s")).tickSize(-(W - M.left - M.right)))
+        .call(g => g.selectAll(".tick line").attr("stroke", "#f1f5f9")).call(g => g.select(".domain").remove());
+      histSvg.append("g").selectAll("g").data(stack).join("g").attr("fill", s => typeByCode[s.key].color)
+        .selectAll("rect").data(s => s).join("rect")
+        .attr("x", d => x(d.data.x0) + 0.5).attr("width", d => Math.max(0, x(d.data.x1) - x(d.data.x0) - 1))
+        .attr("y", d => y(d[1])).attr("height", d => Math.max(0, y(d[0]) - y(d[1])));
+      // One invisible hover target per bin (full column) for an easy-to-hit tooltip
+      histSvg.append("g").selectAll("rect").data(table).join("rect")
+        .attr("x", d => x(d.x0)).attr("width", d => Math.max(0, x(d.x1) - x(d.x0)))
+        .attr("y", top).attr("height", H - bottom - top).attr("fill", "transparent")
+        .on("mousemove", (e, d) => showTip(e, `<strong>AED ${fmt(Math.round(d.x0))} – ${fmt(Math.round(d.x1))}/m²</strong><br>Sales: ${fmt(d.total)} (${rows.length ? pct(d.total / rows.length * 100) : 0}% of filtered)<br>` +
+          active.filter(t => d[t.code]).map(t => `${t.name}: ${fmt(d[t.code])}`).join("<br>")))
+        .on("mouseleave", hideTip);
+      // Median line
+      const med = d3.median(rows, d => d.price);
+      if (med) {
+        const g = histSvg.append("g").attr("pointer-events", "none");
+        g.append("line").attr("x1", x(med)).attr("x2", x(med)).attr("y1", top - 2).attr("y2", H - bottom)
+          .attr("stroke", "#0f172a").attr("stroke-dasharray", "4 3").attr("stroke-width", 1.5);
+        g.append("text").attr("x", x(med) + 5).attr("y", top + 8).attr("class", "dx-sub").style("font-weight", 700).style("fill", "#0f172a")
+          .text(`Median AED ${fmt(Math.round(med))}/m²`);
+      }
+      histSvg.append("g").attr("class", "dx-axis").attr("transform", `translate(0,${H - bottom})`)
+        .call(d3.axisBottom(x).tickValues(W < 600 ? [1000, 5000, 20000, 100000] : priceTicks).tickFormat(priceFmt));
+      histSvg.append("text").attr("class", "dx-sub").attr("x", (M.left + W - M.right) / 2).attr("y", H - 6)
+        .attr("text-anchor", "middle").text("Sale price per m² (AED, log scale)");
+    }
+
+    // ---- 6. Boxplots per property type (same x axis as the histogram) ----
+    const boxSvg = d3.select("#v3-box").append("svg");
+    function drawBoxes(rows) {
+      const active = TYPES.filter(t => state.types.has(t.code));
+      const rowH = 46, top = 34, bottom = 40, H = top + rowH * active.length + bottom;
+      boxSvg.attr("viewBox", `0 0 ${W} ${H}`).selectAll("*").remove();
+      boxSvg.append("text").attr("class", "dx-title").attr("x", 0).attr("y", 13).text("Spread by property type");
+      boxSvg.append("text").attr("class", "dx-sub").attr("x", 0).attr("y", 28).text(W < 600 ? "Box = middle 50%, line = median, dots = outliers" : "Box = middle 50% of prices, line = median, whiskers = 1.5 × IQR on the log scale, dots = outliers");
+      const yb = d3.scaleBand().domain(active.map(t => t.code)).range([top, top + rowH * active.length]).padding(0.3);
+      active.forEach(t => {
+        const vals = rows.filter(d => d.type === t.code).map(d => d.price).sort(d3.ascending);
+        const g = boxSvg.append("g").attr("transform", `translate(0,${yb(t.code)})`);
+        const h = yb.bandwidth();
+        g.append("text").attr("x", M.left - 10).attr("y", h / 2).attr("dy", "0.35em").attr("text-anchor", "end")
+          .style("font-size", W < 600 ? "11px" : "12px").style("font-weight", 700).style("fill", t.color).text(t.name);
+        if (!vals.length) {
+          g.append("text").attr("x", M.left + 6).attr("y", h / 2).attr("dy", "0.35em").attr("class", "dx-sub")
+            .text("No sales for this filter (e.g. land and buildings have no off-plan sales)");
+          return;
+        }
+        const q1 = d3.quantileSorted(vals, 0.25), q2 = d3.quantileSorted(vals, 0.5), q3 = d3.quantileSorted(vals, 0.75);
+        // Prices are strongly right-skewed and drawn on a log axis, so the 1.5 × IQR whisker rule is applied
+        // to log10(price). On a linear rule the lower whisker would run down to implausible values (e.g. AED 24/m²).
+        const lq1 = Math.log10(q1), lq3 = Math.log10(q3), liqr = lq3 - lq1;
+        const lo = vals.find(v => Math.log10(v) >= lq1 - 1.5 * liqr), hi = vals[d3.bisectRight(vals, Math.pow(10, lq3 + 1.5 * liqr)) - 1];
+        const outliers = vals.filter(v => v < lo || v > hi);
+        g.append("line").attr("x1", x(lo)).attr("x2", x(hi)).attr("y1", h / 2).attr("y2", h / 2).attr("stroke", "#64748b");
+        [lo, hi].forEach(v => g.append("line").attr("x1", x(v)).attr("x2", x(v)).attr("y1", h * 0.25).attr("y2", h * 0.75).attr("stroke", "#64748b"));
+        g.append("g").selectAll("circle").data(outliers).join("circle")
+          .attr("cx", v => x(v)).attr("cy", (v, i) => h / 2 + ((i * 7) % 11 - 5) * h / 30)   // small fixed vertical spread
+          .attr("r", 1.8).attr("fill", t.color).attr("fill-opacity", 0.25);
+        g.append("rect").attr("x", x(q1)).attr("width", Math.max(1, x(q3) - x(q1))).attr("y", 0).attr("height", h)
+          .attr("fill", t.color).attr("fill-opacity", 0.22).attr("stroke", t.color).attr("stroke-width", 1.5).attr("rx", 3);
+        g.append("line").attr("x1", x(q2)).attr("x2", x(q2)).attr("y1", 0).attr("y2", h).attr("stroke", "#0f172a").attr("stroke-width", 2.5);
+        g.append("rect").attr("x", M.left).attr("width", W - M.left - M.right).attr("height", h).attr("fill", "transparent")
+          .on("mousemove", e => showTip(e, `<strong>${t.name}</strong><br>Sales: ${fmt(vals.length)}<br>Median: AED ${fmt(Math.round(q2))}/m²<br>Middle 50%: AED ${fmt(Math.round(q1))} – ${fmt(Math.round(q3))}/m²<br>Whiskers: AED ${fmt(Math.round(lo))} – ${fmt(Math.round(hi))}/m²<br>Outliers: ${fmt(outliers.length)}`))
+          .on("mouseleave", hideTip);
+      });
+      boxSvg.append("g").attr("class", "dx-axis").attr("transform", `translate(0,${H - bottom})`)
+        .call(d3.axisBottom(x).tickValues(W < 600 ? [1000, 5000, 20000, 100000] : priceTicks).tickFormat(priceFmt));
+      boxSvg.append("text").attr("class", "dx-sub").attr("x", (M.left + W - M.right) / 2).attr("y", H - 6)
+        .attr("text-anchor", "middle").text("Sale price per m² (AED, log scale)");
+    }
+
+    // ---- 7. Redraw everything that depends on the filters ----
+    function update() {
+      const rows = sales.filter(d => passTypeReg(d) && passYear(d));
+      const med = d3.median(rows, d => d.price);
+      const off = rows.filter(d => d.reg === "O").length;
+      const outside = rows.filter(d => d.price < DOMAIN[0] || d.price > DOMAIN[1]).length;
+      d3.select("#v3-outside").text(fmt(outside));
+      d3.select("#v3-summary").html(rows.length
+        ? `<strong>${fmt(rows.length)}</strong> sales ${state.yearRange ? `in ${state.yearRange[0]}${state.yearRange[1] !== state.yearRange[0] ? "–" + state.yearRange[1] : ""}` : "in 2015–2026"} · median <strong>AED ${fmt(Math.round(med))}/m²</strong> · middle 50%: AED ${fmt(Math.round(d3.quantile(rows, 0.25, d => d.price)))} – ${fmt(Math.round(d3.quantile(rows, 0.75, d => d.price)))}/m² · ${pct(off / rows.length * 100)}% off-plan`
+        : "No sales match these filters. Land and buildings have no off-plan sales, for example.");
+      drawYears();
+      drawHist(rows);
+      drawBoxes(rows);
+    }
+    function drawAll() { measure(); update(); }
+
+    let lastW = 0, timer;
+    window.addEventListener("resize", () => {
+      clearTimeout(timer);
+      timer = setTimeout(() => { const w = document.getElementById("v3-hist").clientWidth; if (w !== lastW) { lastW = w; drawAll(); } }, 150);
+    });
+    drawAll();
+  })();
+  </script>
+
+  <!-- ================================================================
+       Visualization 4: Community Profile Parallel Coordinates (D3)
+       Data: community_data.js (same community table as Visualizations 1 and 2)
+       ================================================================ -->
+  <script>
+  (() => {
+    if (typeof communityData === "undefined") return;
+    const fmt = d3.format(","), pct = d3.format(".1f");
+    const tip = d3.select("#dx-tooltip");
+    const showTip = (e, html) => tip.html(html).style("opacity", 1)
+      .style("left", Math.max(8, Math.min(e.clientX + 14, window.innerWidth - 295)) + "px")
+      .style("top", Math.max(8, Math.min(e.clientY + 14, window.innerHeight - 230)) + "px");
+    const hideTip = () => tip.style("opacity", 0);
+
+    const TYPE_COLOR = { "Apartments / Units": "#2563eb", "Villas / Townhouses": "#059669", "Mixed Typology": "#d97706" };
+
+    // Every dimension comes from community_data.js; population density is derived (2019 population / area).
+    const all = communityData.map(d => ({ ...d, pop_density: d.area_sqkm > 0 ? d.pop_2019 / d.area_sqkm : 0 }));
+    const DIMS = [
+      { key: "median_price_sqm", label: "Median price", unit: "AED/m²", scale: "log", fmt: v => fmt(Math.round(v)) },
+      { key: "sales_count", label: "Sales", unit: "2015–2026", scale: "log", fmt: v => fmt(v) },
+      { key: "offplan_pct", label: "Off-plan", unit: "% of sales", scale: "linear", fmt: v => pct(v) + "%" },
+      { key: "unit_pct", label: "Flats", unit: "% of sales", scale: "linear", fmt: v => pct(v) + "%" },
+      { key: "villa_pct", label: "Villas", unit: "% of sales", scale: "linear", fmt: v => pct(v) + "%" },
+      { key: "venue_count", label: "Venues", unit: "Foursquare", scale: "linear", fmt: v => fmt(v) },
+      { key: "pop_density", label: "Pop. density", unit: "people/km², 2019", scale: "symlog", fmt: v => fmt(Math.round(v)) }
+    ];
+
+    const state = { min: 100, brushes: new Map() };   // brushes: dimension key -> [low, high] in data units
+    d3.select("#v4-min").on("change", e => { state.min = +e.target.value; state.brushes.clear(); draw(); });
+    d3.select("#v4-reset").on("click", () => { state.brushes.clear(); draw(); });
+
+    const svg = d3.select("#v4-chart").append("svg");
+
+    function draw() {
+      const rows = all.filter(d => d.sales_count > state.min).sort((a, b) => b.sales_count - a.sales_count);
+      const W = Math.max(760, document.getElementById("v4-chart").clientWidth || 1000), H = 430;
+      const M = { top: 54, bottom: 26, left: 50, right: 60 };
+      svg.attr("viewBox", `0 0 ${W} ${H}`).selectAll("*").remove();
+
+      const xp = d3.scalePoint().domain(DIMS.map(d => d.key)).range([M.left, W - M.right]);
+      const y = {};
+      DIMS.forEach(dim => {
+        const ext = d3.extent(rows, d => d[dim.key]);
+        let s;
+        if (dim.scale === "log") s = d3.scaleLog().domain([Math.max(1, ext[0] * 0.95), ext[1] * 1.05]);
+        else if (dim.scale === "symlog") s = d3.scaleSymlog().constant(10).domain([0, ext[1] * 1.05]);
+        else s = d3.scaleLinear().domain(dim.unit.startsWith("%") ? [0, 100] : [0, ext[1]]).nice();
+        y[dim.key] = s.range([H - M.bottom, M.top]);
+      });
+
+      const passes = d => [...state.brushes].every(([k, [a, b]]) => d[k] >= a && d[k] <= b);
+      const line = d => d3.line()(DIMS.map(dim => [xp(dim.key), y[dim.key](d[dim.key])]));
+
+      const lines = svg.append("g").selectAll("path").data(rows, d => d.comm_num).join("path")
+        .attr("class", "v4-line").attr("d", line)
+        .attr("stroke", d => TYPE_COLOR[d.dominant_type] || "#64748b").attr("stroke-opacity", 0.75)
+        .on("mouseenter", function (e, d) { d3.select(this).classed("hot", true).raise(); })
+        .on("mousemove", (e, d) => showTip(e, `<strong>${d.community_name}</strong> (Sector ${d.sector})<br>` +
+          DIMS.map(dim => `${dim.label}: ${dim.fmt(d[dim.key])}`).join("<br>") + `<br>Housing type: ${d.dominant_type}`))
+        .on("mouseleave", function () { d3.select(this).classed("hot", false); hideTip(); });
+
+      function applyBrushes() {
+        const sel = rows.filter(passes);
+        lines.classed("dim", d => !passes(d));
+        lines.filter(d => passes(d)).raise();
+        const brushText = [...state.brushes].map(([k, [a, b]]) => {
+          const dim = DIMS.find(x => x.key === k); return `${dim.label} ${dim.fmt(a)}–${dim.fmt(b)}`;
+        });
+        d3.select("#v4-summary").html(`<strong>${sel.length}</strong> of ${rows.length} communities selected` +
+          (brushText.length ? ` · ${brushText.join(" · ")}` : " · brush an axis to filter") +
+          (sel.length ? ` · median price of selection AED ${fmt(Math.round(d3.median(sel, d => d.median_price_sqm)))}/m²` : ""));
+        d3.select("#v4-list").selectAll("span").data(state.brushes.size ? sel : [], d => d.comm_num).join("span")
+          .text(d => `${d.community_name} (${fmt(d.sales_count)})`);
+      }
+
+      const axes = svg.append("g").selectAll("g").data(DIMS).join("g").attr("transform", d => `translate(${xp(d.key)},0)`);
+      axes.each(function (dim) {
+        const g = d3.select(this);
+        const s = y[dim.key];
+        let ax = d3.axisLeft(s);
+        if (dim.scale === "log") ax = ax.ticks(4, "~s");
+        else if (dim.scale === "symlog") ax = ax.tickValues([0, 10, 100, 1000, 10000].filter(v => v <= s.domain()[1])).tickFormat(d3.format("~s"));
+        else ax = ax.ticks(5);
+        g.append("g").attr("class", "dx-axis").call(ax);
+        g.append("text").attr("class", "dx-title").attr("y", 16).attr("text-anchor", "middle").text(dim.label);
+        g.append("text").attr("class", "dx-sub").attr("y", 31).attr("text-anchor", "middle").text(dim.unit);
+
+        const brush = d3.brushY().extent([[-14, M.top], [14, H - M.bottom]])
+          .on("brush end", ({ selection }) => {
+            if (selection) state.brushes.set(dim.key, selection.map(s.invert).sort(d3.ascending));
+            else state.brushes.delete(dim.key);
+            applyBrushes();
+          });
+        const bg = g.append("g").attr("class", "v4-brush").call(brush);
+        if (state.brushes.has(dim.key)) {
+          const [a, b] = state.brushes.get(dim.key);
+          bg.call(brush.move, [s(b), s(a)]);
+        }
+      });
+      axes.selectAll(".v4-brush .selection").attr("fill", "#1d4ed8").attr("fill-opacity", 0.15).attr("stroke", "#1d4ed8");
+      applyBrushes();
+    }
+
+    let lastW = 0, timer;
+    window.addEventListener("resize", () => {
+      clearTimeout(timer);
+      timer = setTimeout(() => { const w = document.getElementById("v4-chart").clientWidth; if (w !== lastW) { lastW = w; draw(); } }, 150);
+    });
+    draw();
   })();
   </script>
 
