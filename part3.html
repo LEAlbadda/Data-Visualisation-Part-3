@@ -5,6 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>CS333 Part 3: Dubai Real Estate Livability & Valuation Matrix</title>
 
+  <!-- D3 for Visualization 2 treemap -->
+  <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+
   <!-- Vega, Vega-Lite, and Vega-Embed libraries -->
   <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
   <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
@@ -420,7 +423,57 @@
       color: #94a3b8;
       border-top: 1px solid var(--border);
     }
+  
+    .cleaning-section {
+      background: var(--card-bg); border: 1px solid var(--border); border-radius: 14px;
+      padding: 26px 24px; box-shadow: var(--shadow-md); margin: 0 0 30px;
+    }
+    .cleaning-section h2 { color: var(--primary-dark); font-size: 21px; margin-bottom: 8px; }
+    .cleaning-section .section-intro { color: var(--text-muted); font-size: 14px; margin-bottom: 18px; }
+    .cleaning-table-wrap { width: 100%; overflow-x: auto; }
+    table.cleaning-table { width: 100%; border-collapse: collapse; font-size: 13px; min-width: 650px; }
+    .cleaning-table th { text-align:left; background:#eff6ff; color:#1e3a8a; padding:12px; }
+    .cleaning-table td { border-bottom:1px solid var(--border); padding:12px; vertical-align:top; color:#334155; }
+    .cleaning-table tr:last-child td { border-bottom:0; }
+    .explain-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:14px; margin:-18px 0 38px; }
+    .explain-card { background:#fff; border:1px solid var(--border); border-radius:12px; padding:17px 18px; }
+    .explain-card h3 { color:var(--primary-dark); font-size:15px; margin:0 0 7px; }
+    .explain-card p { color:var(--text-muted); font-size:13px; margin:0; line-height:1.6; }
+    @media(max-width:760px) { .explain-grid { grid-template-columns:1fr; } }
+
+</style>
+
+  <style>
+    /* Visualization 2 styles are scoped to avoid changing Visualization 1. */
+    #visualization2 .v2-intro { color:#64748b; font-size:14px; margin:0 0 18px; }
+    #visualization2 .v2-stats { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px; margin:18px 0; }
+    #visualization2 .v2-stat { background:#f8fafc; border:1px solid #e2e8f0; border-radius:10px; padding:13px 15px; }
+    #visualization2 .v2-stat strong { display:block; font-size:22px; color:#10213b; }
+    #visualization2 .v2-stat span { color:#64748b; font-size:12px; }
+    #visualization2 .v2-chart-head { display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; margin:18px 0 12px; }
+    #visualization2 .v2-chart-head h3 { margin:0; font-size:18px; color:#10213b; }
+    #visualization2 .v2-chart-head p { color:#64748b; font-size:13px; margin:3px 0 0; }
+    #visualization2 .v2-back { border:1px solid #bfdbfe; color:#1d4ed8; background:#eff6ff; border-radius:8px; padding:8px 12px; font-weight:700; cursor:pointer; }
+    #visualization2 .v2-back:disabled { opacity:.45; cursor:default; }
+    #visualization2 #v2-chart { width:100%; overflow:hidden; }
+    #visualization2 #v2-chart svg { width:100%; height:auto; display:block; }
+    #visualization2 .v2-tile { stroke:#fff; stroke-width:2px; cursor:pointer; }
+    #visualization2 .v2-tile:hover { stroke:#0f172a; stroke-width:3px; }
+    #visualization2 .v2-tile-label { font-weight:700; pointer-events:none; }
+    #visualization2 .v2-sector-label { fill:#0f172a; font-size:15px; font-weight:700; pointer-events:none; }
+    #visualization2 .v2-legend { display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-top:12px; font-size:12px; color:#64748b; }
+    #visualization2 .v2-gradient { width:190px; height:11px; border-radius:99px; background:linear-gradient(90deg,#deebf7,#9ecae1,#4292c6,#08519c); }
+    #v2-tooltip { position:fixed; z-index:1000; pointer-events:none; opacity:0; background:#0f172a; color:#fff; padding:10px 12px; border-radius:9px; font-size:12px; line-height:1.5; box-shadow:0 8px 25px rgba(0,0,0,.2); max-width:260px; }
+    #visualization2 .v2-method { display:grid; grid-template-columns:1fr 1fr; gap:18px; margin-top:18px; }
+    #visualization2 .v2-method h3 { color:#10213b; margin:0 0 5px; font-size:15px; }
+    #visualization2 .v2-method p { color:#64748b; margin:0; font-size:13px; }
+    @media(max-width:650px) {
+      #visualization2 .v2-stats { grid-template-columns:1fr; }
+      #visualization2 .v2-method { grid-template-columns:1fr; }
+      #visualization2 .v2-chart-head h3 { font-size:16px; }
+    }
   </style>
+
 </head>
 <body>
 
@@ -435,18 +488,51 @@
       <p class="header-subtitle">
         An interactive dashboard that links 51,730 Dubai Land Department property sales (2015–2026) to 2,674 Foursquare venues in 163 Dubai communities.
       </p>
-      <nav class="nav-bar">
-        <a href="index.html">← Part 3 Home</a>
-        <a href="#dashboard">Interactive Dashboard</a>
-        <a href="visualization2.html">Visualization 2: Treemap</a>
-        <a href="#documentation">Documentation</a>
-        <a href="#findings">Findings</a>
-        <a href="#methodology">Data and Method</a>
-      </nav>
     </div>
   </header>
 
   <div class="container">
+
+
+    <!-- Data cleaning summary -->
+    <section class="cleaning-section" aria-labelledby="cleaning-title">
+      <h2 id="cleaning-title">How we cleaned the data</h2>
+      <p class="section-intro">Both visualizations use the same Dubai Land Department sales dataset and community-level aggregation. We applied these checks before interpreting the results.</p>
+      <div class="cleaning-table-wrap">
+        <table class="cleaning-table">
+          <thead>
+            <tr><th>Data issue / decision</th><th>What we did</th><th>Effect on the data</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Transactions cover different types</strong></td>
+              <td>Kept records labelled <code>Sales</code> for property price analysis. Mortgages and gifts were not treated as market sales.</td>
+              <td>Raw file: 89,212 records, including 68,286 sales, 17,617 mortgages and 3,309 gifts.</td>
+            </tr>
+            <tr>
+              <td><strong>Dates outside the project period</strong></td>
+              <td>Kept transactions from 1 January 2015 through the latest date in the supplied file (17 September 2026).</td>
+              <td>51,731 sales fall within the selected period before the price check.</td>
+            </tr>
+            <tr>
+              <td><strong>Invalid price per m²</strong></td>
+              <td>Removed the one sale with a non-positive <code>meter_sale_price</code>. The remaining positive values are used for the price and community summaries.</td>
+              <td>51,730 qualifying sales remain.</td>
+            </tr>
+            <tr>
+              <td><strong>Community matching</strong></td>
+              <td>Joined transaction summaries to the community and venue data using the community code, rather than matching on names.</td>
+              <td>163 communities with qualifying sales are represented; 2,674 venues are linked to those communities.</td>
+            </tr>
+            <tr>
+              <td><strong>Small community samples</strong></td>
+              <td>The dashboard includes a minimum-sales filter so users can exclude communities with too few transactions when comparing median prices. The treemap focuses on sales volume and off-plan share.</td>
+              <td>Users can adjust the minimum-sales threshold instead of treating every small-sample median as equally reliable.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
 
     <!-- KPI Summary Banner -->
     <section class="kpi-grid">
@@ -473,9 +559,9 @@
     </section>
 
     <!-- Interactive Visualization Card -->
-    <section id="dashboard" class="viz-card">
+    <section id="visualization1" class="viz-card">
       <div class="viz-header">
-        <h2>Dashboard</h2>
+        <h2>Visualization 1: Urban Livability &amp; Valuation Dashboard</h2>
         <p>Does a higher price per m² come with more amenities nearby? Each circle is a community.</p>
       </div>
 
@@ -493,6 +579,79 @@
         <div id="vis"></div>
       </div>
     </section>
+
+
+
+    <div class="explain-grid" aria-label="Visualization 1 explanation">
+      <article class="explain-card">
+        <h3>Encoding</h3>
+        <p>Each circle represents a community. The x-axis shows venue count, the y-axis shows median sale price per m² on a logarithmic scale, circle size represents sales count, and colour represents the dominant property type.</p>
+      </article>
+      <article class="explain-card">
+        <h3>Interaction</h3>
+        <p>Brush the scatterplot to filter both bar charts. The minimum-sales slider and quadrant dropdown refine all three views. Hover over a mark to see community-level details.</p>
+      </article>
+      <article class="explain-card">
+        <h3>What it helps us see</h3>
+        <p>The dashboard compares property values with nearby amenities and lets users inspect amenity composition and transaction types for selected communities. In the default 50+ sales view, the relationship between venue count and median price is weak (Spearman correlation ≈ 0.04).</p>
+      </article>
+    </div>
+
+    <!-- Visualization 2: Community Transaction Treemap -->
+    <section id="visualization2" class="viz-card">
+      <div class="viz-header">
+        <h2>Visualization 2: Dubai Community Transaction Treemap</h2>
+        <p>Which Dubai communities account for the most property sales, and how does off-plan reliance differ between them?</p>
+      </div>
+      <p class="v2-intro">Each rectangle represents a community, grouped by its Dubai sector. Rectangle size represents the number of sales, while colour represents the percentage of sales registered as off-plan. Select a sector to zoom in and compare its communities.</p>
+
+      <div class="v2-stats">
+        <div class="v2-stat"><strong id="v2-total-sales">—</strong><span>Sales analysed</span></div>
+        <div class="v2-stat"><strong id="v2-community-count">—</strong><span>Communities represented</span></div>
+        <div class="v2-stat"><strong>2015–2026</strong><span>Analysis period</span></div>
+      </div>
+
+      <div class="v2-chart-head">
+        <div>
+          <h3 id="v2-view-title">All sectors</h3>
+          <p id="v2-view-hint">Rectangle area = sales volume · Colour = off-plan share</p>
+        </div>
+        <button id="v2-back-button" class="v2-back" type="button" disabled>← All sectors</button>
+      </div>
+      <div id="v2-chart" role="img" aria-label="Treemap of property sales by Dubai sector and community"></div>
+      <div class="v2-legend">
+        <span>Off-plan share</span><span>0%</span><span class="v2-gradient" aria-hidden="true"></span><span>100%</span>
+        <span style="margin-left:auto">Select a sector to explore its communities</span>
+      </div>
+
+      <div class="v2-method">
+        <div>
+          <h3>How to read it</h3>
+          <p>Rectangle area encodes the number of qualifying sales in each community. The sequential blue colour scale encodes the percentage of sales registered as off-plan. The hierarchy groups communities by sector.</p>
+        </div>
+        <div>
+          <h3>Interaction</h3>
+          <p>Click a sector to explore its communities; use “All sectors” to return. Hover over a community for its sales count, off-plan share, existing-sales share and median price per m².</p>
+        </div>
+      </div>
+      <p class="v2-intro" style="text-align:center;font-size:12px;margin:18px 0 0">Data: Dubai Land Department transactions supplied for CS333; community-level aggregation in community_data.js. Sales are filtered to 2015–2026 with a positive price per m².</p>
+    </section>
+
+
+    <div class="explain-grid" aria-label="Visualization 2 explanation">
+      <article class="explain-card">
+        <h3>Encoding</h3>
+        <p>Each rectangle represents a community. Rectangle area represents the number of qualifying sales, and the blue colour scale represents the off-plan share. Communities are grouped by sector.</p>
+      </article>
+      <article class="explain-card">
+        <h3>Interaction</h3>
+        <p>Select a sector to zoom in and compare its communities. Use the “All sectors” control to return to the overview. Hover over a community to see its sales count, off-plan share, existing-sales share and median price per m².</p>
+      </article>
+      <article class="explain-card">
+        <h3>What it helps us see</h3>
+        <p>The treemap makes it easy to identify where sales are concentrated and compare the balance between off-plan and existing transactions across Dubai communities.</p>
+      </article>
+    </div>
 
     <!-- Deliverables Documentation Section -->
         <section id="documentation" class="doc-section">
@@ -884,5 +1043,119 @@
           "<div style='color:red; padding:20px; font-weight:bold;'>Error rendering Vega-Lite visualization. Please check console logs.</div>";
       });
   </script>
+
+  <div id="v2-tooltip"></div>
+  <script>
+  (() => {
+    const source = (typeof communityData !== "undefined" ? communityData : []);
+    const rows = source.filter(d => Number(d.sales_count) > 0 && d.sector !== null && d.sector !== undefined)
+      .map(d => ({
+        ...d,
+        sector: String(d.sector),
+        sales_count: Number(d.sales_count) || 0,
+        offplan_pct: Math.max(0, Math.min(100, Number(d.offplan_pct) || 0)),
+        existing_pct: Math.max(0, 100 - (Number(d.offplan_pct) || 0))
+      }));
+
+    const total = d3.sum(rows, d => d.sales_count);
+    d3.select("#v2-total-sales").text(d3.format(",")(total));
+    d3.select("#v2-community-count").text(d3.format(",")(rows.length));
+
+    const W = 1120, H = 650;
+    const color = d3.scaleSequential().domain([0,100]).interpolator(d3.interpolateBlues);
+    const svg = d3.select("#v2-chart").append("svg")
+      .attr("viewBox", `0 0 ${W} ${H}`).attr("preserveAspectRatio","xMidYMid meet");
+    const tooltip = d3.select("#v2-tooltip");
+    const backButton = document.getElementById("v2-back-button");
+    const fmt = d3.format(",");
+    const pct = d3.format(".1f");
+
+    const root = d3.hierarchy({
+      name:"All sectors",
+      children:d3.groups(rows, d => d.sector).map(([sector, communities]) => ({
+        name:`Sector ${sector}`,
+        sector,
+        children:communities.map(d => ({...d, name:d.community_name, value:d.sales_count}))
+      }))
+    }).sum(d => d.value || 0).sort((a,b) => b.value-a.value);
+
+    let current = root;
+    function render(node) {
+      current = node;
+      backButton.disabled = node === root;
+      d3.select("#v2-view-title").text(node === root ? "All sectors" : node.data.name);
+      d3.select("#v2-view-hint").text(node === root
+        ? "Rectangle area = sales volume · Colour = off-plan share · Select a sector to explore"
+        : "Communities in " + node.data.name + " · Rectangle area = sales volume · Colour = off-plan share");
+
+      const displayRoot = node.copy();
+      d3.treemap().size([W,H]).paddingOuter(5)
+        .paddingTop(node === root ? 29 : 5).paddingInner(3)
+        .round(true).tile(d3.treemapSquarify)(displayRoot);
+
+      svg.selectAll("*").remove();
+      const groups = svg.selectAll("g.v2-tile-group")
+        .data(displayRoot.children || [], d => d.data.name)
+        .join("g").attr("class","v2-tile-group")
+        .attr("transform",d => `translate(${d.x0},${d.y0})`);
+
+      groups.append("rect").attr("class","v2-tile")
+        .attr("width",d => Math.max(0,d.x1-d.x0))
+        .attr("height",d => Math.max(0,d.y1-d.y0)).attr("rx",4)
+        .attr("fill",d => d.children ? "#e2e8f0" : color(Number(d.data.offplan_pct)||0))
+        .on("mousemove",(event,d) => {
+          const x=d.data;
+          const content = d.children
+            ? `<strong>${x.name}</strong><br>${fmt(d.value)} sales<br>Click to explore communities`
+            : `<strong>${x.community_name}</strong><br>Sector ${x.sector}<br>Sales: ${fmt(x.sales_count)}<br>Off-plan: ${pct(x.offplan_pct)}%<br>Existing: ${pct(x.existing_pct)}%<br>Median price: AED ${fmt(Math.round(Number(x.median_price_sqm)||0))}/m²`;
+          tooltip.html(content).style("opacity",1)
+            .style("left",Math.min(event.clientX+14,window.innerWidth-275)+"px")
+            .style("top",Math.min(event.clientY+14,window.innerHeight-130)+"px");
+        })
+        .on("mouseleave",() => tooltip.style("opacity",0))
+        .on("click",(event,d) => {
+          if (d.children && node === root) {
+            const selected = current.children.find(c => c.data.name === d.data.name);
+            if (selected) render(selected);
+          }
+        });
+
+      groups.filter(d => d.children).append("text").attr("class","v2-sector-label")
+        .attr("x",8).attr("y",20).text(d => d.data.name);
+
+      const labelTiles = groups.filter(d => !d.children &&
+        (d.x1-d.x0)>105 && (d.y1-d.y0)>38);
+      labelTiles.append("clipPath").attr("id",(d,i) => `v2-tile-clip-${i}`)
+        .append("rect")
+        .attr("width",d => Math.max(0,d.x1-d.x0-12))
+        .attr("height",d => Math.max(0,d.y1-d.y0-8));
+
+      labelTiles.append("text").attr("class","v2-tile-label")
+        .attr("clip-path",(d,i) => `url(#v2-tile-clip-${i})`)
+        .attr("x",7).attr("y",18)
+        .style("font-size",d => (d.x1-d.x0)>180 ? "12px" : "10px")
+        .style("fill",d => {
+          const c=d3.color(color(Number(d.data.offplan_pct)||0));
+          const luminance=(0.299*c.r+0.587*c.g+0.114*c.b)/255;
+          return luminance>0.62 ? "#10213b" : "#ffffff";
+        })
+        .style("text-shadow",d => {
+          const c=d3.color(color(Number(d.data.offplan_pct)||0));
+          const luminance=(0.299*c.r+0.587*c.g+0.114*c.b)/255;
+          return luminance>0.62 ? "none" : "0 1px 2px rgba(0,0,0,.35)";
+        })
+        .text(d => d.data.community_name || "");
+
+      if (node !== root) {
+        groups.selectAll("rect.v2-tile").style("cursor","default").on("click",null);
+        groups.selectAll("text.v2-sector-label").remove();
+      }
+    }
+    backButton.addEventListener("click",() => render(root));
+    render(root);
+  })();
+  </script>
+  <div id="v2-tooltip"></div>
+
 </body>
 </html>
