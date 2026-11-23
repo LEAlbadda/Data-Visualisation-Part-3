@@ -773,7 +773,9 @@
               "encoding": { "y": { "field": "y", "type": "quantitative" } }
             },
 
-            // The community circles (this unit is the one the brush is attached to)
+            // The community circles (this unit is the one the brush is attached to).
+            // Smaller bubbles reduce overlap without jittering coordinates, so the plotted
+            // venue counts/prices and the quadrant thresholds remain numerically accurate.
             {
               "name": "scatter",
               "transform": [
@@ -781,7 +783,7 @@
                 { "calculate": "datum.avg_venue_rating == null ? 'No rated venues' : format(datum.avg_venue_rating, '.2f') + ' (' + datum.rated_venue_count + ' rated)'",
                   "as": "rating_text" }
               ],
-              "mark": { "type": "circle", "stroke": "#ffffff", "strokeWidth": 1.4 },
+              "mark": { "type": "circle", "stroke": "#ffffff", "strokeWidth": 1.6 },
               "encoding": {
                 "x": {
                   "field": "venue_count", "type": "quantitative",
@@ -799,7 +801,7 @@
                 },
                 "size": {
                   "field": "sales_count", "type": "quantitative", "title": "Sales Volume (transactions)",
-                  "scale": { "range": [40, 620] },
+                  "scale": { "range": [24, 380] },
                   "legend": { "orient": "none", "legendX": 782, "legendY": 110, "values": [100, 500, 1000, 2000, 4000],
                               "format": ",.0f", "titleFontSize": 12, "labelFontSize": 12,
                               "symbolFillColor": "#94a3b8", "symbolStrokeColor": "#ffffff", "titleLimit": 175 }
@@ -814,7 +816,7 @@
                   },
                   "value": "#cbd5e1"                      // communities outside the brush
                 },
-                "opacity": { "condition": { "param": "brush", "value": 0.88 }, "value": 0.22 },
+                "opacity": { "condition": { "param": "brush", "value": 0.94 }, "value": 0.16 },
                 "tooltip": [
                   { "field": "community_name", "type": "nominal", "title": "Community" },
                   { "field": "comm_num", "type": "nominal", "title": "Community #" },
