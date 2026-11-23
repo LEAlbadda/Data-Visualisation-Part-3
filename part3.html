@@ -134,50 +134,6 @@
       text-decoration: underline;
     }
 
-    /* KPI Summary Cards */
-    .kpi-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: 18px;
-      margin-bottom: 30px;
-    }
-
-    .kpi-card {
-      background: var(--card-bg);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 20px 24px;
-      box-shadow: var(--shadow-sm);
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-      transition: transform 0.2s, box-shadow 0.2s;
-    }
-
-    .kpi-card:hover {
-      transform: translateY(-2px);
-      box-shadow: var(--shadow-md);
-    }
-
-    .kpi-label {
-      font-size: 12px;
-      text-transform: uppercase;
-      font-weight: 700;
-      letter-spacing: 0.05em;
-      color: var(--text-muted);
-    }
-
-    .kpi-value {
-      font-size: 26px;
-      font-weight: 800;
-      color: var(--primary);
-    }
-
-    .kpi-desc {
-      font-size: 12px;
-      color: var(--text-muted);
-    }
-
     /* Visualization Card */
     .viz-card {
       background: var(--card-bg);
@@ -255,10 +211,6 @@
 
       .chart-viewport {
         justify-content: flex-start;
-      }
-
-      .doc-section {
-        padding: 26px 20px;
       }
 
       .vega-bindings {
@@ -340,81 +292,6 @@
       cursor: pointer;
     }
 
-    /* Documentation Section */
-    .doc-section {
-      background: var(--card-bg);
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 36px 32px;
-      box-shadow: var(--shadow-sm);
-      margin-bottom: 30px;
-    }
-
-    .doc-section h2 {
-      font-size: 22px;
-      font-weight: 800;
-      color: var(--primary-dark);
-      margin-bottom: 20px;
-      padding-bottom: 10px;
-      border-bottom: 2px solid #e2e8f0;
-    }
-
-    .doc-section h3 {
-      font-size: 17px;
-      font-weight: 700;
-      color: #1e3a8a;
-      margin: 24px 0 10px 0;
-    }
-
-    .doc-section p {
-      font-size: 14.5px;
-      color: #334155;
-      margin-bottom: 14px;
-      line-height: 1.65;
-    }
-
-    .doc-section ul {
-      margin: 10px 0 18px 24px;
-      font-size: 14px;
-      color: #334155;
-    }
-
-    .doc-section li {
-      margin-bottom: 8px;
-    }
-
-    .quadrant-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: 16px;
-      margin: 20px 0;
-    }
-
-    .quadrant-box {
-      border: 1px solid #e2e8f0;
-      border-radius: 10px;
-      padding: 16px;
-      background: #fafafa;
-    }
-
-    .quadrant-box.q1 { border-top: 4px solid #ef4444; }
-    .quadrant-box.q2 { border-top: 4px solid #10b981; }
-    .quadrant-box.q3 { border-top: 4px solid #8b5cf6; }
-    .quadrant-box.q4 { border-top: 4px solid #f59e0b; }
-
-    .quadrant-title {
-      font-weight: 700;
-      font-size: 14px;
-      margin-bottom: 6px;
-      color: #0f172a;
-    }
-
-    .quadrant-desc {
-      font-size: 12.5px;
-      color: #64748b;
-      line-height: 1.5;
-    }
-
     /* Footer */
     footer {
       text-align: center;
@@ -424,17 +301,6 @@
       border-top: 1px solid var(--border);
     }
   
-    .cleaning-section {
-      background: var(--card-bg); border: 1px solid var(--border); border-radius: 14px;
-      padding: 26px 24px; box-shadow: var(--shadow-md); margin: 0 0 30px;
-    }
-    .cleaning-section h2 { color: var(--primary-dark); font-size: 21px; margin-bottom: 8px; }
-    .cleaning-section .section-intro { color: var(--text-muted); font-size: 14px; margin-bottom: 18px; }
-    .cleaning-table-wrap { width: 100%; overflow-x: auto; }
-    table.cleaning-table { width: 100%; border-collapse: collapse; font-size: 13px; min-width: 650px; }
-    .cleaning-table th { text-align:left; background:#eff6ff; color:#1e3a8a; padding:12px; }
-    .cleaning-table td { border-bottom:1px solid var(--border); padding:12px; vertical-align:top; color:#334155; }
-    .cleaning-table tr:last-child td { border-bottom:0; }
     .explain-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:14px; margin:-18px 0 38px; }
     .explain-card { background:#fff; border:1px solid var(--border); border-radius:12px; padding:17px 18px; }
     .explain-card h3 { color:var(--primary-dark); font-size:15px; margin:0 0 7px; }
@@ -499,69 +365,7 @@
   <div class="container">
 
 
-    <!-- Data cleaning summary -->
-    <section class="cleaning-section" aria-labelledby="cleaning-title">
-      <h2 id="cleaning-title">How we cleaned the data</h2>
-      <p class="section-intro">Both visualizations use the same Dubai Land Department sales dataset and community-level aggregation. We applied these checks before interpreting the results.</p>
-      <div class="cleaning-table-wrap">
-        <table class="cleaning-table">
-          <thead>
-            <tr><th>Data issue / decision</th><th>What we did</th><th>Effect on the data</th></tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><strong>Transactions cover different types</strong></td>
-              <td>Kept records labelled <code>Sales</code> for property price analysis. Mortgages and gifts were not treated as market sales.</td>
-              <td>Raw file: 89,212 records, including 68,286 sales, 17,617 mortgages and 3,309 gifts.</td>
-            </tr>
-            <tr>
-              <td><strong>Dates outside the project period</strong></td>
-              <td>Kept transactions from 1 January 2015 through the latest date in the supplied file (17 September 2026).</td>
-              <td>51,731 sales fall within the selected period before the price check.</td>
-            </tr>
-            <tr>
-              <td><strong>Invalid price per m²</strong></td>
-              <td>Removed the one sale with a non-positive <code>meter_sale_price</code>. The remaining positive values are used for the price and community summaries.</td>
-              <td>51,730 qualifying sales remain.</td>
-            </tr>
-            <tr>
-              <td><strong>Community matching</strong></td>
-              <td>Joined transaction summaries to the community and venue data using the community code, rather than matching on names.</td>
-              <td>163 communities with qualifying sales are represented; 2,674 venues are linked to those communities.</td>
-            </tr>
-            <tr>
-              <td><strong>Small community samples</strong></td>
-              <td>The dashboard includes a minimum-sales filter so users can exclude communities with too few transactions when comparing median prices. The treemap focuses on sales volume and off-plan share.</td>
-              <td>Users can adjust the minimum-sales threshold instead of treating every small-sample median as equally reliable.</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </section>
 
-    <!-- KPI Summary Banner -->
-    <section class="kpi-grid">
-      <div class="kpi-card">
-        <span class="kpi-label">Sales Analysed</span>
-        <span class="kpi-value">51,730</span>
-        <span class="kpi-desc">Sales (2015–2026) with a valid price per m²</span>
-      </div>
-      <div class="kpi-card">
-        <span class="kpi-label">Communities With Sales</span>
-        <span class="kpi-value">163</span>
-        <span class="kpi-desc">Out of 226 communities (91 have 10+ sales; 60 have more than 100)</span>
-      </div>
-      <div class="kpi-card">
-        <span class="kpi-label">Venues Used</span>
-        <span class="kpi-value">2,674</span>
-        <span class="kpi-desc">Foursquare venues in those communities (2,955 in the source file)</span>
-      </div>
-      <div class="kpi-card">
-        <span class="kpi-label">Linked Charts</span>
-        <span class="kpi-value">3 Charts</span>
-        <span class="kpi-desc">The scatterplot brush filters the two bar charts</span>
-      </div>
-    </section>
 
     <!-- Interactive Visualization Card -->
     <section id="visualization1" class="viz-card">
@@ -631,16 +435,6 @@
       <div id="v2-sector-chips" class="v2-chips" aria-label="Select a sector"></div>
       <p class="v2-intro" style="font-size:12px;margin:8px 0 0">Sectors 2, 7 and 8 together hold 332 sales (0.6% of the total), so their rectangles are too small to see at full scale. Use the buttons above to open them.</p>
 
-      <div class="v2-method">
-        <div>
-          <h3>How to read it</h3>
-          <p>Rectangle area encodes the number of qualifying sales in each community. The sequential blue colour scale encodes the percentage of sales registered as off-plan. The hierarchy groups communities by sector.</p>
-        </div>
-        <div>
-          <h3>Interaction</h3>
-          <p>Click a sector tile (or its button below the chart, or press Enter on a focused tile) to explore its communities; use “All sectors” to return. Hover over a sector or community for its sales, off-plan and existing shares; community tooltips also show median price per m² and flag samples under 10 sales.</p>
-        </div>
-      </div>
       <p class="v2-intro" style="text-align:center;font-size:12px;margin:18px 0 0">Data: Dubai Land Department transactions supplied for CS333; community-level aggregation in community_data.js. Sales are filtered to 2015–2026 with a positive price per m².</p>
     </section>
 
@@ -660,129 +454,14 @@
       </article>
     </div>
 
-    <!-- Deliverables Documentation Section -->
-        <section id="documentation" class="doc-section">
-      <h2>Documentation</h2>
 
-      <h3>1. Title</h3>
-      <p><strong>The Dubai Urban Livability &amp; Valuation Matrix</strong></p>
-
-      <h3>2. Working URL</h3>
-      <p><a href="https://lealbadda.github.io/Data-Visualisation-Part-3/" target="_blank">https://lealbadda.github.io/Data-Visualisation-Part-3/</a></p>
-
-      <h3>3. What the charts show</h3>
-      <p>The dashboard has two parts, one above the other. The scatterplot on top is linked to the two bar charts below it.</p>
-
-      <ul>
-        <li>
-          <strong>Sub-Vis 1, the scatterplot (one circle per community):</strong>
-          <ul>
-            <li><strong>X-axis:</strong> number of Foursquare venues in the community (0 to 105).</li>
-            <li><strong>Y-axis:</strong> median sale price per m² in AED, on a log scale from 1,000 to 100,000. The log scale is used because prices are right-skewed: most communities sit below AED 30,000/m² and a few are far higher. The cheapest community shown at the 10-sales minimum is about AED 1,280/m².</li>
-            <li><strong>Circle size:</strong> number of sales in the community, 2015 to 2026.</li>
-            <li><strong>Circle colour:</strong> dominant housing type. <span style="color:#2563eb; font-weight:bold;">Blue</span> means apartments (65% or more of sales), <span style="color:#059669; font-weight:bold;">green</span> means villas and townhouses (45% or more), and <span style="color:#d97706; font-weight:bold;">orange</span> means a mix.</li>
-            <li><strong>Brush highlighting:</strong> circles inside the brush keep their colour (94% opacity). The rest turn grey (16% opacity).</li>
-            <li><strong>Dashed lines:</strong> at 15 venues and AED 13,000/m². These are thresholds we chose, not medians. The medians of the 91 communities with 10 or more sales are 7 venues and AED 14,484/m². A community counts as "high" when it is at or above the line, and each corner of the chart is labelled with its rule.</li>
-          </ul>
-        </li>
-
-        <li>
-          <strong>Sub-Vis 2, two bar charts for the selected communities:</strong>
-          <ul>
-            <li><strong>Left, amenity composition:</strong> total venues in each of five categories (Dining &amp; Cafes, Retail &amp; Shopping, Hospitality &amp; Nightlife, Leisure &amp; Wellness, Services &amp; Community).</li>
-            <li><strong>Right, sales by stage and property type:</strong> off-plan and existing sales add up to total sales. Flats and villas are a separate breakdown of the same sales and do not add up to the total, because land and other property types are left out.</li>
-          </ul>
-        </li>
-      </ul>
-
-      <h3>4. Interaction</h3>
-      <ul>
-        <li><strong>Brush:</strong> drag a rectangle over the scatterplot to select communities. The bar charts then show only those communities. Double-click the chart to clear it. The brush is defined once at the top level of the Vega-Lite spec and attached to the scatterplot only (<code>views: ["scatter"]</code>). The bar charts read it with <code>{"filter": {"param": "brush"}}</code>. The link goes one way, from the scatterplot to the bar charts.</li>
-        <li><strong>Minimum sales slider:</strong> keeps communities with more sales than the chosen value in all three charts (range 100 to 500, default 100). The default therefore applies the "more than 100 transactions" filter requested in the Part 1 feedback.</li>
-        <li><strong>Quadrant dropdown:</strong> shows one quadrant only, in all three charts.</li>
-        <li><strong>Tooltips:</strong> hover over a circle for the community name and number, quadrant, median price, sales, venues, housing type, off-plan share, average venue rating and area. A missing rating reads "No rated venues".</li>
-      </ul>
-      <p>The slider and dropdown decide which communities are eligible, and the brush then picks from those. All three apply at once.</p>
-
-      <h3 id="findings">5. Findings</h3>
-      <p><strong>Research question: does paying more for property in Dubai mean getting a better lifestyle through access to nearby amenities?</strong> In this data, mostly not. Among the 60 communities with more than 100 sales (the default view), the Spearman rank correlation between venue count and median price per m² is about −0.005, i.e. no monotonic relationship; even with a looser 10-sales minimum (91 communities) it is only 0.16. The figures below are for the default view.</p>
-
-      <div class="quadrant-grid">
-        <div class="quadrant-box q1">
-          <div class="quadrant-title">1. Urban Lifestyle Hubs (price of AED 13,000/m² or more, 15+ venues)</div>
-          <div class="quadrant-desc">
-            <strong>13 communities, e.g.</strong> Business Bay (3,660 sales, 43 venues, AED 20,318/m²), Marsa Dubai / Marina (2,967 sales, 100 venues, AED 21,739/m²), Burj Khalifa / Downtown (1,754 sales, 100 venues, AED 25,485/m²).<br>
-            <strong>Note:</strong> High prices go with many venues here. The median is AED 20,832/m² and 43 venues. All 13 are mainly apartments. Dining &amp; Cafes is 46% of venues, hospitality 18% and leisure 16%. Foursquare collection stops at 100 venues per community, so Marina and Downtown are understated.
-          </div>
-        </div>
-
-        <div class="quadrant-box q2">
-          <div class="quadrant-title">2. Affordable Active Communities (below AED 13,000/m², 15+ venues)</div>
-          <div class="quadrant-desc">
-            <strong>8 communities, e.g.</strong> Jabal Ali First (1,987 sales, 49 venues, AED 11,748/m²), Al Thanyah Fifth (1,786 sales, 51 venues, AED 12,490/m²), Warsan First (1,205 sales, 46 venues, AED 7,005/m²).<br>
-            <strong>Note:</strong> The smallest group. Median price is AED 9,207/m², about 44% of the hub median, with a similar number of venues (median 47.5). Only 32% of sales are off-plan.
-          </div>
-        </div>
-
-        <div class="quadrant-box q3">
-          <div class="quadrant-title">3. Exclusive Privacy Enclaves (AED 13,000/m² or more, fewer than 15 venues)</div>
-          <div class="quadrant-desc">
-            <strong>24 communities, the largest group, e.g.</strong> Madinat Al Mataar (2,083 sales, 12 venues, AED 14,483/m²), Al Merkadh (1,768 sales, 1 venue, AED 18,932/m²), Hadaeq Sheikh Mohammed Bin Rashid (1,746 sales, 3 venues, AED 19,165/m²).<br>
-            <strong>Note:</strong> The typical community here has 1 venue but a median price of AED 17,147/m². Most (17 of 24) are mainly apartments and about 67% of sales are off-plan. That points to newer developments whose shops and cafes may not be built or listed yet, more than to villa areas chosen for privacy. The data cannot tell these apart. Private facilities are also not in the Foursquare data.
-          </div>
-        </div>
-
-        <div class="quadrant-box q4">
-          <div class="quadrant-title">4. Emerging Suburban Corridors (below AED 13,000/m², fewer than 15 venues)</div>
-          <div class="quadrant-desc">
-            <strong>15 communities, e.g.</strong> Al Barsha South Fourth / JVC (4,004 sales, 4 venues, AED 12,924/m²), Wadi Al Safa 5 (2,183 sales, 7 venues, AED 12,578/m²), Al Hebiah Fourth (1,406 sales, 12 venues, AED 10,536/m²).<br>
-            <strong>Note:</strong> Many sales and few recorded venues (median 2). About 54% of sales are off-plan overall, which fits with housing being sold before commercial amenities arrive, though this data does not prove it.
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Methodology -->
-    <section id="methodology" class="doc-section">
-      <h2>Data and Method</h2>
-
-      <h3>Datasets</h3>
-      <ul>
-        <li><strong>Property transactions (<code>transactions.csv</code>):</strong> the course's Dubai Land Department file. We kept records marked "Sales", registered 2015 to 2026, with a positive price per m². That leaves 51,730 sales in 163 communities. We re-checked the raw file: 89,212 records (68,286 sales, 17,617 mortgages, 3,309 gifts); 51,731 sales fall in 2015–2026 and one has a non-positive price per m².</li>
-        <li><strong>Venues (<code>dubai_venues.csv</code>):</strong> 2,955 Foursquare venues. 2,674 are inside the 163 communities with sales and are the ones used. The other 281 are in 63 communities with no qualifying sales. Venues are sorted into five groups with simple keyword rules, so some are misplaced (pubs, BBQ and sandwich places end up in Services &amp; Community). Of the 2,674 venues: Dining &amp; Cafes 50.8%, Retail &amp; Shopping 13.4%, Hospitality &amp; Nightlife 13.2%, Leisure &amp; Wellness 12.8%, Services &amp; Community 9.8%.</li>
-        <li><strong>Boundaries (<code>dubai.geojson</code>):</strong> community names, areas and 2019 population for 226 communities.</li>
-      </ul>
-
-      <h3>Joining the data</h3>
-      <p>
-        The tables are joined on the community code (<code>COMM_NUM</code>, called <code>comm_num</code> in the transactions file). Of the 226 communities in the GeoJSON, 163 have at least one qualifying sale, and all 163 match a boundary record. 138 of them have at least one venue and 25 have none. <code>prepare_data.py</code> also checks that off-plan plus existing sales equal total sales, and that the five venue groups add up to the venue count, in every community.
-      </p>
-
-      <h3>Calculations and cleaning</h3>
-      <ul>
-        <li><strong>Median price:</strong> we use the median price per m² instead of the mean so that a few extreme sales do not distort a community's figure.</li>
-        <li><strong>Venue density:</strong> venues divided by community area in km².</li>
-        <li><strong>Off-plan share:</strong> off-plan sales divided by total sales, times 100.</li>
-        <li><strong>Small samples:</strong> the data-preparation reliability flag uses 10 sales as its minimum. The 72 communities with fewer than 10 sales (243 sales in total) stay in the data files, flagged <code>insufficient_data</code>, but are never drawn. Their medians are not reliable; for example AED 1, 2 and 11/m² come from 1 to 3 sales. We cannot tell from the aggregated data whether those values are entry errors or nominal transfers.</li>
-        <li><strong>Missing ratings:</strong> a community's average rating uses only rated venues. It is null when there are none, which affects 28 communities (25 with no venues, 3 whose venues are all unrated). It is never stored as 0.</li>
-        <li><strong>Quadrant lines:</strong> 15 venues and AED 13,000/m² are chosen thresholds, not medians.</li>
-      </ul>
-
-      <h3>Limitations</h3>
-      <ul>
-        <li><strong>Venue cap:</strong> Foursquare collection stopped at 100 venues per community, and two communities (Marina and Downtown) reached it.</li>
-        <li><strong>Price per m² mixes property types:</strong> land plots and built units are both priced per m². Communities with mostly land or industrial sales (Saih Shuaib 1 and 4, around AED 1,300 to 1,500/m²) are not comparable with apartment communities.</li>
-        <li><strong>Private amenities:</strong> clubhouses, private pools and similar facilities in gated communities do not appear in Foursquare data, so venue counts understate what some residents have.</li>
-        <li><strong>Association only:</strong> the charts show how price and recorded amenities relate, not why.</li>
-      </ul>
-    </section>
 
   </div>
 
   <footer>
     <div class="container">
       <p>CS333 Data Visualization Assignment Part 3 | Prepared for Dr. Sherief Abdallah</p>
-      <p style="margin-top: 4px;">Built with Vega-Lite 5 | Group 4</p>
+      <p style="margin-top: 4px;">Built with Vega-Lite 5 and D3.js | Group 4</p>
     </div>
   </footer>
 
